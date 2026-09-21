@@ -11,44 +11,34 @@ function visual(p){const src=imageSrc(p);return src?`<img src="${esc(src)}" alt=
 function card(p){const badge=p.badge?`<b class="badge ${p.soldOut?'sold-badge':''}">${esc(p.badge)}</b>`:'';return `<article class="card ${p.soldOut?'sold':''}"><button class="card-open" data-product-id="${esc(p.id)}" aria-label="Ver ${esc(p.name)}"><div class="photo">${visual(p)}<div class="placeholder" ${imageSrc(p)?'hidden':''}><div class="shirt-mark">${initials(p.name)}</div><span>AMORA FUT</span><small>STREETWEAR</small></div>${badge}<div class="quick">VER DETALHES</div></div><div class="info"><div class="catline">${esc(p.category)} <i>•</i> ${esc(p.version)}</div><h3>${esc(p.name)}</h3><div class="price">${p.oldPrice?`<del>${fmt(p.oldPrice)}</del>`:''}<strong>${fmt(p.price)}</strong></div><div class="pix"><span>PIX</span> ${fmt(pix(p.price))}</div><span class="cta">Consultar tamanhos <b>→</b></span></div></button></article>`;}
 function render(){const q=state.q;let arr=(window.PRODUCTS||[]).filter(p=>isCat(p,state.cat)&&(`${p.name} ${p.category} ${p.version}`).toLowerCase().includes(q));if(state.sort==='menor')arr.sort((a,b)=>a.price-b.price);if(state.sort==='maior')arr.sort((a,b)=>b.price-a.price);const grid=$('#grid');if(!grid)return;if(arr.length)grid.innerHTML=arr.map(card).join('');else grid.innerHTML='<div class="empty"><strong>Nenhum produto encontrado.</strong><span>Tente outro time, coleção ou categoria.</span></div>';const count=$('#count');if(count)count.textContent=`${arr.length} ${arr.length===1?'produto':'produtos'}`;}
 function waLink(p){return 'https://wa.me/'+WA+'?text='+encodeURIComponent(`Olá! Vi no catálogo VIP da Amora Fut e tenho interesse na ${p.name} (${p.version}), por ${fmt(p.price)}. Gostaria de consultar os tamanhos disponíveis.`);}
+function productImage(p){
+  const src=imageSrc(p);
+  if(!src) return `<div class="modal-placeholder"><div class="shirt-mark big">${initials(p.name)}</div><span>AMORA FUT</span><small>CATÁLOGO VIP</small></div>`;
+  return `<img src="${esc(src)}" alt="${esc(p.name)}" onerror="this.remove();this.parentElement.insertAdjacentHTML('beforeend','<div class=&quot;modal-placeholder&quot;><div class=&quot;shirt-mark big&quot;>${initials(p.name)}</div><span>AMORA FUT</span><small>CATÁLOGO VIP</small></div>')">`;
+}
 function openProduct(id){
   const p=(window.PRODUCTS||[]).find(x=>x.id===id); if(!p) return;
-  const src=imageSrc(p);
-  const img=src?`<img src="${esc(src)}" alt="${esc(p.name)}" onerror="this.style.display='none';this.nextElementSibling.hidden=false;"><div class="modal-placeholder" hidden><div class="shirt-mark big">${initials(p.name)}</div><span>AMORA FUT</span><small>CATÁLOGO VIP</small></div>`:`<div class="modal-placeholder"><div class="shirt-mark big">${initials(p.name)}</div><span>AMORA FUT</span><small>CATÁLOGO VIP</small></div>`;
-  $('#modal').innerHTML=`<div class="modal-bg" id="modalBg" role="dialog" aria-modal="true" aria-label="Detalhes do produto">
-    <div class="modal" id="productModal">
-      <button type="button" class="close" id="modalClose" aria-label="Fechar janela">×</button>
-      <div class="modal-photo">${img}</div>
-      <div class="modal-info">
-        <div class="eyebrow">${esc(p.category)} · ${esc(p.version)}</div>
-        <div class="modal-tag">${p.soldOut?'ESGOTADO':(p.badge||'CATÁLOGO VIP')}</div>
-        <h2>${esc(p.name)}</h2>
-        <div class="modal-price">${p.oldPrice?`<del>${fmt(p.oldPrice)}</del>`:''}<strong>${fmt(p.price)}</strong></div>
-        <div class="pix"><span>PIX</span> ${fmt(pix(p.price))} · 5% OFF</div>
-        <div class="modal-points"><div>✓ Envio para todo o Brasil</div><div>✓ Consulte tamanhos no WhatsApp</div><div>✓ Atendimento personalizado</div></div>
-        <div class="actions"><a class="btn primary ${p.soldOut?'disabled':''}" ${p.soldOut?'aria-disabled="true"':'href="'+waLink(p)+'" target="_blank" rel="noopener"'}>${p.soldOut?'Produto esgotado':'Pedir pelo WhatsApp'}</a></div>
-      </div>
+  const dialog=$('#productDialog'); if(!dialog) return;
+  dialog.innerHTML=`<div class="dialog-shell">
+    <button type="button" class="close" id="modalClose" aria-label="Fechar janela">×</button>
+    <div class="modal-photo">${productImage(p)}</div>
+    <div class="modal-info">
+      <div class="eyebrow">${esc(p.category)} · ${esc(p.version)}</div>
+      <div class="modal-tag">${p.soldOut?'ESGOTADO':(p.badge||'CATÁLOGO VIP')}</div>
+      <h2>${esc(p.name)}</h2>
+      <div class="modal-price">${p.oldPrice?`<del>${fmt(p.oldPrice)}</del>`:''}<strong>${fmt(p.price)}</strong></div>
+      <div class="pix"><span>PIX</span> ${fmt(pix(p.price))} · 5% OFF</div>
+      <div class="modal-points"><div>✓ Envio para todo o Brasil</div><div>✓ Consulte tamanhos no WhatsApp</div><div>✓ Atendimento personalizado</div></div>
+      <div class="actions"><a class="btn primary ${p.soldOut?'disabled':''}" ${p.soldOut?'aria-disabled="true"':'href="'+waLink(p)+'" target="_blank" rel="noopener"'}>${p.soldOut?'Produto esgotado':'Pedir pelo WhatsApp'}</a></div>
     </div>
   </div>`;
-  const modal=$('#modal'), bg=$('#modalBg'), box=$('#productModal'), close=$('#modalClose');
-  modal.className='modal-host show'; 
-  document.body.classList.add('lock');
-  document.documentElement.classList.add('modal-lock');
-  close.addEventListener('click', e=>{e.preventDefault();e.stopImmediatePropagation();closeProduct();},{once:true});
-  bg.addEventListener('click', e=>{if(e.target===bg) closeProduct();});
-  box.addEventListener('click', e=>e.stopPropagation());
+  dialog.showModal();
+  const close=$('#modalClose');
+  close?.addEventListener('click',()=>dialog.close(),{once:true});
+  dialog.addEventListener('click',e=>{ if(e.target===dialog) dialog.close(); },{once:true});
+  dialog.addEventListener('close',()=>{dialog.innerHTML='';},{once:true});
 }
-function closeProduct(){
-  const m=$('#modal');
-  if(m){m.className='modal-host';m.innerHTML='';}
-  document.body.classList.remove('lock');
-  document.documentElement.classList.remove('modal-lock');
-}
+function closeProduct(){ const d=$('#productDialog'); if(d?.open) d.close(); }
 function setCat(cat){state.cat=cat;document.querySelectorAll('.category-card').forEach(b=>b.classList.toggle('active',b.dataset.cat===cat));render();const c=$('#catalogo');if(c)c.scrollIntoView({behavior:'smooth',block:'start'});}
-function init(){document.querySelectorAll('.category-card').forEach(b=>b.addEventListener('click',()=>setCat(b.dataset.cat)));document.querySelectorAll('[data-nav-cat]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();setCat(a.dataset.navCat)}));const sync=e=>{state.q=e.target.value.toLowerCase().trim();document.querySelectorAll('#search,#searchMobile').forEach(x=>{if(x!==e.target)x.value=e.target.value});render()};$('#search')?.addEventListener('input',sync);$('#searchMobile')?.addEventListener('input',sync);$('#sort')?.addEventListener('change',e=>{state.sort=e.target.value;render()});document.addEventListener('click',e=>{
-  const open=e.target.closest('.card-open');
-  if(open){e.preventDefault();openProduct(open.dataset.productId);return;}
-  if(e.target.id==='modalClose'){e.preventDefault();closeProduct();return;}
-  if(e.target.id==='modalBg'){closeProduct();return;}
-});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeProduct()});render();}
+function init(){document.querySelectorAll('.category-card').forEach(b=>b.addEventListener('click',()=>setCat(b.dataset.cat)));document.querySelectorAll('[data-nav-cat]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();setCat(a.dataset.navCat)}));const sync=e=>{state.q=e.target.value.toLowerCase().trim();document.querySelectorAll('#search,#searchMobile').forEach(x=>{if(x!==e.target)x.value=e.target.value});render()};$('#search')?.addEventListener('input',sync);$('#searchMobile')?.addEventListener('input',sync);$('#sort')?.addEventListener('change',e=>{state.sort=e.target.value;render()});document.addEventListener('click',e=>{const open=e.target.closest('.card-open');if(open){e.preventDefault();openProduct(open.dataset.productId);}});render();}
 window.openProduct=openProduct;window.closeProduct=closeProduct;document.addEventListener('DOMContentLoaded',init);

@@ -1,8 +1,11 @@
-AMORA FUT — CATÁLOGO VIP V4.1
+AMORA FUT — CATÁLOGO VIP V4.5
 
-Correção de carregamento do catálogo para GitHub Pages.
-Os produtos agora têm uma grade inicial estática e o JavaScript assume o controle quando carregado, evitando catálogo vazio quando scripts demoram ou são bloqueados.
+Correção definitiva do modal: usa <dialog> nativo, sem dependência de overlay/scroll lock antigo.
+- X fecha
+- ESC fecha
+- clique no fundo fecha
+- rolagem fica dentro do modal
+- a página não some nem perde a posição
 
-Cores: cinza chumbo + rosa da logomarca + branco.
-WhatsApp: (85) 99802-2643
-Instagram: @amorafutcamisas
+IMPORTANTE SOBRE AS FOTOS:
+O catálogo só consegue mostrar uma foto quando ela está cadastrada em products.js e o arquivo existe em assets/images. A V4.5 mantém as fotos que realmente estão no pacote (incluindo Manchester City e Arsenal de referência) e não inventa fotos de outros modelos. Para mostrar as camisas reais dos demais produtos, é necessário fornecer/importar as fotos correspondentes.
