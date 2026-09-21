@@ -1,16 +1,19 @@
-AMORA FUT — CATÁLOGO VIP V2
+AMORA FUT — CATÁLOGO VIP V4
 
-Esta versão é um catálogo, sem carrinho e sem checkout.
-Os pedidos são direcionados para o WhatsApp da Amora Fut.
+Versão de acabamento visual com identidade oficial da Amora Fut.
 
-WhatsApp: (85) 99802-2643
-Instagram: @amorafutcamisas
-Site atual de referência: https://amorafut.com.br/
+- Fundo cinza chumbo
+- Rosa da logomarca como cor de destaque
+- Branco/preto para contraste
+- Logo oficial aplicada no header, hero, banner e rodapé
+- Catálogo sem carrinho/checkout
+- Busca, filtros, ordenação e modal de produto
+- WhatsApp: (85) 99802-2643
+- Instagram: @amorafutcamisas
 
-COMO PUBLICAR NO GITHUB PAGES
-1. Descompacte o ZIP.
-2. Entre no repositório do GitHub Pages.
-3. Envie SUBSTITUINDO os arquivos/pastas existentes pelos arquivos deste ZIP.
-4. Aguarde o GitHub Pages atualizar.
-
-Observação: a lista de produtos foi montada a partir do catálogo atualmente apresentado em amorafut.com.br. Quando uma foto local do produto não está disponível neste pacote, o catálogo usa uma apresentação visual neutra para não inventar a imagem do modelo.
+PUBLICAÇÃO NO GITHUB PAGES
+1. Extraia o ZIP.
+2. Entre no repositório do catálogo.
+3. Substitua os arquivos antigos pelos arquivos desta pasta.
+4. Faça Commit changes.
+5. Aguarde o GitHub Pages atualizar.
