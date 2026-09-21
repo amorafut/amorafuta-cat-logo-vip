@@ -1,19 +1,8 @@
-AMORA FUT — CATÁLOGO VIP V4
+AMORA FUT — CATÁLOGO VIP V4.1
 
-Versão de acabamento visual com identidade oficial da Amora Fut.
+Correção de carregamento do catálogo para GitHub Pages.
+Os produtos agora têm uma grade inicial estática e o JavaScript assume o controle quando carregado, evitando catálogo vazio quando scripts demoram ou são bloqueados.
 
-- Fundo cinza chumbo
-- Rosa da logomarca como cor de destaque
-- Branco/preto para contraste
-- Logo oficial aplicada no header, hero, banner e rodapé
-- Catálogo sem carrinho/checkout
-- Busca, filtros, ordenação e modal de produto
-- WhatsApp: (85) 99802-2643
-- Instagram: @amorafutcamisas
-
-PUBLICAÇÃO NO GITHUB PAGES
-1. Extraia o ZIP.
-2. Entre no repositório do catálogo.
-3. Substitua os arquivos antigos pelos arquivos desta pasta.
-4. Faça Commit changes.
-5. Aguarde o GitHub Pages atualizar.
+Cores: cinza chumbo + rosa da logomarca + branco.
+WhatsApp: (85) 99802-2643
+Instagram: @amorafutcamisas

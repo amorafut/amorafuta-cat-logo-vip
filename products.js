@@ -1,0 +1,22 @@
+window.PRODUCTS = [
+ {id:'real-madrid-casa-26-27-torcedor',name:'Real Madrid Casa 26/27',category:'Internacionais',version:'Torcedor',price:130,badge:'DESTAQUE'},
+ {id:'flamengo-treino-bege-26-27-torcedor',name:'Flamengo Treino Bege 26/27',category:'Brasileiras',version:'Torcedor',price:115,badge:'TREINO'},
+ {id:'flamengo-treino-marrom-26-27-torcedor',name:'Flamengo Treino Marrom 26/27',category:'Brasileiras',version:'Torcedor',price:115,badge:'TREINO'},
+ {id:'borussia-dortmund-casa-26-27-torcedor',name:'Borussia Dortmund Casa 26/27',category:'Internacionais',version:'Torcedor',price:130},
+ {id:'manchester-city-casa-26-27-torcedor',name:'Manchester City Casa 26/27',category:'Internacionais',version:'Torcedor',price:130,image:'assets/images/man-city-01.jpg'},
+ {id:'atletico-mineiro-casa-26-27-torcedor',name:'Atlético Mineiro Casa 26/27',category:'Brasileiras',version:'Torcedor',price:130},
+ {id:'corinthians-casa-26-27-torcedor',name:'Corinthians Casa 26/27',category:'Brasileiras',version:'Torcedor',price:130},
+ {id:'cruzeiro-treino-azul-26-27-torcedor',name:'Cruzeiro Treino Azul Escuro 26/27',category:'Brasileiras',version:'Torcedor',price:115,badge:'TREINO'},
+ {id:'flamengo-casa-26-27-torcedor',name:'Flamengo Casa 26/27',category:'Brasileiras',version:'Torcedor',price:130,badge:'DESTAQUE'},
+ {id:'flamengo-fora-26-27-torcedor',name:'Flamengo Fora 26/27',category:'Brasileiras',version:'Torcedor',price:130},
+ {id:'palmeiras-casa-26-27-torcedor',name:'Palmeiras Casa 26/27',category:'Brasileiras',version:'Torcedor',price:130},
+ {id:'vasco-casa-26-27-torcedor',name:'Vasco Casa 26/27',category:'Brasileiras',version:'Torcedor',price:130},
+ {id:'corinthians-treino-vinho-26-27-torcedor',name:'Corinthians Treino Vinho 26/27',category:'Brasileiras',version:'Torcedor',price:115,badge:'TREINO'},
+ {id:'selecao-brasileira-casa-26-27-jogador',name:'Seleção Brasileira Casa 26/27',category:'Seleções',version:'Jogador',price:130,oldPrice:160,badge:'OFERTA'},
+ {id:'fluminense-casa-26-27-torcedor',name:'Fluminense Casa 26/27',category:'Brasileiras',version:'Torcedor',price:130},
+ {id:'arsenal-fora-26-27-jogador',name:'Arsenal Fora 26/27',category:'Internacionais',version:'Jogador',price:160,badge:'LANÇAMENTO'},
+ {id:'mexico-fora-26-jogador',name:'México Fora 26',category:'Seleções',version:'Jogador',price:160,badge:'LANÇAMENTO'},
+ {id:'inter-miami-fora-26-27-jogador',name:'Inter Miami Fora 26/27',category:'Internacionais',version:'Jogador',price:160,badge:'LANÇAMENTO'},
+ {id:'manchester-united-iii-25-26-torcedor',name:'Manchester United III 25/26',category:'Internacionais',version:'Torcedor',price:130},
+ {id:'atletico-madrid-retro-04-05-f-torres',name:'Atlético de Madrid Retrô 04/05 F. Torres',category:'Internacionais',version:'Torcedor',price:120,oldPrice:140,badge:'ESGOTADO',soldOut:true}
+];
