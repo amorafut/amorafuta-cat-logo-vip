@@ -1,11 +1,6 @@
-AMORA FUT — CATÁLOGO VIP V4.5
+AMORA FUT V6 - PÁGINAS INDIVIDUAIS
 
-Correção definitiva do modal: usa <dialog> nativo, sem dependência de overlay/scroll lock antigo.
-- X fecha
-- ESC fecha
-- clique no fundo fecha
-- rolagem fica dentro do modal
-- a página não some nem perde a posição
+IMPORTANTE: substitua a versão anterior no repositório GitHub, incluindo a pasta produto/.
+Os cards usam links absolutos para o GitHub Pages e não dependem de modal ou JavaScript para abrir.
 
-IMPORTANTE SOBRE AS FOTOS:
-O catálogo só consegue mostrar uma foto quando ela está cadastrada em products.js e o arquivo existe em assets/images. A V4.5 mantém as fotos que realmente estão no pacote (incluindo Manchester City e Arsenal de referência) e não inventa fotos de outros modelos. Para mostrar as camisas reais dos demais produtos, é necessário fornecer/importar as fotos correspondentes.
+URL: https://amorafut.github.io/amorafuta-cat-logo-vip/
