@@ -1,6 +1,16 @@
-AMORA FUT — CATÁLOGO VIP V1
+AMORA FUT — CATÁLOGO VIP V2
 
-Catálogo sem checkout: escolha o produto e envie o pedido pelo WhatsApp.
-WhatsApp: 55 85 99802-2643
+Esta versão é um catálogo, sem carrinho e sem checkout.
+Os pedidos são direcionados para o WhatsApp da Amora Fut.
+
+WhatsApp: (85) 99802-2643
 Instagram: @amorafutcamisas
-Fundo principal: cinza chumbo.
+Site atual de referência: https://amorafut.com.br/
+
+COMO PUBLICAR NO GITHUB PAGES
+1. Descompacte o ZIP.
+2. Entre no repositório do GitHub Pages.
+3. Envie SUBSTITUINDO os arquivos/pastas existentes pelos arquivos deste ZIP.
+4. Aguarde o GitHub Pages atualizar.
+
+Observação: a lista de produtos foi montada a partir do catálogo atualmente apresentado em amorafut.com.br. Quando uma foto local do produto não está disponível neste pacote, o catálogo usa uma apresentação visual neutra para não inventar a imagem do modelo.

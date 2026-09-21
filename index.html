@@ -1,9 +1,83 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Amora Fut | Catálogo VIP</title><meta name="description" content="Catálogo Amora Fut Streetwear"><link rel="stylesheet" href="css/catalogo.css"></head><body>
-<div class="topbar">ENVIO PARA TODO O BRASIL <span>•</span> PIX COM 5% DE DESCONTO</div>
-<header class="header"><a href="#inicio" class="brand"><div class="brand-name">AMORA <b>FUT</b></div><div class="brand-sub">STREETWEAR • DESIGNER PREMIUM</div></a><button class="search-open" id="searchOpen">⌕</button></header>
-<section class="hero" id="inicio"><div class="hero-copy"><span class="eyebrow">CATÁLOGO VIP</span><h1>Seu estilo.<br><strong>Sua camisa.</strong></h1><p>Explore nossa seleção de camisas de futebol e encontre seu próximo manto.</p><a href="#catalogo" class="hero-btn">VER CATÁLOGO</a></div><div class="hero-mark">AF</div></section>
-<section class="filters-wrap" id="catalogo"><div class="search-box"><span>⌕</span><input id="search" placeholder="Buscar time ou camisa..."></div><div class="filters"><button class="filter active" data-filter="Todos">Todos</button><button class="filter" data-filter="Brasileiras">Brasileiras</button><button class="filter" data-filter="Internacionais">Internacionais</button><button class="filter" data-filter="Seleções">Seleções</button><button class="filter" data-filter="Lançamentos">Lançamentos</button></div></section>
-<main class="catalog"><div class="catalog-head"><div><span class="eyebrow">SELEÇÃO AMORA FUT</span><h2>Camisas em destaque</h2></div><span id="count"></span></div><div class="grid" id="grid"></div><div class="empty" id="empty">Nenhuma camisa encontrada.</div></main>
-<div class="modal" id="modal"><div class="modal-bg" id="modalBg"></div><div class="product-modal"><button class="close" id="close">×</button><div class="modal-gallery"><div class="main-photo"><img id="mainPhoto"></div><div class="thumbs" id="thumbs"></div></div><div class="modal-info"><span class="badge" id="badge"></span><div class="eyebrow" id="team"></div><h2 id="productName"></h2><p id="description"></p><div class="price" id="price"></div><div class="pix">À vista no Pix: <b id="pix"></b></div><div class="size-title">Escolha o tamanho</div><div class="sizes" id="sizes"></div><div class="stock" id="stock"></div><button class="buy" id="buy">PEDIR PELO WHATSAPP</button><div class="trust"><span>✓ Envio para todo o Brasil</span><span>✓ Atendimento via WhatsApp</span><span>✓ Fotos reais dos produtos</span></div></div></div></div>
-<footer><div class="footer-brand">AMORA <b>FUT</b><small>STREETWEAR • DESIGNER PREMIUM</small></div><p>Camisas de futebol, estilo e identidade.</p><a href="https://instagram.com/amorafutcamisas" target="_blank">Instagram @amorafutcamisas</a><div class="copy">© 2026 Amora Fut Streetwear</div></footer>
-<script src="js/products.js"></script><script src="js/catalogo.js"></script></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Amora Fut — Catálogo VIP</title>
+<meta name="description" content="Catálogo VIP Amora Fut Streetwear — camisas de futebol. Consulte tamanhos e peça pelo WhatsApp.">
+<link rel="stylesheet" href="css/catalogo.css">
+</head>
+<body>
+<div class="topbar">
+  <div>🚚 <b>FRETE PARA TODO O BRASIL</b></div>
+  <div>♛ <b>QUALIDADE PREMIUM</b></div>
+  <div>🔒 <b>COMPRA 100% SEGURA</b></div>
+</div>
+<header>
+  <nav class="nav">
+    <a class="brand" href="#top" aria-label="Amora Fut">
+      <img src="assets/images/logo-amora-fut.png" alt="Amora Fut Streetwear">
+    </a>
+    <div class="navlinks">
+      <a class="active" href="#top">Início</a>
+      <a href="#catalogo">Brasileiras</a>
+      <a href="#catalogo">Internacionais</a>
+      <a href="#catalogo">Seleções</a>
+      <a href="#catalogo">Lançamentos</a>
+      <a href="#catalogo">Ofertas</a>
+    </div>
+    <a class="nav-social" href="https://instagram.com/amorafutcamisas" target="_blank" rel="noopener">◎ @amorafutcamisas</a>
+  </nav>
+  <div class="searchbar">
+    <input id="search" type="search" placeholder="Buscar camisas, times, seleções..." aria-label="Buscar produtos">
+    <button aria-label="Buscar">⌕</button>
+  </div>
+</header>
+<main id="top">
+  <section class="hero">
+    <div class="hero-copy">
+      <div class="eyebrow">AMORA FUT STREETWEAR</div>
+      <h1>MAIS QUE<br><span>CAMISAS.</span></h1>
+      <h2>UMA PAIXÃO QUE VESTE VOCÊ</h2>
+      <p>Camisas de futebol atuais, retrô e modelos especiais para quem vive o futebol com atitude.</p>
+      <div class="hero-actions"><a class="hero-btn" href="#catalogo">VER CATÁLOGO <span>→</span></a><a class="hero-link" href="https://wa.me/5585998022643" target="_blank" rel="noopener">FALAR NO WHATSAPP</a></div>
+    </div>
+    <div class="hero-visual">
+      <div class="glow"></div><div class="shirt-silhouette s1">AMORA</div><div class="shirt-silhouette s2">FUT</div><div class="shirt-silhouette s3">26/27</div>
+      <div class="hero-stamp">ESTILO<br><b>FUTEBOL</b><br>ATITUDE</div>
+    </div>
+  </section>
+  <section class="benefits">
+    <div><span>♢</span><b>PRODUTOS DE<br>ALTA QUALIDADE</b></div>
+    <div><span>♢</span><b>PAGAMENTO<br>SEGURO</b></div>
+    <div><span>▣</span><b>ENVIO PARA<br>TODO O BRASIL</b></div>
+    <div><span>%</span><b>5% DE DESCONTO<br>NO PIX</b></div>
+    <div><span>◉</span><b>ATENDIMENTO VIA<br>WHATSAPP</b></div>
+  </section>
+  <section id="catalogo" class="catalog-section">
+    <div class="category-cards">
+      <button class="category-card active" data-cat="Todos"><strong>▦</strong><span>Todos</span></button>
+      <button class="category-card" data-cat="Brasileiras"><strong>♜</strong><span>Brasileiras</span></button>
+      <button class="category-card" data-cat="Internacionais"><strong>◎</strong><span>Internacionais</span></button>
+      <button class="category-card" data-cat="Seleções"><strong>♟</strong><span>Seleções</span></button>
+      <button class="category-card" data-cat="Lançamentos"><strong>★</strong><span>Lançamentos</span></button>
+      <button class="category-card" data-cat="Ofertas"><strong>◆</strong><span>Ofertas</span></button>
+    </div>
+    <div class="catalog-head"><div><span class="section-kicker">COLEÇÃO AMORA FUT</span><h2>PRODUTOS <em>EM DESTAQUE</em></h2></div><span id="count"></span></div>
+    <div class="tools"><div class="search-mobile"><input id="searchMobile" type="search" placeholder="Buscar no catálogo..."></div><select id="sort" class="sort"><option value="relevantes">Mais relevantes</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option></select></div>
+    <div id="grid" class="grid"></div>
+  </section>
+  <section class="brand-banner">
+    <div class="brand-banner-copy"><span>VISTA O QUE TE MOVE</span><b>♛</b></div>
+    <img src="assets/images/logo-amora-fut.png" alt="Amora Fut Streetwear">
+    <div class="brand-banner-copy right"><span>ENTRE PARA O NOSSO TIME</span><a href="https://instagram.com/amorafutcamisas" target="_blank" rel="noopener">@amorafutcamisas</a></div>
+  </section>
+</main>
+<footer>
+  <div class="footer-benefits"><div>◉ <span>ATENDIMENTO<br>PERSONALIZADO</span></div><div>↔ <span>TROCA COM<br>FACILIDADE</span></div><div>▣ <span>ENTREGA EM<br>TODO O BRASIL</span></div><div>% <span>5% DE DESCONTO NO PIX</span></div><div>♛ <span>PRODUTOS<br>PREMIUM</span></div></div>
+  <div class="footer"><div class="footer-brand"><img src="assets/images/logo-amora-fut.png" alt="Amora Fut"><div><strong>AMORA FUT - STREETWEAR</strong><small>Designer Premium</small></div></div><div class="footer-links"><a href="#top">Sobre Nós</a><a href="#catalogo">Catálogo</a><a href="https://wa.me/5585998022643" target="_blank" rel="noopener">Contato</a><a href="https://instagram.com/amorafutcamisas" target="_blank" rel="noopener">Instagram</a></div><div class="footer-copy">© 2026 Amora Fut Streetwear. Todos os direitos reservados.</div></div>
+</footer>
+<a class="whatsapp" href="https://wa.me/5585998022643" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">◔</a>
+<div id="modal"></div>
+<script src="js/products.js"></script><script src="js/catalogo.js"></script>
+</body></html>

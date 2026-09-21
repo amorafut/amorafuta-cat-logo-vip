@@ -1,52 +1,22 @@
-window.AMORA_PRODUCTS=[
-  {
-    "id": "arsenal-2025-26-jogador",
-    "name": "Camisa Arsenal 2025/26",
-    "team": "Arsenal",
-    "category": "Internacionais",
-    "version": "Jogador",
-    "price": 160,
-    "sizes": {
-      "P": 0,
-      "M": 0,
-      "G": 1,
-      "GG": 0
-    },
-    "badge": "ÚLTIMA UNIDADE",
-    "description": "Camisa Arsenal 2025/26 na versão jogador, com base azul, detalhes amarelos e acabamento em vermelho.",
-    "images": [
-      "assets/images/arsenal-01.jpg",
-      "assets/images/arsenal-02.jpg",
-      "assets/images/arsenal-03.jpg",
-      "assets/images/arsenal-04.jpg",
-      "assets/images/arsenal-05.jpg",
-      "assets/images/arsenal-06.jpg",
-      "assets/images/arsenal-07.jpg"
-    ]
-  },
-  {
-    "id": "inter-milao-2026-27-jogador",
-    "name": "Camisa Inter de Milão 2026/27",
-    "team": "Inter de Milão",
-    "category": "Internacionais",
-    "version": "Jogador",
-    "price": 160,
-    "sizes": {
-      "P": 5,
-      "M": 5,
-      "G": 5,
-      "GG": 3
-    },
-    "badge": "LANÇAMENTO",
-    "description": "Modelo em azul e preto com detalhes dourados, gola polo e acabamento esportivo.",
-    "images": [
-      "assets/images/inter-01.jpg",
-      "assets/images/inter-02.jpg",
-      "assets/images/inter-03.jpg",
-      "assets/images/inter-04.jpg",
-      "assets/images/inter-05.jpg",
-      "assets/images/inter-06.jpg",
-      "assets/images/inter-07.jpg"
-    ]
-  }
+window.PRODUCTS = [
+ {id:'real-madrid-casa-26-27-torcedor',name:'Real Madrid Casa 26/27',category:'Internacionais',version:'Torcedor',price:130,badge:'DESTAQUE'},
+ {id:'flamengo-treino-bege-26-27-torcedor',name:'Flamengo Treino Bege 26/27',category:'Brasileiras',version:'Torcedor',price:115,badge:'TREINO'},
+ {id:'flamengo-treino-marrom-26-27-torcedor',name:'Flamengo Treino Marrom 26/27',category:'Brasileiras',version:'Torcedor',price:115,badge:'TREINO'},
+ {id:'borussia-dortmund-casa-26-27-torcedor',name:'Borussia Dortmund Casa 26/27',category:'Internacionais',version:'Torcedor',price:130},
+ {id:'manchester-city-casa-26-27-torcedor',name:'Manchester City Casa 26/27',category:'Internacionais',version:'Torcedor',price:130,image:'assets/images/man-city-01.jpg'},
+ {id:'atletico-mineiro-casa-26-27-torcedor',name:'Atlético Mineiro Casa 26/27',category:'Brasileiras',version:'Torcedor',price:130},
+ {id:'corinthians-casa-26-27-torcedor',name:'Corinthians Casa 26/27',category:'Brasileiras',version:'Torcedor',price:130},
+ {id:'cruzeiro-treino-azul-26-27-torcedor',name:'Cruzeiro Treino Azul Escuro 26/27',category:'Brasileiras',version:'Torcedor',price:115,badge:'TREINO'},
+ {id:'flamengo-casa-26-27-torcedor',name:'Flamengo Casa 26/27',category:'Brasileiras',version:'Torcedor',price:130,badge:'DESTAQUE'},
+ {id:'flamengo-fora-26-27-torcedor',name:'Flamengo Fora 26/27',category:'Brasileiras',version:'Torcedor',price:130},
+ {id:'palmeiras-casa-26-27-torcedor',name:'Palmeiras Casa 26/27',category:'Brasileiras',version:'Torcedor',price:130},
+ {id:'vasco-casa-26-27-torcedor',name:'Vasco Casa 26/27',category:'Brasileiras',version:'Torcedor',price:130},
+ {id:'corinthians-treino-vinho-26-27-torcedor',name:'Corinthians Treino Vinho 26/27',category:'Brasileiras',version:'Torcedor',price:115,badge:'TREINO'},
+ {id:'selecao-brasileira-casa-26-27-jogador',name:'Seleção Brasileira Casa 26/27',category:'Seleções',version:'Jogador',price:130,oldPrice:160,badge:'OFERTA'},
+ {id:'fluminense-casa-26-27-torcedor',name:'Fluminense Casa 26/27',category:'Brasileiras',version:'Torcedor',price:130},
+ {id:'arsenal-fora-26-27-jogador',name:'Arsenal Fora 26/27',category:'Internacionais',version:'Jogador',price:160,badge:'LANÇAMENTO'},
+ {id:'mexico-fora-26-jogador',name:'México Fora 26',category:'Seleções',version:'Jogador',price:160,badge:'LANÇAMENTO'},
+ {id:'inter-miami-fora-26-27-jogador',name:'Inter Miami Fora 26/27',category:'Internacionais',version:'Jogador',price:160,badge:'LANÇAMENTO'},
+ {id:'manchester-united-iii-25-26-torcedor',name:'Manchester United III 25/26',category:'Internacionais',version:'Torcedor',price:130},
+ {id:'atletico-madrid-retro-04-05-f-torres',name:'Atlético de Madrid Retrô 04/05 F. Torres',category:'Internacionais',version:'Torcedor',price:120,oldPrice:140,badge:'ESGOTADO',soldOut:true}
 ];
