@@ -46,3 +46,6 @@
  .hero-action.secondary{display:none}
 }
 @media (max-width:420px){.hero-image-wrap{height:440px}.hero-mobile-copy b{font-size:36px}.hero-mobile-copy span{font-size:24px}.hero-mobile-copy small{font-size:7px;max-width:170px}.hero-overlay-actions{bottom:12px}.hero-action{height:40px;font-size:7px}}
+
+/* Otimizacao de renderizacao fora da primeira tela */
+.brand-banner,footer{content-visibility:auto;contain-intrinsic-size:400px}
