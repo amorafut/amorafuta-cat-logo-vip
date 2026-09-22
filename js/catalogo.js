@@ -24,7 +24,7 @@ function card(p){
       <div class="price">${p.oldPrice?`<del>${fmt(p.oldPrice)}</del>`:''}<strong>${fmt(p.price)}</strong></div>
       <div class="pix"><span>PIX</span> ${fmt(pix(p.price))}</div>
       <span class="cta">Consultar tamanhos <b>→</b></span></div>
-    </button></article>`;
+    </a></article>`;
 }
 function render(){
  let arr=PRODUCTS.filter(p=>isCat(p,state.cat)&&(`${p.name} ${p.category} ${p.version}`).toLowerCase().includes(state.q));
