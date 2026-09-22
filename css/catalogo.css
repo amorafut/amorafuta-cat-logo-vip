@@ -47,3 +47,26 @@
 .hero-image-link img{width:100%;max-width:100%;height:auto;display:block;object-fit:contain}
 @media (max-width:1024px){.hero-image-wrap{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}.hero-image-link img{width:100vw;height:auto}}
 @media (max-width:600px){.hero-image-wrap{width:100vw}.hero-image-link img{width:100vw;height:auto;min-height:0;object-fit:contain}.hero-overlay-actions{bottom:8px}.hero-action{font-size:8px;height:36px;padding:0 11px}}
+
+/* BANNER RESPONSIVO — desktop, tablet e smartphone */
+.hero-image-wrap{position:relative;width:100%;overflow:hidden;background:#050506}
+.hero-image-link{position:relative;display:block;width:100%;height:auto;overflow:hidden}
+.hero-image-link picture,.hero-image-link img{display:block;width:100%;line-height:0}
+.hero-image-link img{height:auto;max-width:none;object-fit:cover}
+.hero-mobile-copy{display:none}
+@media (min-width:1400px){.hero-image-link img{width:100%}}
+@media (min-width:761px) and (max-width:1200px){.hero-image-wrap{height:clamp(390px,42vw,520px)}.hero-image-link,.hero-image-link img{height:100%}.hero-image-link img{width:100%;object-fit:cover;object-position:center center}}
+@media (max-width:760px){
+ .hero-image-wrap{height:470px;width:100vw;margin-left:calc(50% - 50vw);background:#07070a}
+ .hero-image-link{height:100%;background-image:url('../assets/images/banner-home.png?v=3');background-size:cover;background-position:center center}
+ .hero-image-link picture{display:none}
+ .hero-mobile-copy{display:flex;position:absolute;left:18px;top:24px;z-index:3;flex-direction:column;text-transform:uppercase;text-shadow:0 4px 16px #000;line-height:.92}
+ .hero-mobile-copy b{font-size:42px;color:#fff;font-weight:1000;letter-spacing:-2px}
+ .hero-mobile-copy span{font-size:28px;color:var(--pink);font-weight:1000;letter-spacing:-1px;margin-top:3px}
+ .hero-mobile-copy small{font-size:8px;line-height:1.5;letter-spacing:1.5px;color:#fff;font-weight:800;margin-top:12px;max-width:190px}
+ .hero-overlay-actions{bottom:14px;padding:0 10px}
+ .hero-action{height:42px;padding:0 15px;font-size:8px}
+ .hero-action.primary{flex:1;justify-content:center;max-width:245px}
+ .hero-action.secondary{display:none}
+}
+@media (max-width:420px){.hero-image-wrap{height:440px}.hero-mobile-copy b{font-size:36px}.hero-mobile-copy span{font-size:24px}.hero-mobile-copy small{font-size:7px;max-width:170px}.hero-overlay-actions{bottom:12px}.hero-action{height:40px;font-size:7px}}
