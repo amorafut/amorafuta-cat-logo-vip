@@ -61,15 +61,24 @@
   },
   {
     "id": "manchester-city-casa-26-27-torcedor",
-    "team": "Manchester City",
     "name": "Manchester City Casa 26/27",
+    "team": "Manchester City",
     "category": "Internacionais",
     "version": "Torcedor",
     "price": 130,
+    "badge": "",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 0,
+      "GG": 0
+    },
+    "description": "",
     "images": [
-      "assets/images/man-city-01.jpg"
-    ],
-    "published": true
+      "assets/images/catalog/manchester-city-casa-26-27-torcedor/01.png"
+    ]
   },
   {
     "id": "atletico-mineiro-casa-26-27-torcedor",
