@@ -1,0 +1,117 @@
+name: Otimizar imagens do catálogo
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  optimize-images:
+    if: !contains(github.event.head_commit.message, '[skip image optimization]')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v6
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Instalar Sharp
+        run: npm install --no-save sharp
+
+      - name: Converter imagens para WebP
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const sharp = require('sharp');
+
+          const root = 'assets/images';
+          const textFiles = ['index.html', 'produto.html', 'data/products.json'];
+
+          function walk(dir) {
+            return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
+              const p = path.join(dir, entry.name);
+              return entry.isDirectory() ? walk(p) : [p];
+            });
+          }
+
+          async function main() {
+            const files = walk(root);
+            const originals = files.filter(f => /\.(png|jpe?g)$/i.test(f));
+            let converted = 0;
+            let removed = 0;
+
+            for (const input of originals) {
+              const output = input.replace(/\.(png|jpe?g)$/i, '.webp');
+              if (!fs.existsSync(output)) {
+                await sharp(input)
+                  .rotate()
+                  .webp({ quality: 82, effort: 4, smartSubsample: true })
+                  .toFile(output);
+                converted++;
+              }
+            }
+
+            const replacements = new Map();
+            for (const input of originals) {
+              const output = input.replace(/\.(png|jpe?g)$/i, '.webp');
+              const from = input.replaceAll('\\', '/');
+              const to = output.replaceAll('\\', '/');
+              replacements.set(from, to);
+            }
+
+            for (const file of textFiles) {
+              if (!fs.existsSync(file)) continue;
+              let text = fs.readFileSync(file, 'utf8');
+              for (const [from, to] of replacements) {
+                text = text.split(from).join(to);
+              }
+              fs.writeFileSync(file, text);
+            }
+
+            // Só remove o original depois que o WebP correspondente existir.
+            for (const input of originals) {
+              const output = input.replace(/\.(png|jpe?g)$/i, '.webp');
+              if (fs.existsSync(output)) {
+                fs.unlinkSync(input);
+                removed++;
+              }
+            }
+
+            console.log(JSON.stringify({ converted, removed, totalOriginals: originals.length }, null, 2));
+          }
+
+          main().catch(err => {
+            console.error(err);
+            process.exit(1);
+          });
+          NODE
+
+      - name: Verificar referências antigas
+        shell: bash
+        run: |
+          if grep -R -nE 'assets/images/[^" )>]+\.(png|jpe?g)' index.html produto.html data/products.json 2>/dev/null; then
+            echo "Ainda existem referências de imagens antigas."
+            exit 1
+          fi
+
+      - name: Publicar otimizações
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/images index.html produto.html data/products.json
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteração de imagem para publicar."
+            exit 0
+          fi
+          git commit -m "perf: otimizar imagens para WebP [skip image optimization]"
+          git push
