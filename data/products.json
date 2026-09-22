@@ -1,5 +1,26 @@
 [
   {
+    "id": "real-madrid-fora-26-27-torcedor",
+    "name": "Real Madrid fora 26/27",
+    "team": "Real Madrid",
+    "category": "Internacionais",
+    "version": "Torcedor",
+    "price": 130,
+    "badge": "LANÇAMENTO",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 1,
+      "GG": 1
+    },
+    "description": "",
+    "images": [
+      "assets/images/catalog/real-madrid-fora-26-27-torcedor/01.png"
+    ]
+  },
+  {
     "id": "real-madrid-casa-26-27-torcedor",
     "team": "Real Madrid",
     "name": "Real Madrid Casa 26/27",
