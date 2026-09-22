@@ -22,13 +22,30 @@
   },
   {
     "id": "real-madrid-casa-26-27-torcedor",
-    "team": "Real Madrid",
     "name": "Real Madrid Casa 26/27",
+    "team": "Real Madrid",
     "category": "Internacionais",
     "version": "Torcedor",
     "price": 130,
     "badge": "DESTAQUE",
-    "published": true
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 1,
+      "M": 2,
+      "G": 2,
+      "GG": 1
+    },
+    "description": "",
+    "images": [
+      "assets/images/catalog/real-madrid-casa-26-27-torcedor/ord-1790112522940-01.png",
+      "assets/images/catalog/real-madrid-casa-26-27-torcedor/ord-1790112526505-02.jpg",
+      "assets/images/catalog/real-madrid-casa-26-27-torcedor/ord-1790112530205-03.jpg",
+      "assets/images/catalog/real-madrid-casa-26-27-torcedor/ord-1790112533550-04.jpg",
+      "assets/images/catalog/real-madrid-casa-26-27-torcedor/ord-1790112537853-05.jpg",
+      "assets/images/catalog/real-madrid-casa-26-27-torcedor/ord-1790112541287-06.jpg",
+      "assets/images/catalog/real-madrid-casa-26-27-torcedor/ord-1790112544607-07.jpg"
+    ]
   },
   {
     "id": "flamengo-treino-bege-26-27-torcedor",
