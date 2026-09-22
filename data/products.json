@@ -38,7 +38,14 @@
     "version": "Torcedor",
     "price": 115,
     "badge": "TREINO",
-    "published": true
+    "published": true,
+    "images": [
+      "assets/images/catalog/flamengo-treino-bege-26-27-torcedor/ord-1790112040695-01.jpg",
+      "assets/images/catalog/flamengo-treino-bege-26-27-torcedor/ord-1790112044037-02.jpg",
+      "assets/images/catalog/flamengo-treino-bege-26-27-torcedor/ord-1790112048298-03.jpg",
+      "assets/images/catalog/flamengo-treino-bege-26-27-torcedor/ord-1790112052806-04.jpg",
+      "assets/images/catalog/flamengo-treino-bege-26-27-torcedor/ord-1790112056876-05.jpg"
+    ]
   },
   {
     "id": "flamengo-treino-marrom-26-27-torcedor",
