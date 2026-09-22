@@ -20,6 +20,10 @@ jobs:
         shell: bash
         run: |
           set -e
+          test -f tmp/banner-home.b64.01
+          test -f tmp/banner-home.b64.02
+          test -f tmp/banner-home.b64.03
+          test -f tmp/banner-home.b64.04
           cat tmp/banner-home.b64.* > /tmp/banner-home.b64
           base64 -d /tmp/banner-home.b64 > assets/images/banner-home.webp
           file assets/images/banner-home.webp
