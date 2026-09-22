@@ -1,10 +1,11 @@
 const WA='5585998022643';
 const fmt=v=>v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 const pix=v=>v*.95;
-let state={cat:'Todos',q:'',sort:'relevantes'};
+let state={cat:'Todos',team:'Todos',q:'',sort:'relevantes'};
 const $=s=>document.querySelector(s);
 function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
 function initials(name){return name.split(/\s+/).slice(0,3).map(x=>x[0]).join('').toUpperCase();}
+function isTeam(p,team){ return team==='Todos' || p.team===team; }
 function isCat(p,cat){
   if(cat==='Todos') return true;
   if(cat==='Lançamentos') return p.badge==='LANÇAMENTO';
@@ -27,7 +28,7 @@ function card(p){
     </a></article>`;
 }
 function render(){
- let arr=PRODUCTS.filter(p=>isCat(p,state.cat)&&(`${p.name} ${p.category} ${p.version}`).toLowerCase().includes(state.q));
+ let arr=PRODUCTS.filter(p=>isCat(p,state.cat)&&isTeam(p,state.team)&&(`${p.name} ${p.team||''} ${p.category} ${p.version}`).toLowerCase().includes(state.q));
  if(state.sort==='menor')arr.sort((a,b)=>a.price-b.price);
  if(state.sort==='maior')arr.sort((a,b)=>b.price-a.price);
  $('#grid').innerHTML=arr.map(card).join('')||`<div class="empty"><strong>Nenhum produto encontrado.</strong><span>Tente outro time, coleção ou categoria.</span></div>`;
@@ -46,11 +47,14 @@ function openProduct(id){
 }
 function closeProduct(e){if(e&&e.target!==e.currentTarget)return;$('#modal').classList.remove('show');document.body.classList.remove('lock')}
 function setCat(cat){state.cat=cat;document.querySelectorAll('.category-card').forEach(b=>b.classList.toggle('active',b.dataset.cat===cat));render();document.querySelector('#catalogo').scrollIntoView({behavior:'smooth',block:'start'})}
+function setTeam(team){state.team=team;document.querySelectorAll('.team-chip').forEach(b=>b.classList.toggle('active',b.dataset.team===team));render();document.querySelector('#catalogo').scrollIntoView({behavior:'smooth',block:'start'})}
+function renderTeams(){const box=$('#teamFilters');if(!box)return;const teams=[...new Set(PRODUCTS.map(p=>p.team).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt-BR'));box.innerHTML='<button class="team-chip active" data-team="Todos">Todos os times</button>'+teams.map(t=>`<button class="team-chip" data-team="${esc(t)}">${esc(t)}</button>`).join('');box.querySelectorAll('.team-chip').forEach(b=>b.addEventListener('click',()=>setTeam(b.dataset.team)));}
 function init(){
+ renderTeams();
  document.querySelectorAll('.category-card').forEach(b=>b.addEventListener('click',()=>setCat(b.dataset.cat)));
  document.querySelectorAll('[data-nav-cat]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();setCat(a.dataset.navCat)}));
  const sync=e=>{state.q=e.target.value.toLowerCase().trim();document.querySelectorAll('#search,#searchMobile').forEach(x=>{if(x!==e.target)x.value=e.target.value});render()};
  $('#search').addEventListener('input',sync);$('#searchMobile').addEventListener('input',sync);$('#sort').addEventListener('change',e=>{state.sort=e.target.value;render()});
  render();
 }
-window.openProduct=openProduct;window.closeProduct=closeProduct;document.addEventListener('DOMContentLoaded',init);
+window.openProduct=openProduct;window.closeProduct=closeProduct;window.setTeam=setTeam;document.addEventListener('DOMContentLoaded',init);
