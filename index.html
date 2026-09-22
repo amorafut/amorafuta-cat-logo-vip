@@ -5,7 +5,18 @@
 <meta name="description" content="Catálogo VIP Amora Fut Streetwear. Camisas de futebol, lançamentos e modelos especiais.">
 <meta name="theme-color" content="#232427">
 <link rel="stylesheet" href="css/catalogo.css?v=9.0">
-</head><body id="top"><div id="cartRoot"></div>
+<style id="amora-cart-critical">
+#cartRoot{position:relative;z-index:100}
+#cartRoot .cart-overlay{position:fixed!important;inset:0!important;background:rgba(0,0,0,.65)!important;opacity:0!important;visibility:hidden!important;pointer-events:none!important;z-index:9990!important;transition:.25s}
+#cartRoot .cart-drawer{position:fixed!important;top:0!important;right:0!important;width:min(430px,94vw)!important;height:100vh!important;margin:0!important;padding:0!important;background:#202124!important;border-left:1px solid #55575d!important;box-shadow:-20px 0 60px rgba(0,0,0,.45)!important;transform:translateX(105%)!important;transition:.28s!important;z-index:9991!important;display:flex!important;flex-direction:column!important;color:#fff!important}
+body.cart-open #cartRoot .cart-overlay{opacity:1!important;visibility:visible!important;pointer-events:auto!important}
+body.cart-open #cartRoot .cart-drawer{transform:translateX(0)!important}
+#cartRoot .cart-float{position:fixed!important;right:92px!important;bottom:22px!important;width:58px!important;height:58px!important;border-radius:50%!important;background:#fff!important;color:#17181a!important;border:0!important;z-index:9992!important;cursor:pointer!important;box-shadow:0 12px 32px rgba(0,0,0,.35)!important}
+#cartRoot .cart-head{padding:24px 22px!important;border-bottom:1px solid #45474c!important;display:flex!important;justify-content:space-between!important;align-items:center!important}
+#cartRoot .cart-items{flex:1!important;overflow:auto!important;padding:14px!important}
+#cartRoot .cart-foot{padding:18px!important;border-top:1px solid #45474c!important;background:#191a1c!important}
+@media(max-width:480px){#cartRoot .cart-float{right:76px!important;bottom:14px!important;width:52px!important;height:52px!important}}
+</style></head><body id="top"><div id="cartRoot"></div>
 <div class="topbar"><div>🚚 <b>FRETE PARA TODO O BRASIL</b></div><div>♛ <b>QUALIDADE PREMIUM</b></div><div>🔒 <b>ATENDIMENTO VIA WHATSAPP</b></div></div>
 <header class="site-header">
  <div class="nav wrap">
@@ -13,7 +24,7 @@
   <nav class="navlinks" aria-label="Categorias">
    <a class="active" href="#top">Início</a><a href="#catalogo" data-nav-cat="Brasileiras">Brasileiras</a><a href="#catalogo" data-nav-cat="Internacionais">Internacionais</a><a href="#catalogo" data-nav-cat="Seleções">Seleções</a><a href="#catalogo" data-nav-cat="Lançamentos">Lançamentos</a><a href="#catalogo" data-nav-cat="Ofertas">Ofertas</a>
   </nav>
-  <a class="social" href="https://instagram.com/amorafutcamisas" target="_blank" rel="noopener"><span>◎</span> @amorafutcamisas</a>
+  <button type="button" class="header-cart" onclick="openCart()" aria-label="Abrir carrinho">🛒 <span>CARRINHO</span><b id="headerCartBadge">0</b></button><a class="social" href="https://instagram.com/amorafutcamisas" target="_blank" rel="noopener"><span>◎</span> @amorafutcamisas</a>
  </div>
  <div class="searchbar wrap"><input id="search" type="search" placeholder="Buscar camisas, times, seleções..." aria-label="Buscar no catálogo"><button aria-label="Buscar">⌕</button></div>
 </header>
@@ -34,5 +45,5 @@
 </main>
 <footer><div class="footer-benefits wrap"><div>◉ <span>ATENDIMENTO<br>PERSONALIZADO</span></div><div>↔ <span>TROCA COM<br>FACILIDADE</span></div><div>▣ <span>ENTREGA EM<br>TODO O BRASIL</span></div><div>% <span>5% DE DESCONTO<br>NO PIX</span></div><div>♛ <span>PRODUTOS<br>PREMIUM</span></div></div><div class="footer wrap"><div class="footer-brand"><img src="assets/images/logo-amora-fut.png" alt="Amora Fut"><div><strong>AMORA FUT — STREETWEAR</strong><small>Designer Premium</small></div></div><div class="footer-links"><a href="#top">Início</a><a href="#catalogo">Catálogo</a><a href="admin/">Painel</a><a href="https://wa.me/5585998022643" target="_blank" rel="noopener">Contato</a><a href="https://instagram.com/amorafutcamisas" target="_blank" rel="noopener">Instagram</a></div><div class="footer-copy">© 2026 Amora Fut Streetwear. Todos os direitos reservados.</div></div></footer>
 <a class="whatsapp" href="https://wa.me/5585998022643" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">◔</a>
-<script src="js/cart.js?v=2.0"></script><script src="js/catalogo.js?v=10.0"></script>
+<script src="js/cart.js?v=3.0"></script><script src="js/catalogo.js?v=11.0"></script>
 </body></html>
