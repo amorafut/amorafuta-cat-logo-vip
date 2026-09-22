@@ -49,3 +49,13 @@
 
 /* Otimizacao de renderizacao fora da primeira tela */
 .brand-banner,footer{content-visibility:auto;contain-intrinsic-size:400px}
+
+
+/* Acessibilidade: contraste e controles nomeados sem alterar o layout */
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.section-kicker{color:#ff5b9c}
+.teams-hint,.catline{color:#a0a3aa}
+del{color:#a0a3aa}
+.cta{color:#ff78ad}
+.badge,.team-chip.active,.hero-action.primary,.cart-checkout{background:#c9005c!important;color:#fff!important}
+.footer-copy{color:#a0a3aa}
