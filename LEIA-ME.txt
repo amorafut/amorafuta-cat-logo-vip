@@ -1,6 +1,6 @@
 AMORA FUT V6 - PÁGINAS INDIVIDUAIS
 
-IMPORTANTE: substitua a versão anterior no repositório GitHub, incluindo a pasta produto/.
+IMPORTANTE: substitua a versão anterior no repositório GitHub, incluindo a raiz do projeto.
 Os cards usam links absolutos para o GitHub Pages e não dependem de modal ou JavaScript para abrir.
 
 URL: https://amorafut.github.io/amorafuta-cat-logo-vip/
