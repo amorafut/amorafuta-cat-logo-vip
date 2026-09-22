@@ -1,0 +1,27 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Painel Amora Fut</title><meta name="theme-color" content="#232427"><link rel="stylesheet" href="admin.css?v=1.0"></head><body>
+<header class="admin-head"><a href="../index.html" class="logo"><img src="../assets/images/logo-amora-fut.png" alt="Amora Fut"></a><div><strong>PAINEL ADMINISTRATIVO</strong><small>Catálogo VIP</small></div><a class="site-link" href="../index.html" target="_blank">Ver site ↗</a></header>
+<main class="admin-wrap">
+<section id="authCard" class="panel auth"><div class="panel-title"><span>🔐</span><div><h1>Acesso de publicação</h1><p>O painel é privado. Seu token fica somente neste navegador.</p></div></div><label>GitHub Token<input id="token" type="password" autocomplete="off" placeholder="Cole aqui seu token fine-grained"></label><div class="auth-row"><label class="check"><input id="remember" type="checkbox"> lembrar neste dispositivo</label><button id="connect" class="primary">Conectar</button></div><div id="authMsg" class="msg"></div><details><summary>Como configurar o acesso</summary><ol><li>No GitHub, crie um <b>Fine-grained personal access token</b>.</li><li>Escolha somente o repositório <b>amorafut/amorafuta-cat-logo-vip</b>.</li><li>Em <b>Repository permissions</b>, dê <b>Contents: Read and write</b>.</li><li>Cole o token aqui. Ele não será colocado no código do site.</li></ol></details></section>
+<section id="app" class="hidden">
+<div class="dash"><div><span>AMORA FUT</span><h1>Gerenciador de catálogo</h1><p>Cadastre produtos, fotos, preços e estoque. Depois publique em um clique.</p></div><div class="stats"><div><b id="statProducts">0</b><small>produtos</small></div><div><b id="statTeams">0</b><small>times</small></div><div><b id="statStock">0</b><small>unidades</small></div></div></div>
+<div class="toolbar"><button id="newProduct" class="primary">＋ Novo produto</button><button id="reload" class="ghost">↻ Recarregar</button><button id="publish" class="publish">🚀 Publicar alterações</button><span id="status" class="status"></span></div>
+<div class="layout"><aside class="panel product-list"><div class="list-head"><h2>Produtos</h2><input id="filter" placeholder="Buscar produto ou time"></div><div id="list"></div></aside>
+<section class="panel editor"><div id="emptyEditor" class="empty-editor"><div>⚽</div><h2>Selecione um produto</h2><p>Ou clique em <b>Novo produto</b> para começar.</p></div>
+<form id="form" class="hidden">
+<div class="editor-head"><div><span id="editMode">NOVO PRODUTO</span><h2 id="formTitle">Novo produto</h2></div><button type="button" id="delete" class="danger ghost">Excluir</button></div>
+<div class="form-grid">
+<label>ID / slug<input id="fId" required placeholder="palmeiras-casa-26-27"></label>
+<label>Nome do produto<input id="fName" required placeholder="Palmeiras Casa 26/27"></label>
+<label>Time<input id="fTeam" required placeholder="Palmeiras"></label>
+<label>Categoria<select id="fCategory"><option>Brasileiras</option><option>Internacionais</option><option>Seleções</option></select></label>
+<label>Versão<select id="fVersion"><option>Torcedor</option><option>Jogador</option></select></label>
+<label>Preço<input id="fPrice" type="number" step="0.01" min="0" required></label>
+<label>Preço anterior<input id="fOldPrice" type="number" step="0.01" min="0"></label>
+<label>Etiqueta<select id="fBadge"><option value="">Nenhuma</option><option>DESTAQUE</option><option>LANÇAMENTO</option><option>OFERTA</option><option>TREINO</option><option>ÚLTIMA UNIDADE</option></select></label>
+</div>
+<label>Descrição<textarea id="fDescription" rows="4" placeholder="Descrição curta do produto"></textarea></label>
+<div class="switches"><label class="switch"><input id="fPublished" type="checkbox" checked><span></span> Publicado no catálogo</label><label class="switch"><input id="fSold" type="checkbox"><span></span> Esgotado</label></div>
+<div class="stock-box"><h3>Estoque por tamanho</h3><div class="stock-grid"><label>P<input id="sP" type="number" min="0" value="0"></label><label>M<input id="sM" type="number" min="0" value="0"></label><label>G<input id="sG" type="number" min="0" value="0"></label><label>GG<input id="sGG" type="number" min="0" value="0"></label></div><small>Deixe todos em 0 se quiser apenas informar disponibilidade pelo WhatsApp.</small></div>
+<div class="photo-box"><div class="photo-head"><div><h3>Fotos do produto</h3><small>Você pode selecionar várias de uma vez.</small></div><label class="upload">＋ Adicionar fotos<input id="photos" type="file" accept="image/*" multiple></label></div><div id="previews" class="previews"></div></div>
+<div class="form-actions"><button type="submit" class="primary">Salvar produto</button><button type="button" id="cancel" class="ghost">Cancelar</button></div>
+</form></section></div></section></main><script src="admin.js?v=1.0"></script></body></html>
