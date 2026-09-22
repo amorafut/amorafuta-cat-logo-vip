@@ -9,7 +9,7 @@ window.PRODUCTS = [
  {id:'cruzeiro-treino-azul-26-27-torcedor',name:'Cruzeiro Treino Azul Escuro 26/27',category:'Brasileiras',version:'Torcedor',price:115,badge:'TREINO'},
  {id:'flamengo-casa-26-27-torcedor',name:'Flamengo Casa 26/27',category:'Brasileiras',version:'Torcedor',price:130,badge:'DESTAQUE'},
  {id:'flamengo-fora-26-27-torcedor',name:'Flamengo Fora 26/27',category:'Brasileiras',version:'Torcedor',price:130},
- {id:'palmeiras-casa-26-27-torcedor',name:'Palmeiras Casa 26/27',category:'Brasileiras',version:'Torcedor',price:130},
+ {id:'palmeiras-casa-26-27-torcedor',name:'Palmeiras Casa 26/27',category:'Brasileiras',version:'Torcedor',price:130,image:'assets/images/palmeiras-casa-26-27-front.jpg',badge:'DESTAQUE'},
  {id:'vasco-casa-26-27-torcedor',name:'Vasco Casa 26/27',category:'Brasileiras',version:'Torcedor',price:130},
  {id:'corinthians-treino-vinho-26-27-torcedor',name:'Corinthians Treino Vinho 26/27',category:'Brasileiras',version:'Torcedor',price:115,badge:'TREINO'},
  {id:'selecao-brasileira-casa-26-27-jogador',name:'Seleção Brasileira Casa 26/27',category:'Seleções',version:'Jogador',price:130,oldPrice:160,badge:'OFERTA'},
