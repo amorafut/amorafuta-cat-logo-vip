@@ -23,12 +23,40 @@
     if(p)p.images=order.filter(x=>x.kind==='existing').map(x=>x.path);
     pendingFiles=order.filter(x=>x.kind==='pending');
   }
+
+  async function publishOrdered(){
+    if(!token){msg('Conecte o GitHub primeiro.',false);return}
+    $('#publish').disabled=true;msg('Publicando fotos na ordem escolhida...');
+    try{
+      const p=products.find(x=>x.id===currentId);
+      if(p){
+        const finalImages=[];let n=1;
+        for(const x of order){
+          if(x.kind==='existing') finalImages.push(x.path);
+          else {
+            const f=x.file;
+            const ext=(f.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';
+            const path='assets/images/catalog/'+p.id+'/ord-'+Date.now()+'-'+String(n).padStart(2,'0')+'.'+ext;
+            await publishFile(path,await b64File(f));
+            finalImages.push(path);
+          }
+          n++;
+        }
+        p.images=finalImages;
+      }
+      const json=btoa(unescape(encodeURIComponent(JSON.stringify(products,null,2))));
+      await publishFile(DATA,json);
+      pendingFiles=[];order=(p&&p.images||[]).map((x,i)=>({kind:'existing',path:x,url:'../'+x,name:x.split('/').pop(),i}));
+      renderList();updateStats();draw();msg('Publicado! A ordem das fotos foi salva.');
+    }catch(e){msg(e.message||'Erro ao publicar.',false)}
+    finally{$('#publish').disabled=false}
+  }
   const originalSet=window.setForm;
   window.setForm=function(p){originalSet(p);setTimeout(draw,0)};
   const originalNew=window.newProduct;
   window.newProduct=function(){originalNew();order=[];draw()};
   const ph=document.querySelector('#photos');
   if(ph)ph.addEventListener('change',()=>setTimeout(draw,0));
-  document.addEventListener('DOMContentLoaded',()=>setTimeout(draw,50));
+  document.addEventListener('DOMContentLoaded',()=>{setTimeout(draw,50);const pb=document.querySelector('#publish');if(pb)pb.onclick=publishOrdered;});
   setInterval(()=>{const box=document.querySelector('#previews');if(box&&box.dataset.reorderReady!=='1'){box.dataset.reorderReady='1';draw()}},500);
 })();
