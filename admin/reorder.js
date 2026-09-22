@@ -21,7 +21,7 @@
   function apply(){
     const p=products.find(x=>x.id===currentId);
     if(p)p.images=order.filter(x=>x.kind==='existing').map(x=>x.path);
-    pendingFiles=order.filter(x=>x.kind==='pending').map(x=>x.file);
+    pendingFiles=order.filter(x=>x.kind==='pending');
   }
   const originalSet=window.setForm;
   window.setForm=function(p){originalSet(p);setTimeout(draw,0)};
