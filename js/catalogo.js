@@ -18,7 +18,7 @@ function visual(p){
 function card(p){
   const badge=p.badge?`<b class="badge ${p.soldOut?'sold-badge':''}">${esc(p.badge)}</b>`:'';
   return `<article class="card ${p.soldOut?'sold':''}">
-    <button class="card-open" onclick="openProduct('${p.id}')" aria-label="Ver ${esc(p.name)}">
+    <a class="card-open" href="${p.id}.html" aria-label="Ver ${esc(p.name)}">
       <div class="photo">${visual(p)}<div class="placeholder" ${p.image?'hidden':''}><div class="shirt-mark">${initials(p.name)}</div><span>AMORA FUT</span><small>STREETWEAR</small></div>${badge}<div class="quick">VER DETALHES</div></div>
       <div class="info"><div class="catline">${esc(p.category)} <i>•</i> ${esc(p.version)}</div><h3>${esc(p.name)}</h3>
       <div class="price">${p.oldPrice?`<del>${fmt(p.oldPrice)}</del>`:''}<strong>${fmt(p.price)}</strong></div>
@@ -51,6 +51,6 @@ function init(){
  document.querySelectorAll('[data-nav-cat]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();setCat(a.dataset.navCat)}));
  const sync=e=>{state.q=e.target.value.toLowerCase().trim();document.querySelectorAll('#search,#searchMobile').forEach(x=>{if(x!==e.target)x.value=e.target.value});render()};
  $('#search').addEventListener('input',sync);$('#searchMobile').addEventListener('input',sync);$('#sort').addEventListener('change',e=>{state.sort=e.target.value;render()});
- document.addEventListener('keydown',e=>{if(e.key==='Escape')closeProduct()});render();
+ render();
 }
 window.openProduct=openProduct;window.closeProduct=closeProduct;document.addEventListener('DOMContentLoaded',init);
