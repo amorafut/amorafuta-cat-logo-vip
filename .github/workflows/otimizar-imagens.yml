@@ -34,7 +34,7 @@ jobs:
           const sharp = require('sharp');
 
           const root = 'assets/images';
-          const textFiles = ['index.html', 'produto.html', 'data/products.json'];
+          const textFiles = ['index.html', 'produto.html', 'css/catalogo.css', 'data/products.json'];
 
           function walk(dir) {
             return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
