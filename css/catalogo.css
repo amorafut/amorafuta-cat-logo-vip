@@ -40,3 +40,10 @@
 .hero-image-link{display:block;width:100%;cursor:pointer}.hero-image-link picture,.hero-image-link img{display:block;width:100%;height:auto}.hero-image-link img{object-fit:cover}
 .hero-overlay-actions{position:absolute;left:0;right:0;bottom:20px;display:flex;justify-content:center;gap:12px;z-index:5;line-height:normal;pointer-events:none}.hero-action{pointer-events:auto;display:flex;align-items:center;gap:14px;height:46px;padding:0 22px;border-radius:7px;text-decoration:none;font-size:10px;font-weight:1000;letter-spacing:.6px;box-shadow:0 8px 25px rgba(0,0,0,.35);backdrop-filter:blur(5px)}.hero-action.primary{background:var(--pink);color:#fff}.hero-action.primary:hover{filter:brightness(1.08);transform:translateY(-1px)}.hero-action.secondary{background:rgba(8,8,10,.82);border:1px solid rgba(255,255,255,.55);color:#fff}.hero-action.secondary:hover{border-color:var(--pink);color:#fff}
 @media(max-width:760px){.hero-overlay-actions{bottom:12px;gap:7px}.hero-action{height:38px;padding:0 12px;font-size:8px;gap:7px}.hero-action.secondary{display:none}}
+
+/* RESPONSIVIDADE DO BANNER OFICIAL */
+.hero-image-wrap{width:100%;max-width:100vw;overflow:hidden}
+.hero-image-link{width:100%;display:block}
+.hero-image-link img{width:100%;max-width:100%;height:auto;display:block;object-fit:contain}
+@media (max-width:1024px){.hero-image-wrap{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}.hero-image-link img{width:100vw;height:auto}}
+@media (max-width:600px){.hero-image-wrap{width:100vw}.hero-image-link img{width:100vw;height:auto;min-height:0;object-fit:contain}.hero-overlay-actions{bottom:8px}.hero-action{font-size:8px;height:36px;padding:0 11px}}
