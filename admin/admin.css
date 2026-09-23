@@ -69,3 +69,47 @@
 .sales-panel{display:block!important;visibility:visible!important;width:100%;clear:both}
 #salesJump{display:inline-flex;align-items:center;justify-content:center}
 @media(min-width:1001px){.sales-panel{min-height:220px}.sales-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+/* REORGANIZAÇÃO DO CONTROLE DE VENDAS */
+.sales-grid>label{
+  display:block!important;
+  font-size:10px!important;
+  font-weight:900!important;
+  letter-spacing:.3px!important;
+}
+.sales-grid>label input,
+.sales-grid>label select,
+.installment-fields input{
+  display:block;
+  width:100%;
+  margin-top:7px;
+  border:1px solid #55575d;
+  background:#202124;
+  color:#fff;
+  border-radius:7px;
+  padding:12px;
+  outline:0;
+  font:inherit;
+  font-size:12px;
+}
+.sales-grid>label input[readonly]{background:#303136;color:#eee}
+.sales-grid{
+  align-items:start;
+}
+.installment-fields{
+  align-self:start;
+  margin-top:0;
+}
+@media(min-width:1001px){
+  .sales-grid{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    column-gap:18px;
+    row-gap:16px;
+  }
+  .sales-grid>label{
+    min-width:0;
+  }
+  .installment-fields{
+    grid-column:span 2;
+  }
+}
