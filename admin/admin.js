@@ -145,3 +145,4 @@ function initSales(){
  $('#clearSales').onclick=()=>{if(confirm('Apagar o histórico de vendas salvo neste navegador? Isso não altera vendas já publicadas no estoque.')){saveSales([]);renderSales()}};
 }
 initSales();
+const salesJump=$('#salesJump');if(salesJump)salesJump.onclick=()=>$('#saleForm')?.scrollIntoView({behavior:'smooth',block:'start'});
