@@ -51,24 +51,32 @@
 
   function imageToWebP(file){
     return new Promise((resolve,reject)=>{
-      if(file && file.type==='image/webp'){resolve(file);return}
-      if(!file || !/^image\\/(jpeg|jpg|png)$/i.test(file.type||'')){resolve(file);return}
+      if(!file){reject(new Error('Arquivo de imagem inválido.'));return}
+      if(file.type==='image/webp'){resolve(file);return}
+      if(!/^image\\/(jpeg|jpg|png)$/i.test(file.type||'')){
+        reject(new Error('Formato não suportado: '+(file.name||'imagem')+'. Use JPG, PNG ou WebP.'));
+        return;
+      }
       const url=URL.createObjectURL(file),img=new Image();
       img.onload=()=>{
         try{
+          const max=1800;
+          const scale=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight));
           const canvas=document.createElement('canvas');
-          canvas.width=img.naturalWidth; canvas.height=img.naturalHeight;
-          const ctx=canvas.getContext('2d');
-          ctx.drawImage(img,0,0);
+          canvas.width=Math.max(1,Math.round(img.naturalWidth*scale));
+          canvas.height=Math.max(1,Math.round(img.naturalHeight*scale));
+          const ctx=canvas.getContext('2d',{alpha:true});
+          if(!ctx)throw new Error('Seu navegador não conseguiu preparar a imagem.');
+          ctx.drawImage(img,0,0,canvas.width,canvas.height);
           canvas.toBlob(blob=>{
             URL.revokeObjectURL(url);
-            if(!blob){reject(new Error('Não foi possível converter a imagem para WebP.'));return}
+            if(!blob){reject(new Error('Não foi possível converter '+file.name+' para WebP.'));return}
             const name=file.name.replace(/\\.[^.]+$/,'')+'.webp';
             resolve(new File([blob],name,{type:'image/webp',lastModified:Date.now()}));
-          },'image/webp',0.84);
+          },'image/webp',0.82);
         }catch(e){URL.revokeObjectURL(url);reject(e)}
       };
-      img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('Não foi possível ler a imagem.'))};
+      img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('Não foi possível abrir '+file.name+'. Use JPG, PNG ou WebP.'))};
       img.src=url;
     });
   }
@@ -103,6 +111,7 @@
         const base=[...(p.images||[])];
         let n=base.length+1;
         for(const x of queue){
+          msg('Enviando foto '+n+' de '+queue.length+' — '+p.name+'...');
           const f=await imageToWebP(x.file);
           const path='assets/images/catalog/'+p.id+'/ord-'+Date.now()+'-'+String(n).padStart(2,'0')+'.webp';
           await publishFile(path,await b64File(f));
