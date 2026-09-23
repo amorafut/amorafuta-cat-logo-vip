@@ -80,7 +80,7 @@ function updateSaleSizes(){
  }
  const stock=p.stock||{};
  const available=sizes.filter(s=>Number(stock[s]||0)>0);
- el.innerHTML='<option value="">Selecione o tamanho</option>'+available.map(s=>'<option value="'+s+'">'+s+' — '+Number(stock[s]||0)+' un.</option>').join('');
+ el.innerHTML='<option value="">Selecione o tamanho</option>'+available.map(s=>'<option value="'+s+'">'+s+'</option>').join('');
  if(available.includes(current))el.value=current;
  else if(available.length===1)el.value=available[0];
 }
