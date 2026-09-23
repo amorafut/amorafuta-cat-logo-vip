@@ -226,32 +226,65 @@
   },
   {
     "id": "palmeiras-casa-26-27-torcedor",
-    "team": "Palmeiras",
     "name": "Palmeiras Casa 26/27",
+    "team": "Palmeiras",
     "category": "Brasileiras",
     "version": "Torcedor",
     "price": 130,
     "badge": "DESTAQUE",
-    "published": true
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 0,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": []
   },
   {
     "id": "vasco-casa-26-27-torcedor",
-    "team": "Vasco",
     "name": "Vasco Casa 26/27",
+    "team": "Vasco",
     "category": "Brasileiras",
     "version": "Torcedor",
     "price": 130,
-    "published": true
+    "badge": "",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 0,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": []
   },
   {
     "id": "corinthians-treino-vinho-26-27-torcedor",
-    "team": "Corinthians",
     "name": "Corinthians Treino Vinho 26/27",
+    "team": "Corinthians",
     "category": "Brasileiras",
     "version": "Torcedor",
     "price": 115,
     "badge": "TREINO",
-    "published": true
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 0,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": [
+      "assets/images/catalog/corinthians-treino-vinho-26-27-torcedor/ord-1790165573817-01.png"
+    ]
   },
   {
     "id": "selecao-brasileira-casa-26-27-jogador",
