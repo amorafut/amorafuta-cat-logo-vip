@@ -33,7 +33,7 @@ function setTeam(team){state.team=team;document.querySelectorAll('.team-chip').f
 function renderTeams(){const box=$('#teamFilters');const teams=[...new Set(PRODUCTS.filter(p=>p.published!==false).map(p=>p.team).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt-BR'));box.innerHTML='<button class="team-chip active" data-team="Todos">Todos os times</button>'+teams.map(t=>'<button class="team-chip" data-team="'+esc(t)+'">'+esc(t)+'</button>').join('');box.querySelectorAll('.team-chip').forEach(b=>b.addEventListener('click',()=>setTeam(b.dataset.team)));}
 async function init(){
  try{
-  const r=await fetch('data/products.json?v=21',{cache:'force-cache'});if(!r.ok)throw new Error('Falha ao carregar catálogo');PRODUCTS=await r.json();
+  const r=await fetch('data/products.json?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('Falha ao carregar catálogo');PRODUCTS=await r.json();
   renderTeams();
   document.querySelectorAll('.category-card').forEach(b=>b.addEventListener('click',()=>setCat(b.dataset.cat)));
   document.querySelectorAll('[data-nav-cat]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();setCat(a.dataset.navCat)}));
