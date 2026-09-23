@@ -9,7 +9,7 @@ function imageGallery(p){
  return '<div class="gallery-main"><img id="mainProductImage" src="'+esc(imgs[0])+'" alt="'+esc(p.name)+'" width="900" height="1200" decoding="async"></div><div class="thumbs">'+imgs.map((x,i)=>'<button type="button" class="thumb '+(i===0?'active':'')+'" data-img="'+esc(x)+'"><img src="'+esc(x)+'" alt=""></button>').join('')+'</div>';
 }
 function sizeButtons(p){
- const s=p.stock||{};const sizes=['P','M','G','GG'];const total=Object.values(s).reduce((a,v)=>a+Number(v||0),0);if(p.soldOut)return '<div class="stock-note">Produto esgotado.</div>';if(!p.stock||total===0)return '<div class="sizes">'+sizes.map(x=>'<button class="size" data-size="'+x+'">'+x+'</button>').join('')+'</div><div class="stock-note">Disponibilidade sujeita a confirmação pelo WhatsApp.</div>';
+ const s=p.stock||{};const sizes=['P','M','G','GG','3G'];const total=Object.values(s).reduce((a,v)=>a+Number(v||0),0);if(p.soldOut)return '<div class="stock-note">Produto esgotado.</div>';if(!p.stock||total===0)return '<div class="sizes">'+sizes.map(x=>'<button class="size" data-size="'+x+'">'+x+'</button>').join('')+'</div><div class="stock-note">Disponibilidade sujeita a confirmação pelo WhatsApp.</div>';
  return '<div class="sizes">'+sizes.map(x=>{const n=Number(s[x]||0);return '<button class="size '+(!n?'disabled':'')+'" data-size="'+x+'" '+(!n?'disabled':'')+'>'+x+(n?' <small>('+n+' un.)</small>':'<small>Esgotado</small>')+'</button>';}).join('')+'</div><div class="stock-total">Estoque total: <b>'+total+' unidades</b></div>';
 }
 function render(p){
