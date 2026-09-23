@@ -75,29 +75,55 @@
 
   async function publishOrdered(){
     if(!token){msg('Conecte o GitHub primeiro.',false);return}
-    $('#publish').disabled=true;msg('Publicando fotos na ordem escolhida...');
+    $('#publish').disabled=true;msg('Publicando todos os produtos e fotos...');
     try{
-      const p=products.find(x=>x.id===currentId);
-      if(p){
-        const finalImages=[];let n=1;
-        for(const x of order){
-          if(x.kind==='existing') finalImages.push(x.path);
-          else {
-            const f=await imageToWebP(x.file);
-            const path='assets/images/catalog/'+p.id+'/ord-'+Date.now()+'-'+String(n).padStart(2,'0')+'.webp';
-            await publishFile(path,await b64File(f));
-            finalImages.push(path);
-          }
+      // Captura o que estiver aberto neste momento antes de publicar.
+      stashCurrent();
+
+      for(const p of products){
+        const draft=p.id?pendingByProduct[p.id]:null;
+        if(draft&&draft.product){
+          Object.assign(p,JSON.parse(JSON.stringify(draft.product)));
+        }
+
+        const files=draft&&draft.files?draft.files:[];
+        if(!files.length) continue;
+
+        // Para o produto atual, respeita a ordem definida no painel.
+        let queue;
+        if(p.id===currentId&&order.length){
+          queue=order.filter(x=>x.kind==='pending');
+        }else{
+          queue=files.map(x=>({kind:'pending',file:x.file,url:x.url,name:x.file.name}));
+        }
+
+        const base=[...(p.images||[])];
+        let n=base.length+1;
+        for(const x of queue){
+          const f=await imageToWebP(x.file);
+          const path='assets/images/catalog/'+p.id+'/ord-'+Date.now()+'-'+String(n).padStart(2,'0')+'.webp';
+          await publishFile(path,await b64File(f));
+          base.push(path);
           n++;
         }
-        p.images=finalImages;
+        p.images=base;
+        delete pendingByProduct[p.id];
       }
+
       const json=btoa(unescape(encodeURIComponent(JSON.stringify(products,null,2))));
       await publishFile(DATA,json);
-      pendingFiles=[];if(p)delete pendingByProduct[p.id];order=(p&&p.images||[]).map((x,i)=>({kind:'existing',path:x,url:'../'+x,name:x.split('/').pop(),i}));
-      renderList();updateStats();draw();msg('Publicado! A ordem das fotos foi salva.');
-    }catch(e){msg(e.message||'Erro ao publicar.',false)}
-    finally{$('#publish').disabled=false}
+
+      pendingFiles=[];
+      order=(products.find(x=>x.id===currentId)?.images||[]).map((x,i)=>({kind:'existing',path:x,url:'../'+x,name:x.split('/').pop(),i}));
+      renderPreviews((products.find(x=>x.id===currentId)?.images)||[]);
+      renderList();
+      updateStats();
+      msg('Publicado! Todos os produtos e fotos foram enviados ao site.');
+    }catch(e){
+      msg(e.message||'Erro ao publicar.',false)
+    }finally{
+      $('#publish').disabled=false
+    }
   }
   const originalSet=window.setForm;
   window.setFormBase=originalSet;
