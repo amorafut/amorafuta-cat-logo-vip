@@ -56,3 +56,92 @@ $('#changeToken').onclick=()=>{sessionStorage.removeItem('amora_github_token');l
 $('#delete').onclick=()=>{if(!currentId)return;if(confirm('Excluir este produto do catálogo local? Depois clique em Publicar alterações.')){products=products.filter(p=>p.id!==currentId);currentId=null;$('#form').classList.add('hidden');$('#emptyEditor').classList.remove('hidden');renderList();updateStats();msg('Produto removido localmente. Clique em Publicar alterações.');}};
 $('#form').onsubmit=e=>{e.preventDefault();const p=readForm();if(!p.id||!p.name||!p.team){alert('Preencha ID, nome e time.');return;}const i=products.findIndex(x=>x.id===currentId);if(i>=0)products[i]=p;else{if(products.some(x=>x.id===p.id)){alert('Esse ID já existe.');return;}products.unshift(p);}currentId=p.id;pendingByProduct[p.id]={product:JSON.parse(JSON.stringify(p)),files:[...(pendingFiles||[])]};$('#emptyEditor').classList.add('hidden');$('#form').classList.remove('hidden');$('#editMode').textContent='EDITAR PRODUTO';$('#formTitle').textContent=p.name;$('#delete').style.visibility='visible';renderList();updateStats();msg('Produto salvo no painel. As fotos ficam preservadas. Clique em Publicar alterações para enviar ao site.');};
 (async()=>{if(token){try{await repoCheck();$('#token').value=token;$('#authCard').classList.add('hidden');$('#app').classList.remove('hidden');await loadData();}catch(e){sessionStorage.removeItem('amora_github_token');localStorage.removeItem('amora_github_token');token='';}}})();
+/* CONTROLE DE VENDAS — armazenamento local e dedução no estoque */
+const SALES_KEY='amora_fut_sales_v1';
+function getSales(){try{return JSON.parse(localStorage.getItem(SALES_KEY)||'[]')}catch(e){return[]}}
+function saveSales(v){localStorage.setItem(SALES_KEY,JSON.stringify(v))}
+function saleMoney(v){return Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}
+function todayBR(){const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}
+function renderSaleProducts(){
+ const el=$('#saleProduct');if(!el)return;
+ const current=el.value;
+ el.innerHTML='<option value="">Selecione o produto</option>'+products.map(p=>'<option value="'+esc(p.id)+'">'+esc(p.name)+' — '+esc(p.team||'')+'</option>').join('');
+ if(products.some(p=>p.id===current))el.value=current;
+ updateSalePrice();
+}
+function updateSalePrice(){
+ const p=products.find(x=>x.id===$('#saleProduct')?.value);
+ if(!p)return;
+ const price=Number(p.price||0), discount=Math.min(Math.max(Number($('#saleDiscount')?.value||0),0),price);
+ $('#salePrice').value=price.toFixed(2);
+ $('#saleDiscount').value=discount.toFixed(2);
+ $('#saleFinal').value=(price-discount).toFixed(2);
+ const v=$('#saleVersion');if(v&&!v.dataset.touched)v.value=p.version||'Torcedor';
+}
+function toggleInstallment(){
+ const parcel=$('#salePayment')?.value==='Parcelado';
+ $('#installmentFields')?.classList.toggle('hidden',!parcel);
+ if(parcel){
+   $('#salePayDate').required=true;$('#salePayValue').required=true;
+   if(!Number($('#salePayValue').value||0))$('#salePayValue').value=Number($('#saleFinal').value||0).toFixed(2);
+ }else{
+   $('#salePayDate').required=false;$('#salePayValue').required=false;
+ }
+}
+function renderSales(){
+ const list=$('#salesList');if(!list)return;
+ const sales=getSales();
+ const pending=sales.filter(x=>!x.aplicada).length;
+ $('#salesPendingCount').textContent=pending;
+ list.innerHTML=sales.length?sales.slice().reverse().map(s=>'<tr><td>'+esc(s.dataCompra||'')+'</td><td>'+esc(s.cliente||'')+'</td><td>'+esc(s.produtoNome||s.productId)+'</td><td>'+esc(s.tamanho||'')+'</td><td>'+esc(s.versao||'')+'</td><td>'+saleMoney(s.valorFinal)+'</td><td>'+esc(s.formaPagamento||'')+(s.formaPagamento==='Parcelado'?' · '+esc(s.dataPagamento||''):'')+'</td><td><span class="sale-status '+(s.aplicada?'applied':'pending')+'">'+(s.aplicada?'APLICADA':'AGUARDANDO PUBLICAÇÃO')+'</span></td></tr>').join(''):'<tr><td colspan="8" style="color:#999;text-align:center">Nenhuma venda registrada.</td></tr>';
+}
+function preparePendingSales(list){
+ const sales=getSales();
+ const pending=sales.filter(s=>!s.aplicada);
+ if(!pending.length)return ()=>{};
+ const backups=[];
+ for(const s of pending){
+   const p=list.find(x=>x.id===s.productId);
+   if(!p)throw new Error('Produto da venda não encontrado: '+(s.produtoNome||s.productId));
+   const size=s.tamanho;
+   if(!size)throw new Error('A venda de '+s.produtoNome+' precisa de tamanho.');
+   const current=Number((p.stock||{})[size]||0);
+   if(current<=0)throw new Error('Estoque insuficiente para '+s.produtoNome+' tamanho '+size+'. Estoque atual: '+current+'.');
+   backups.push({p,size,current});
+   p.stock=p.stock||{};p.stock[size]=current-1;
+   const total=Object.values(p.stock).reduce((a,v)=>a+Number(v||0),0);
+   if(total<=0)p.soldOut=true;
+ }
+ return ()=>{
+   const now=getSales().map(s=>pending.some(x=>x.id===s.id)?{...s,aplicada:true,dataAplicacao:new Date().toISOString()}:s);
+   saveSales(now);renderSales();
+ };
+}
+window.preparePendingSales=preparePendingSales;
+function initSales(){
+ if(!$('#saleForm'))return;
+ $('#saleDate').value=todayBR();
+ renderSaleProducts();renderSales();toggleInstallment();
+ $('#saleProduct').onchange=()=>{updateSalePrice();const p=products.find(x=>x.id===$('#saleProduct').value);if(p){$('#saleVersion').value=p.version||'Torcedor';$('#saleVersion').dataset.touched='0'}};
+ $('#saleVersion').onchange=()=>$('#saleVersion').dataset.touched='1';
+ $('#saleDiscount').oninput=updateSalePrice;
+ $('#salePayment').onchange=toggleInstallment;
+ $('#saleForm').onsubmit=e=>{
+   e.preventDefault();
+   const p=products.find(x=>x.id===$('#saleProduct').value);
+   if(!p){alert('Selecione o produto.');return}
+   const size=$('#saleSize').value;
+   const stock=Number((p.stock||{})[size]||0);
+   if(stock<=0){alert('Não há estoque cadastrado para '+p.name+' no tamanho '+size+'. Cadastre o estoque antes de registrar a venda.');return}
+   const price=Number(p.price||0),discount=Math.min(Math.max(Number($('#saleDiscount').value||0),0),price),finalValue=price-discount;
+   if($('#salePayment').value==='Parcelado'&&!$('#salePayDate').value){alert('Informe a data para pagamento.');return}
+   if($('#salePayment').value==='Parcelado'&&!Number($('#salePayValue').value||0)){alert('Informe o valor acordado.');return}
+   const sales=getSales();
+   sales.push({id:'venda-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),productId:p.id,produtoNome:p.name,cliente:$('#saleClient').value.trim(),versao:$('#saleVersion').value,tamanho:size,dataCompra:$('#saleDate').value,valorProduto:price,desconto:discount,valorFinal:finalValue,formaPagamento:$('#salePayment').value,dataPagamento:$('#salePayment').value==='Parcelado'?$('#salePayDate').value:'',valorAcordado:$('#salePayment').value==='Parcelado'?Number($('#salePayValue').value||0):null,aplicada:false});
+   saveSales(sales);renderSales();
+   e.target.reset();$('#saleDate').value=todayBR();$('#saleDiscount').value='0';renderSaleProducts();toggleInstallment();
+   msg('Venda registrada. Clique em Publicar alterações para deduzir do estoque.',true);
+ };
+ $('#clearSales').onclick=()=>{if(confirm('Apagar o histórico de vendas salvo neste navegador? Isso não altera vendas já publicadas no estoque.')){saveSales([]);renderSales()}};
+}
+initSales();
