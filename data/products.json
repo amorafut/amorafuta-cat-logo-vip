@@ -382,7 +382,7 @@
     },
     "description": "",
     "images": [
-      "assets/images/catalog/mexico-fora-26-jogador/01.webp"
+      "assets/images/catalog/mexico-fora-26-jogador/01.png"
     ]
   },
   {
@@ -397,12 +397,23 @@
   },
   {
     "id": "manchester-united-iii-25-26-torcedor",
-    "team": "Manchester United",
     "name": "Manchester United III 25/26",
+    "team": "Manchester United",
     "category": "Internacionais",
     "version": "Torcedor",
     "price": 130,
-    "published": true
+    "badge": "",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 0,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": []
   },
   {
     "id": "atletico-madrid-retro-04-05-f-torres",
