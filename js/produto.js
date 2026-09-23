@@ -10,7 +10,7 @@ function imageGallery(p){
 }
 function sizeButtons(p){
  const s=p.stock||{};const sizes=['P','M','G','GG'];const total=Object.values(s).reduce((a,v)=>a+Number(v||0),0);if(p.soldOut)return '<div class="stock-note">Produto esgotado.</div>';if(!p.stock||total===0)return '<div class="sizes">'+sizes.map(x=>'<button class="size" data-size="'+x+'">'+x+'</button>').join('')+'</div><div class="stock-note">Disponibilidade sujeita a confirmação pelo WhatsApp.</div>';
- return '<div class="sizes">'+sizes.map(x=>{const n=Number(s[x]||0);return '<button class="size '+(!n?'disabled':'')+'" data-size="'+x+'" '+(!n?'disabled':'')+'>'+x+(n?'':'<small>Esgotado</small>')+'</button>';}).join('')+'</div>';
+ return '<div class="sizes">'+sizes.map(x=>{const n=Number(s[x]||0);return '<button class="size '+(!n?'disabled':'')+'" data-size="'+x+'" '+(!n?'disabled':'')+'>'+x+(n?' <small>('+n+' un.)</small>':'<small>Esgotado</small>')+'</button>';}).join('')+'</div><div class="stock-total">Estoque total: <b>'+total+' unidades</b></div>';
 }
 function render(p){
  document.title=p.name+' — Amora Fut Streetwear';
