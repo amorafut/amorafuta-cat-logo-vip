@@ -298,14 +298,26 @@
   },
   {
     "id": "selecao-brasileira-casa-26-27-jogador",
-    "team": "Seleção Brasileira",
     "name": "Seleção Brasileira Casa 26/27",
+    "team": "Seleção Brasileira",
     "category": "Seleções",
     "version": "Jogador",
     "price": 130,
-    "oldPrice": 160,
     "badge": "OFERTA",
-    "published": true
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 1,
+      "M": 2,
+      "G": 2,
+      "GG": 2,
+      "3G": 2
+    },
+    "description": "",
+    "oldPrice": 160,
+    "images": [
+      "assets/images/catalog/selecao-brasileira-casa-26-27-jogador/01.png"
+    ]
   },
   {
     "id": "fluminense-casa-26-27-torcedor",
@@ -346,7 +358,7 @@
     },
     "description": "",
     "images": [
-      "assets/images/catalog/arsenal-fora-26-27-jogador/01.webp"
+      "assets/images/catalog/arsenal-fora-26-27-jogador/01.png"
     ]
   },
   {
