@@ -352,7 +352,13 @@
     },
     "description": "",
     "images": [
-      "assets/images/catalog/vasco-casa-26-27-torcedor/01.webp"
+      "assets/images/catalog/vasco-casa-26-27-torcedor/01.jpg",
+      "assets/images/catalog/vasco-casa-26-27-torcedor/02.jpg",
+      "assets/images/catalog/vasco-casa-26-27-torcedor/03.jpg",
+      "assets/images/catalog/vasco-casa-26-27-torcedor/04.jpg",
+      "assets/images/catalog/vasco-casa-26-27-torcedor/05.jpg",
+      "assets/images/catalog/vasco-casa-26-27-torcedor/06.jpg",
+      "assets/images/catalog/vasco-casa-26-27-torcedor/07.jpg"
     ]
   },
   {
@@ -367,8 +373,8 @@
     "soldOut": false,
     "stock": {
       "P": 0,
-      "M": 0,
-      "G": 0,
+      "M": 1,
+      "G": 1,
       "GG": 0,
       "3G": 0
     },
