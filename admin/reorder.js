@@ -26,6 +26,30 @@
     pendingFiles=order.filter(x=>x.kind==='pending');
   }
 
+  function imageToWebP(file){
+    return new Promise((resolve,reject)=>{
+      if(file && file.type==='image/webp'){resolve(file);return}
+      if(!file || !/^image\\/(jpeg|jpg|png)$/i.test(file.type||'')){resolve(file);return}
+      const url=URL.createObjectURL(file),img=new Image();
+      img.onload=()=>{
+        try{
+          const canvas=document.createElement('canvas');
+          canvas.width=img.naturalWidth; canvas.height=img.naturalHeight;
+          const ctx=canvas.getContext('2d');
+          ctx.drawImage(img,0,0);
+          canvas.toBlob(blob=>{
+            URL.revokeObjectURL(url);
+            if(!blob){reject(new Error('Não foi possível converter a imagem para WebP.'));return}
+            const name=file.name.replace(/\\.[^.]+$/,'')+'.webp';
+            resolve(new File([blob],name,{type:'image/webp',lastModified:Date.now()}));
+          },'image/webp',0.84);
+        }catch(e){URL.revokeObjectURL(url);reject(e)}
+      };
+      img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('Não foi possível ler a imagem.'))};
+      img.src=url;
+    });
+  }
+
   async function publishOrdered(){
     if(!token){msg('Conecte o GitHub primeiro.',false);return}
     $('#publish').disabled=true;msg('Publicando fotos na ordem escolhida...');
@@ -36,9 +60,8 @@
         for(const x of order){
           if(x.kind==='existing') finalImages.push(x.path);
           else {
-            const f=x.file;
-            const ext=(f.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';
-            const path='assets/images/catalog/'+p.id+'/ord-'+Date.now()+'-'+String(n).padStart(2,'0')+'.'+ext;
+            const f=await imageToWebP(x.file);
+            const path='assets/images/catalog/'+p.id+'/ord-'+Date.now()+'-'+String(n).padStart(2,'0')+'.webp';
             await publishFile(path,await b64File(f));
             finalImages.push(path);
           }
