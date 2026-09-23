@@ -93,7 +93,6 @@ function updateSalePrice(){
  }
  const qty=Math.max(1,Number($('#saleQty')?.value||1)); const price=Number(p.price||0), total=price*qty, discount=Math.min(Math.max(Number($('#saleDiscount')?.value||0),0),total);
  $('#salePrice').value=total.toFixed(2);
- $('#saleDiscount').value=discount.toFixed(2);
  $('#saleFinal').value=(total-discount).toFixed(2);
  const v=$('#saleVersion');if(v&&!v.dataset.touched)v.value=p.version||'Torcedor';
 }
