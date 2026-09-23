@@ -115,7 +115,7 @@
     },
     "description": "",
     "images": [
-      "assets/images/catalog/borussia-dortmund-casa-26-27-torcedor/01.webp"
+      "assets/images/catalog/borussia-dortmund-casa-26-27-torcedor/01.png"
     ]
   },
   {
@@ -193,13 +193,15 @@
     "soldOut": false,
     "stock": {
       "P": 0,
-      "M": 0,
-      "G": 0,
+      "M": 1,
+      "G": 1,
       "GG": 0,
       "3G": 0
     },
     "description": "",
-    "images": []
+    "images": [
+      "assets/images/catalog/cruzeiro-treino-azul-26-27-torcedor/01.png"
+    ]
   },
   {
     "id": "flamengo-casa-26-27-torcedor",
