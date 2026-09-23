@@ -309,22 +309,45 @@
   },
   {
     "id": "fluminense-casa-26-27-torcedor",
-    "team": "Fluminense",
     "name": "Fluminense Casa 26/27",
+    "team": "Fluminense",
     "category": "Brasileiras",
     "version": "Torcedor",
     "price": 130,
-    "published": true
+    "badge": "",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 1,
+      "G": 1,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": []
   },
   {
     "id": "arsenal-fora-26-27-jogador",
-    "team": "Arsenal",
     "name": "Arsenal Fora 26/27",
+    "team": "Arsenal",
     "category": "Internacionais",
     "version": "Jogador",
     "price": 160,
     "badge": "LANÇAMENTO",
-    "published": true
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 1,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": [
+      "assets/images/catalog/arsenal-fora-26-27-jogador/01.png"
+    ]
   },
   {
     "id": "mexico-fora-26-jogador",
