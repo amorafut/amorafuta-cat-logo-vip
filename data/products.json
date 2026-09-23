@@ -1,5 +1,27 @@
 [
   {
+    "id": "barcelona-casa-24-25",
+    "name": "Barcelona casa 24/25",
+    "team": "Barcelona",
+    "category": "Internacionais",
+    "version": "Torcedor",
+    "price": 130,
+    "badge": "DESTAQUE",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 1,
+      "GG": 2,
+      "3G": 0
+    },
+    "description": "",
+    "images": [
+      "assets/images/catalog/barcelona-casa-24-25/01.png"
+    ]
+  },
+  {
     "id": "flamengo-3-26",
     "name": "Flamengo 3 26",
     "team": "Flamengo",
