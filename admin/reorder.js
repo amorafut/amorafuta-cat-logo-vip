@@ -1,7 +1,30 @@
 (function(){
   let order=[];
-  function stashCurrent(){ if(currentId) pendingByProduct[currentId]=pendingFiles||[]; }
-  function restoreCurrent(){ pendingFiles=pendingByProduct[currentId]||[]; }
+  function stashCurrent(){
+    if(!currentId)return;
+    try{
+      const draft=typeof readForm==='function'?readForm():products.find(x=>x.id===currentId);
+      pendingByProduct[currentId]={
+        product: JSON.parse(JSON.stringify(draft||products.find(x=>x.id===currentId)||{})),
+        files:[...(pendingFiles||[])]
+      };
+    }catch(e){
+      pendingByProduct[currentId]={
+        product: products.find(x=>x.id===currentId),
+        files:[...(pendingFiles||[])]
+      };
+    }
+  }
+  function restoreCurrent(fallback){
+    const d=currentId?pendingByProduct[currentId]:null;
+    if(d){
+      // Recarrega todos os campos salvos do produto antes de restaurar as fotos pendentes.
+      if(d.product && typeof window.setFormBase==='function') window.setFormBase(d.product);
+      pendingFiles=[...(d.files||[])];
+    }else{
+      pendingFiles=[];
+    }
+  }
   function esc2(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
   function syncOrder(){
     const p=products.find(x=>x.id===currentId);
@@ -77,9 +100,24 @@
     finally{$('#publish').disabled=false}
   }
   const originalSet=window.setForm;
-  window.setForm=function(p){stashCurrent();originalSet(p);restoreCurrent();order=[];setTimeout(draw,0)};
+  window.setFormBase=originalSet;
+  window.setForm=function(p){
+    stashCurrent();
+    const draft=p&&p.id?pendingByProduct[p.id]:null;
+    originalSet(draft&&draft.product?draft.product:p);
+    if(draft) pendingFiles=[...(draft.files||[])];
+    else pendingFiles=[];
+    order=[];
+    setTimeout(draw,0);
+  };
   const originalNew=window.newProduct;
-  window.newProduct=function(){stashCurrent();originalNew();restoreCurrent();order=[];draw()};
+  window.newProduct=function(){
+    stashCurrent();
+    originalNew();
+    pendingFiles=[];
+    order=[];
+    draw();
+  };
   const ph=document.querySelector('#photos');
   if(ph)ph.addEventListener('change',()=>setTimeout(draw,0));
   document.addEventListener('DOMContentLoaded',()=>{setTimeout(draw,50);const pb=document.querySelector('#publish');if(pb)pb.onclick=publishOrdered;});
