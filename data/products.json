@@ -49,13 +49,22 @@
   },
   {
     "id": "flamengo-treino-bege-26-27-torcedor",
-    "team": "Flamengo",
     "name": "Flamengo Treino Bege 26/27",
+    "team": "Flamengo",
     "category": "Brasileiras",
     "version": "Torcedor",
     "price": 115,
     "badge": "TREINO",
     "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 0,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
     "images": [
       "assets/images/catalog/flamengo-treino-bege-26-27-torcedor/ord-1790112040695-01.webp",
       "assets/images/catalog/flamengo-treino-bege-26-27-torcedor/ord-1790112044037-02.webp",
@@ -66,22 +75,43 @@
   },
   {
     "id": "flamengo-treino-marrom-26-27-torcedor",
-    "team": "Flamengo",
     "name": "Flamengo Treino Marrom 26/27",
+    "team": "Flamengo",
     "category": "Brasileiras",
     "version": "Torcedor",
     "price": 115,
     "badge": "TREINO",
-    "published": true
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 0,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": []
   },
   {
     "id": "borussia-dortmund-casa-26-27-torcedor",
-    "team": "Borussia Dortmund",
     "name": "Borussia Dortmund Casa 26/27",
+    "team": "Borussia Dortmund",
     "category": "Internacionais",
     "version": "Torcedor",
     "price": 130,
-    "published": true
+    "badge": "",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 0,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": []
   },
   {
     "id": "manchester-city-casa-26-27-torcedor",
@@ -106,41 +136,85 @@
   },
   {
     "id": "atletico-mineiro-casa-26-27-torcedor",
-    "team": "Atlético-MG",
     "name": "Atlético Mineiro Casa 26/27",
+    "team": "Atlético-MG",
     "category": "Brasileiras",
     "version": "Torcedor",
     "price": 130,
-    "published": true
+    "badge": "",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 0,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": []
   },
   {
     "id": "corinthians-casa-26-27-torcedor",
-    "team": "Corinthians",
     "name": "Corinthians Casa 26/27",
+    "team": "Corinthians",
     "category": "Brasileiras",
     "version": "Torcedor",
     "price": 130,
-    "published": true
+    "badge": "",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 0,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": []
   },
   {
     "id": "cruzeiro-treino-azul-26-27-torcedor",
-    "team": "Cruzeiro",
     "name": "Cruzeiro Treino Azul Escuro 26/27",
+    "team": "Cruzeiro",
     "category": "Brasileiras",
     "version": "Torcedor",
     "price": 115,
     "badge": "TREINO",
-    "published": true
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 0,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": []
   },
   {
     "id": "flamengo-casa-26-27-torcedor",
-    "team": "Flamengo",
     "name": "Flamengo Casa 26/27",
+    "team": "Flamengo",
     "category": "Brasileiras",
     "version": "Torcedor",
     "price": 130,
     "badge": "DESTAQUE",
-    "published": true
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 0,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": [
+      "assets/images/catalog/flamengo-casa-26-27-torcedor/ord-1790162867341-01.png"
+    ]
   },
   {
     "id": "flamengo-fora-26-27-torcedor",
