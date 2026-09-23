@@ -244,8 +244,8 @@
     "soldOut": false,
     "stock": {
       "P": 0,
-      "M": 0,
-      "G": 0,
+      "M": 1,
+      "G": 1,
       "GG": 0,
       "3G": 0
     },
@@ -425,7 +425,12 @@
     "description": "",
     "oldPrice": 160,
     "images": [
-      "assets/images/catalog/selecao-brasileira-casa-26-27-jogador/01.webp"
+      "assets/images/catalog/selecao-brasileira-casa-26-27-jogador/01.jpg",
+      "assets/images/catalog/selecao-brasileira-casa-26-27-jogador/02.jpg",
+      "assets/images/catalog/selecao-brasileira-casa-26-27-jogador/03.jpg",
+      "assets/images/catalog/selecao-brasileira-casa-26-27-jogador/04.jpg",
+      "assets/images/catalog/selecao-brasileira-casa-26-27-jogador/05.jpg",
+      "assets/images/catalog/selecao-brasileira-casa-26-27-jogador/06.jpg"
     ]
   },
   {
