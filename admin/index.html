@@ -24,4 +24,22 @@
 <div class="stock-box"><h3>Estoque por tamanho</h3><div class="stock-grid"><label>P<input id="sP" type="number" min="0" value="0"></label><label>M<input id="sM" type="number" min="0" value="0"></label><label>G<input id="sG" type="number" min="0" value="0"></label><label>GG<input id="sGG" type="number" min="0" value="0"> <label>3G<input id="s3G" type="number" min="0" value="0"></label></label></div><small>Deixe todos em 0 se quiser apenas informar disponibilidade pelo WhatsApp.</small></div>
 <div class="photo-box"><div class="photo-head"><div><h3>Fotos do produto</h3><small>Remova uma foto pelo × e adicione outra quando quiser.</small></div><label class="upload">＋ Adicionar fotos<input id="photos" type="file" accept="image/*" multiple></label></div><div id="previews" class="previews"></div></div>
 <div class="form-actions"><button type="submit" class="primary">Salvar produto</button><button type="button" id="cancel" class="ghost">Cancelar</button></div>
-</form></section></div></section></main><script src="admin.js?v=1.5"></script><script src="reorder.js?v=1.6"></script></body></html>
+</form></section></div><section class="panel sales-panel">
+<div class="sales-head"><div><span>CONTROLE DE VENDAS</span><h2>Registrar venda</h2><p>As vendas ficam salvas neste navegador. Ao publicar, o estoque é deduzido e a venda fica marcada como aplicada.</p></div><div class="sales-count"><b id="salesPendingCount">0</b><small>pendentes</small></div></div>
+<form id="saleForm">
+<div class="sales-grid">
+<label>Produto<select id="saleProduct" required><option value="">Selecione o produto</option></select></label>
+<label>Cliente<input id="saleClient" type="text" placeholder="Nome do cliente" required></label>
+<label>Versão<select id="saleVersion"><option>Torcedor</option><option>Jogador</option></select></label>
+<label>Tamanho<select id="saleSize" required><option value="">Selecione</option><option>P</option><option>M</option><option>G</option><option>GG</option><option>3G</option></select></label>
+<label>Data da compra<input id="saleDate" type="date" required></label>
+<label>Valor do produto<input id="salePrice" type="number" step="0.01" readonly></label>
+<label>Desconto<input id="saleDiscount" type="number" step="0.01" min="0" value="0"></label>
+<label>Valor final<input id="saleFinal" type="number" step="0.01" readonly></label>
+<label>Forma de pagamento<select id="salePayment"><option>Pix</option><option>Cartão de crédito</option><option>Parcelado</option></select></label>
+<div id="installmentFields" class="installment-fields hidden"><label>Data para pagamento<input id="salePayDate" type="date"></label><label>Valor acordado<input id="salePayValue" type="number" step="0.01" min="0"></label></div>
+</div>
+<div class="sale-actions"><button type="submit" class="primary">＋ Registrar venda</button><button type="button" id="clearSales" class="ghost">Limpar histórico local</button></div>
+</form>
+<div class="sales-table-wrap"><table class="sales-table"><thead><tr><th>Data</th><th>Cliente</th><th>Produto</th><th>Tam.</th><th>Versão</th><th>Valor</th><th>Pagamento</th><th>Status</th></tr></thead><tbody id="salesList"></tbody></table></div>
+</section></section></main><script src="admin.js?v=1.6"></script><script src="reorder.js?v=1.7"></script></body></html>
