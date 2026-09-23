@@ -64,3 +64,8 @@
 .sale-status.applied{background:#183d2f;color:#70e0ad}
 @media(max-width:1000px){.sales-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:620px){.sales-panel{padding:15px}.sales-head{flex-direction:column}.sales-grid{grid-template-columns:1fr}.installment-fields{grid-column:auto;grid-template-columns:1fr}.sale-actions{flex-wrap:wrap}}
+
+/* CONTROLE DE VENDAS — VISIBILIDADE EM TODAS AS TELAS */
+.sales-panel{display:block!important;visibility:visible!important;width:100%;clear:both}
+#salesJump{display:inline-flex;align-items:center;justify-content:center}
+@media(min-width:1001px){.sales-panel{min-height:220px}.sales-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
