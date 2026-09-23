@@ -1,5 +1,7 @@
 (function(){
   let order=[];
+  function stashCurrent(){ if(currentId) pendingByProduct[currentId]=pendingFiles||[]; }
+  function restoreCurrent(){ pendingFiles=pendingByProduct[currentId]||[]; }
   function esc2(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
   function syncOrder(){
     const p=products.find(x=>x.id===currentId);
@@ -46,15 +48,15 @@
       }
       const json=btoa(unescape(encodeURIComponent(JSON.stringify(products,null,2))));
       await publishFile(DATA,json);
-      pendingFiles=[];order=(p&&p.images||[]).map((x,i)=>({kind:'existing',path:x,url:'../'+x,name:x.split('/').pop(),i}));
+      pendingFiles=[];if(p)delete pendingByProduct[p.id];order=(p&&p.images||[]).map((x,i)=>({kind:'existing',path:x,url:'../'+x,name:x.split('/').pop(),i}));
       renderList();updateStats();draw();msg('Publicado! A ordem das fotos foi salva.');
     }catch(e){msg(e.message||'Erro ao publicar.',false)}
     finally{$('#publish').disabled=false}
   }
   const originalSet=window.setForm;
-  window.setForm=function(p){originalSet(p);setTimeout(draw,0)};
+  window.setForm=function(p){stashCurrent();originalSet(p);restoreCurrent();order=[];setTimeout(draw,0)};
   const originalNew=window.newProduct;
-  window.newProduct=function(){originalNew();order=[];draw()};
+  window.newProduct=function(){stashCurrent();originalNew();restoreCurrent();order=[];draw()};
   const ph=document.querySelector('#photos');
   if(ph)ph.addEventListener('change',()=>setTimeout(draw,0));
   document.addEventListener('DOMContentLoaded',()=>{setTimeout(draw,50);const pb=document.querySelector('#publish');if(pb)pb.onclick=publishOrdered;});
