@@ -28,8 +28,23 @@ function render(){
  $('#grid').innerHTML=arr.map(card).join('')||'<div class="empty"><strong>Nenhum produto encontrado.</strong><span>Tente outro time, coleção ou categoria.</span></div>';
  $('#count').textContent=arr.length+' '+(arr.length===1?'produto':'produtos');
 }
-function setCat(cat){state.cat=cat;document.querySelectorAll('.category-card').forEach(b=>b.classList.toggle('active',b.dataset.cat===cat));render();document.querySelector('#catalogo').scrollIntoView({behavior:'smooth',block:'start'});}
-function setTeam(team){state.team=team;document.querySelectorAll('.team-chip').forEach(b=>b.classList.toggle('active',b.dataset.team===team));render();document.querySelector('#catalogo').scrollIntoView({behavior:'smooth',block:'start'});}
+function syncSearchUI(){
+ document.querySelectorAll('#search,#searchMobile').forEach(x=>x.value=state.q);
+ document.querySelectorAll('.category-card').forEach(b=>b.classList.toggle('active',!state.q&&state.team==='Todos'&&b.dataset.cat===state.cat));
+ document.querySelectorAll('.team-chip').forEach(b=>b.classList.toggle('active',!state.q&&state.cat==='Todos'&&b.dataset.team===state.team));
+}
+function setCat(cat){
+ state.cat=cat;state.team='Todos';state.q='';
+ syncSearchUI();render();document.querySelector('#catalogo').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function setTeam(team){
+ state.team=team;state.cat='Todos';state.q='';
+ syncSearchUI();render();document.querySelector('#catalogo').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function setSearch(q){
+ state.q=String(q||'').toLowerCase().trim();state.cat='Todos';state.team='Todos';
+ syncSearchUI();render();
+}
 function renderTeams(){const box=$('#teamFilters');const teams=[...new Set(PRODUCTS.filter(p=>p.published!==false).map(p=>p.team).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt-BR'));box.innerHTML='<button class="team-chip active" data-team="Todos">Todos os times</button>'+teams.map(t=>'<button class="team-chip" data-team="'+esc(t)+'">'+esc(t)+'</button>').join('');box.querySelectorAll('.team-chip').forEach(b=>b.addEventListener('click',()=>setTeam(b.dataset.team)));}
 async function init(){
  try{
@@ -37,9 +52,9 @@ async function init(){
   renderTeams();
   document.querySelectorAll('.category-card').forEach(b=>b.addEventListener('click',()=>setCat(b.dataset.cat)));
   document.querySelectorAll('[data-nav-cat]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();setCat(a.dataset.navCat)}));
-  const sync=e=>{state.q=e.target.value.toLowerCase().trim();document.querySelectorAll('#search,#searchMobile').forEach(x=>{if(x!==e.target)x.value=e.target.value});render();};
+  const sync=e=>setSearch(e.target.value);
   $('#search').addEventListener('input',sync);$('#searchMobile').addEventListener('input',sync);$('#sort').addEventListener('change',e=>{state.sort=e.target.value;render();});
-  render();
+  syncSearchUI();render();
  }catch(e){$('#grid').innerHTML='<div class="empty"><strong>Não foi possível carregar o catálogo.</strong><span>Tente atualizar a página em alguns segundos.</span></div>';console.error(e);}
 }
 document.addEventListener('DOMContentLoaded',init);
