@@ -91,10 +91,10 @@ function updateSalePrice(){
    $('#salePrice').value='';$('#saleFinal').value='';
    return;
  }
- const price=Number(p.price||0), discount=Math.min(Math.max(Number($('#saleDiscount')?.value||0),0),price);
- $('#salePrice').value=price.toFixed(2);
+ const qty=Math.max(1,Number($('#saleQty')?.value||1)); const price=Number(p.price||0), total=price*qty, discount=Math.min(Math.max(Number($('#saleDiscount')?.value||0),0),total);
+ $('#salePrice').value=total.toFixed(2);
  $('#saleDiscount').value=discount.toFixed(2);
- $('#saleFinal').value=(price-discount).toFixed(2);
+ $('#saleFinal').value=(total-discount).toFixed(2);
  const v=$('#saleVersion');if(v&&!v.dataset.touched)v.value=p.version||'Torcedor';
 }
 function toggleInstallment(){
@@ -112,7 +112,7 @@ function renderSales(){
  const sales=getSales();
  const pending=sales.filter(x=>!x.aplicada).length;
  $('#salesPendingCount').textContent=pending;
- list.innerHTML=sales.length?sales.slice().reverse().map(s=>'<tr><td>'+esc(s.dataCompra||'')+'</td><td>'+esc(s.cliente||'')+'</td><td>'+esc(s.produtoNome||s.productId)+'</td><td>'+esc(s.tamanho||'')+'</td><td>'+esc(s.versao||'')+'</td><td>'+saleMoney(s.valorFinal)+'</td><td>'+esc(s.formaPagamento||'')+(s.formaPagamento==='Parcelado'?' · '+esc(s.dataPagamento||''):'')+'</td><td><span class="sale-status '+(s.aplicada?'applied':'pending')+'">'+(s.aplicada?'APLICADA':'AGUARDANDO PUBLICAÇÃO')+'</span></td></tr>').join(''):'<tr><td colspan="8" style="color:#999;text-align:center">Nenhuma venda registrada.</td></tr>';
+ list.innerHTML=sales.length?sales.slice().reverse().map(s=>'<tr><td>'+esc(s.dataCompra||'')+'</td><td>'+esc(s.cliente||'')+'</td><td>'+esc(s.produtoNome||s.productId)+'</td><td>'+esc(s.tamanho||'')+'</td><td>'+esc(s.quantidade||1)+'</td><td>'+esc(s.versao||'')+'</td><td>'+saleMoney(s.valorFinal)+'</td><td>'+esc(s.formaPagamento||'')+(s.formaPagamento==='Parcelado'?' · '+esc(s.dataPagamento||''):'')+'</td><td><span class="sale-status '+(s.aplicada?'applied':'pending')+'">'+(s.aplicada?'APLICADA':'AGUARDANDO PUBLICAÇÃO')+'</span></td></tr>').join(''):'<tr><td colspan="9" style="color:#999;text-align:center">Nenhuma venda registrada.</td></tr>';
 }
 function preparePendingSales(list){
  const sales=getSales();
@@ -125,9 +125,10 @@ function preparePendingSales(list){
    const size=s.tamanho;
    if(!size)throw new Error('A venda de '+s.produtoNome+' precisa de tamanho.');
    const current=Number((p.stock||{})[size]||0);
-   if(current<=0)throw new Error('Estoque insuficiente para '+s.produtoNome+' tamanho '+size+'. Estoque atual: '+current+'.');
+   const qty=Math.max(1,Math.floor(Number(s.quantidade||1)));
+   if(current<qty)throw new Error('Estoque insuficiente para '+s.produtoNome+' tamanho '+size+'. Estoque atual: '+stock+'. Quantidade solicitada: '+qty+'.');
    backups.push({p,size,current});
-   p.stock=p.stock||{};p.stock[size]=current-1;
+   p.stock=p.stock||{};p.stock[size]=current-qty;
    const total=Object.values(p.stock).reduce((a,v)=>a+Number(v||0),0);
    if(total<=0)p.soldOut=true;
  }
@@ -144,21 +145,23 @@ function initSales(){
  $('#saleProduct').onchange=()=>{updateSalePrice();const p=products.find(x=>x.id===$('#saleProduct').value);if(p){$('#saleVersion').value=p.version||'Torcedor';$('#saleVersion').dataset.touched='0'}};
  $('#saleVersion').onchange=()=>$('#saleVersion').dataset.touched='1';
  $('#saleDiscount').oninput=updateSalePrice;
+ $('#saleQty').oninput=updateSalePrice;
  $('#salePayment').onchange=toggleInstallment;
  $('#saleForm').onsubmit=e=>{
    e.preventDefault();
    const p=products.find(x=>x.id===$('#saleProduct').value);
    if(!p){alert('Selecione o produto.');return}
    const size=$('#saleSize').value;
+   const qty=Math.max(1,Math.floor(Number($('#saleQty').value||1)));
    const stock=Number((p.stock||{})[size]||0);
-   if(stock<=0){alert('Não há estoque cadastrado para '+p.name+' no tamanho '+size+'. Cadastre o estoque antes de registrar a venda.');return}
-   const price=Number(p.price||0),discount=Math.min(Math.max(Number($('#saleDiscount').value||0),0),price),finalValue=price-discount;
+   if(stock<qty){alert('Não há estoque cadastrado para '+p.name+' no tamanho '+size+'. Cadastre o estoque antes de registrar a venda.');return}
+   const price=Number(p.price||0),total=price*qty,discount=Math.min(Math.max(Number($('#saleDiscount').value||0),0),total),finalValue=total-discount;
    if($('#salePayment').value==='Parcelado'&&!$('#salePayDate').value){alert('Informe a data para pagamento.');return}
    if($('#salePayment').value==='Parcelado'&&!Number($('#salePayValue').value||0)){alert('Informe o valor acordado.');return}
    const sales=getSales();
-   sales.push({id:'venda-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),productId:p.id,produtoNome:p.name,cliente:$('#saleClient').value.trim(),versao:$('#saleVersion').value,tamanho:size,dataCompra:$('#saleDate').value,valorProduto:price,desconto:discount,valorFinal:finalValue,formaPagamento:$('#salePayment').value,dataPagamento:$('#salePayment').value==='Parcelado'?$('#salePayDate').value:'',valorAcordado:$('#salePayment').value==='Parcelado'?Number($('#salePayValue').value||0):null,aplicada:false});
+   sales.push({id:'venda-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),productId:p.id,produtoNome:p.name,cliente:$('#saleClient').value.trim(),versao:$('#saleVersion').value,tamanho:size,dataCompra:$('#saleDate').value,quantidade:qty,valorUnitario:price,valorProduto:total,desconto:discount,valorFinal:finalValue,formaPagamento:$('#salePayment').value,dataPagamento:$('#salePayment').value==='Parcelado'?$('#salePayDate').value:'',valorAcordado:$('#salePayment').value==='Parcelado'?Number($('#salePayValue').value||0):null,aplicada:false});
    saveSales(sales);renderSales();
-   e.target.reset();$('#saleDate').value=todayBR();$('#saleDiscount').value='0';renderSaleProducts();toggleInstallment();
+   e.target.reset();$('#saleDate').value=todayBR();$('#saleDiscount').value='0';$('#saleQty').value='1';renderSaleProducts();toggleInstallment();
    msg('Venda registrada. Clique em Publicar alterações para deduzir do estoque.',true);
  };
  $('#clearSales').onclick=()=>{if(confirm('Apagar o histórico de vendas salvo neste navegador? Isso não altera vendas já publicadas no estoque.')){saveSales([]);renderSales()}};
