@@ -48,3 +48,21 @@ del{color:#a0a3aa}
 .hero-image-link img{display:block;width:100%;height:auto;max-width:100%;object-fit:contain;object-position:center}
 @media(max-width:1024px){.hero-image-wrap{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}.hero-image-link img{width:100vw;height:auto}}
 @media(max-width:600px){.hero-image-wrap{width:100vw}.hero-image-link img{width:100vw;height:auto;object-fit:contain}}
+
+/* AJUSTE FINAL DE TELAS — banner principal */
+.hero-image-wrap{width:100%;max-width:100%;overflow:hidden;background:#050506}
+.hero-image-link{display:block;width:100%;line-height:0}
+.hero-image-link img{display:block;width:100%;height:auto;max-width:none;object-fit:contain;object-position:center center}
+@media (min-width:1440px){
+ .hero-image-link img{width:100%;height:auto}
+}
+@media (min-width:768px) and (max-width:1439px){
+ .hero-image-link img{width:100%;height:auto}
+}
+@media (max-width:767px){
+ .hero-image-wrap{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
+ .hero-image-link img{width:100vw;height:auto;object-fit:contain}
+}
+@media (max-width:480px){
+ .hero-image-link img{width:100vw;height:auto}
+}
