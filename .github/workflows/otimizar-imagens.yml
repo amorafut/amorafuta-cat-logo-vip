@@ -61,6 +61,8 @@ jobs:
             }
 
             const replacements = new Map();
+
+            // Converte os arquivos originais encontrados na pasta.
             for (const input of originals) {
               const output = input.replace(/\.(png|jpe?g)$/i, '.webp');
               const from = input.replaceAll('\\', '/');
@@ -68,9 +70,16 @@ jobs:
               replacements.set(from, to);
             }
 
+            // Também corrige referências antigas que já apontam para PNG/JPG,
+            // mesmo quando o arquivo original já foi removido.
             for (const file of textFiles) {
               if (!fs.existsSync(file)) continue;
               let text = fs.readFileSync(file, 'utf8');
+              const refs = [...text.matchAll(/assets\/images\/[^"')\s]+\.(?:png|jpe?g)/gi)].map(m => m[0]);
+              for (const ref of refs) {
+                const candidate = ref.replace(/\.(png|jpe?g)$/i, '.webp');
+                if (fs.existsSync(candidate)) replacements.set(ref, candidate);
+              }
               for (const [from, to] of replacements) {
                 text = text.split(from).join(to);
               }
