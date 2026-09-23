@@ -69,9 +69,28 @@ function renderSaleProducts(){
  if(products.some(p=>p.id===current))el.value=current;
  updateSalePrice();
 }
+function updateSaleSizes(){
+ const el=$('#saleSize');if(!el)return;
+ const p=products.find(x=>x.id===$('#saleProduct')?.value);
+ const current=el.value;
+ const sizes=['P','M','G','GG','3G'];
+ if(!p){
+   el.innerHTML='<option value="">Selecione o produto primeiro</option>';
+   return;
+ }
+ const stock=p.stock||{};
+ const available=sizes.filter(s=>Number(stock[s]||0)>0);
+ el.innerHTML='<option value="">Selecione o tamanho</option>'+available.map(s=>'<option value="'+s+'">'+s+' — '+Number(stock[s]||0)+' un.</option>').join('');
+ if(available.includes(current))el.value=current;
+ else if(available.length===1)el.value=available[0];
+}
 function updateSalePrice(){
  const p=products.find(x=>x.id===$('#saleProduct')?.value);
- if(!p)return;
+ updateSaleSizes();
+ if(!p){
+   $('#salePrice').value='';$('#saleFinal').value='';
+   return;
+ }
  const price=Number(p.price||0), discount=Math.min(Math.max(Number($('#saleDiscount')?.value||0),0),price);
  $('#salePrice').value=price.toFixed(2);
  $('#saleDiscount').value=discount.toFixed(2);
@@ -121,7 +140,7 @@ window.preparePendingSales=preparePendingSales;
 function initSales(){
  if(!$('#saleForm'))return;
  $('#saleDate').value=todayBR();
- renderSaleProducts();renderSales();toggleInstallment();
+ renderSaleProducts();updateSaleSizes();renderSales();toggleInstallment();
  $('#saleProduct').onchange=()=>{updateSalePrice();const p=products.find(x=>x.id===$('#saleProduct').value);if(p){$('#saleVersion').value=p.version||'Torcedor';$('#saleVersion').dataset.touched='0'}};
  $('#saleVersion').onchange=()=>$('#saleVersion').dataset.touched='1';
  $('#saleDiscount').oninput=updateSalePrice;
