@@ -31,7 +31,11 @@ body.cart-open #cartRoot .cart-drawer{transform:translateX(0)!important}
 <main>
 <section class="hero-image-wrap" aria-label="Banner principal Amora Fut">
   <a class="hero-image-link" href="#catalogo" aria-label="Ver catálogo">
-    <img src="assets/images/banner-amora-fut.webp?v=1" alt="Amora Fut Streetwear — Paixão que veste você" width="1536" height="576" fetchpriority="high" decoding="async">
+    <picture>
+      <source media="(max-width: 767px)" srcset="assets/images/banners/banner-amora-fut-mobile.webp?v=1">
+      <source media="(max-width: 1199px)" srcset="assets/images/banners/banner-amora-fut-tablet.webp?v=1">
+      <img src="assets/images/banner-amora-fut.webp?v=1" alt="Amora Fut Streetwear — Paixão que veste você" width="1536" height="576" fetchpriority="high" decoding="async">
+    </picture>
   </a>
 </section>
 <section class="benefits wrap"><div><i>◇</i><span><b>PRODUTOS DE</b><small>ALTA QUALIDADE</small></span></div><div><i>♛</i><span><b>QUALIDADE</b><small>PREMIUM</small></span></div><div><i>▣</i><span><b>ENVIO</b><small>TODO O BRASIL</small></span></div><div><i>%</i><span><b>5% OFF</b><small>NO PIX</small></span></div><div><i>◉</i><span><b>ATENDIMENTO</b><small>VIA WHATSAPP</small></span></div></section>
