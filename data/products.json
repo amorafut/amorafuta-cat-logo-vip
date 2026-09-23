@@ -66,6 +66,7 @@
     },
     "description": "",
     "images": [
+      "assets/images/catalog/flamengo-treino-bege-26-27-torcedor/ord-1790164720561-01.png",
       "assets/images/catalog/flamengo-treino-bege-26-27-torcedor/ord-1790112040695-01.webp",
       "assets/images/catalog/flamengo-treino-bege-26-27-torcedor/ord-1790112044037-02.webp",
       "assets/images/catalog/flamengo-treino-bege-26-27-torcedor/ord-1790112048298-03.webp",
@@ -212,9 +213,7 @@
       "3G": 0
     },
     "description": "",
-    "images": [
-      "assets/images/catalog/flamengo-casa-26-27-torcedor/ord-1790162867341-01.webp"
-    ]
+    "images": []
   },
   {
     "id": "flamengo-fora-26-27-torcedor",
