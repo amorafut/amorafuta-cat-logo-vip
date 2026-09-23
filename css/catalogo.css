@@ -41,3 +41,10 @@ del{color:#a0a3aa}
 .cta{color:#ff78ad}
 .badge,.team-chip.active,.hero-action.primary,.cart-checkout{background:#c9005c!important;color:#fff!important}
 .footer-copy{color:#a0a3aa}
+
+/* BANNER OFICIAL AMORA FUT — responsivo */
+.hero-image-wrap{position:relative;width:100%;max-width:100vw;overflow:hidden;background:#050506;border-bottom:1px solid #303136;line-height:0}
+.hero-image-link{display:block;width:100%;margin:0}
+.hero-image-link img{display:block;width:100%;height:auto;max-width:100%;object-fit:contain;object-position:center}
+@media(max-width:1024px){.hero-image-wrap{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}.hero-image-link img{width:100vw;height:auto}}
+@media(max-width:600px){.hero-image-wrap{width:100vw}.hero-image-link img{width:100vw;height:auto;object-fit:contain}}
