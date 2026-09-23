@@ -1,5 +1,27 @@
 [
   {
+    "id": "flamengo-3-26",
+    "name": "Flamengo 3 26",
+    "team": "Flamengo",
+    "category": "Brasileiras",
+    "version": "Torcedor",
+    "price": 130,
+    "badge": "LANÇAMENTO",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 1,
+      "GG": 2,
+      "3G": 0
+    },
+    "description": "",
+    "images": [
+      "assets/images/catalog/flamengo-3-26/01.png"
+    ]
+  },
+  {
     "id": "real-madrid-fora-26-27-torcedor",
     "name": "Real Madrid fora 26/27",
     "team": "Real Madrid",
