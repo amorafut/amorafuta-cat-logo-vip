@@ -215,7 +215,9 @@
       "3G": 0
     },
     "description": "",
-    "images": []
+    "images": [
+      "assets/images/catalog/flamengo-casa-26-27-torcedor/01.png"
+    ]
   },
   {
     "id": "flamengo-fora-26-27-torcedor",
