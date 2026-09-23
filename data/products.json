@@ -298,12 +298,30 @@
   },
   {
     "id": "flamengo-fora-26-27-torcedor",
-    "team": "Flamengo",
     "name": "Flamengo Fora 26/27",
+    "team": "Flamengo",
     "category": "Brasileiras",
     "version": "Torcedor",
     "price": 130,
-    "published": true
+    "badge": "",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 1,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": [
+      "assets/images/catalog/flamengo-fora-26-27-torcedor/01.png",
+      "assets/images/catalog/flamengo-fora-26-27-torcedor/02.jpg",
+      "assets/images/catalog/flamengo-fora-26-27-torcedor/03.jpg",
+      "assets/images/catalog/flamengo-fora-26-27-torcedor/04.jpg",
+      "assets/images/catalog/flamengo-fora-26-27-torcedor/05.jpg",
+      "assets/images/catalog/flamengo-fora-26-27-torcedor/06.jpg"
+    ]
   },
   {
     "id": "palmeiras-casa-26-27-torcedor",
@@ -380,11 +398,11 @@
     },
     "description": "",
     "images": [
-      "assets/images/catalog/corinthians-treino-vinho-26-27-torcedor/01.webp",
-      "assets/images/catalog/corinthians-treino-vinho-26-27-torcedor/02.webp",
-      "assets/images/catalog/corinthians-treino-vinho-26-27-torcedor/03.webp",
-      "assets/images/catalog/corinthians-treino-vinho-26-27-torcedor/04.webp",
-      "assets/images/catalog/corinthians-treino-vinho-26-27-torcedor/05.webp"
+      "assets/images/catalog/corinthians-treino-vinho-26-27-torcedor/01.png",
+      "assets/images/catalog/corinthians-treino-vinho-26-27-torcedor/02.jpg",
+      "assets/images/catalog/corinthians-treino-vinho-26-27-torcedor/03.jpg",
+      "assets/images/catalog/corinthians-treino-vinho-26-27-torcedor/04.jpg",
+      "assets/images/catalog/corinthians-treino-vinho-26-27-torcedor/05.jpg"
     ]
   },
   {
