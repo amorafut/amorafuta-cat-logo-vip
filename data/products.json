@@ -185,14 +185,22 @@
     "published": true,
     "soldOut": false,
     "stock": {
-      "P": 0,
+      "P": 1,
       "M": 0,
-      "G": 0,
-      "GG": 0
+      "G": 1,
+      "GG": 0,
+      "3G": 0
     },
     "description": "",
     "images": [
-      "assets/images/catalog/manchester-city-casa-26-27-torcedor/01.webp"
+      "assets/images/catalog/manchester-city-casa-26-27-torcedor/01.jpg",
+      "assets/images/catalog/manchester-city-casa-26-27-torcedor/02.jpg",
+      "assets/images/catalog/manchester-city-casa-26-27-torcedor/03.jpg",
+      "assets/images/catalog/manchester-city-casa-26-27-torcedor/04.jpg",
+      "assets/images/catalog/manchester-city-casa-26-27-torcedor/05.jpg",
+      "assets/images/catalog/manchester-city-casa-26-27-torcedor/06.jpg",
+      "assets/images/catalog/manchester-city-casa-26-27-torcedor/07.jpg",
+      "assets/images/catalog/manchester-city-casa-26-27-torcedor/08.jpg"
     ]
   },
   {
