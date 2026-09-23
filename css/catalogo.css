@@ -114,4 +114,4 @@ del{color:#a0a3aa}
 .stock-card b{font-weight:900}.stock-card .stock-zero{color:#a0a3aa}
 .stock-total{margin:9px 0 0;color:#a8abb1;font-size:10px}
 .stock-total b{color:#fff}
-.size small{font-size:8px;opacity:.85}
+.size small{font-size:10px;opacity:1;font-weight:800;line-height:1.1}
