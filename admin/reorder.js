@@ -80,6 +80,9 @@
       // Captura o que estiver aberto neste momento antes de publicar.
       stashCurrent();
 
+      // Reserva as vendas pendentes e deduz o estoque somente após o JSON ser publicado.
+      const finalizeSales=window.preparePendingSales?window.preparePendingSales(products):()=>{};
+
       for(const p of products){
         const draft=p.id?pendingByProduct[p.id]:null;
         if(draft&&draft.product){
@@ -112,6 +115,7 @@
 
       const json=btoa(unescape(encodeURIComponent(JSON.stringify(products,null,2))));
       await publishFile(DATA,json);
+      finalizeSales();
 
       pendingFiles=[];
       order=(products.find(x=>x.id===currentId)?.images||[]).map((x,i)=>({kind:'existing',path:x,url:'../'+x,name:x.split('/').pop(),i}));
