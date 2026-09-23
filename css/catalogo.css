@@ -108,3 +108,10 @@ del{color:#a0a3aa}
   .benefits b{font-size:9px}
   .benefits small{font-size:8px}
 }
+
+/* ESTOQUE VISÍVEL PARA O CLIENTE */
+.stock-card{margin-top:8px;font-size:9px;letter-spacing:.7px;color:#ff5b9c;text-transform:uppercase}
+.stock-card b{font-weight:900}.stock-card .stock-zero{color:#a0a3aa}
+.stock-total{margin:9px 0 0;color:#a8abb1;font-size:10px}
+.stock-total b{color:#fff}
+.size small{font-size:8px;opacity:.85}
