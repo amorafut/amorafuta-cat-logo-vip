@@ -269,7 +269,7 @@
     "stock": {
       "P": 0,
       "M": 0,
-      "G": 0,
+      "G": 1,
       "GG": 0,
       "3G": 0
     },
@@ -365,13 +365,25 @@
   },
   {
     "id": "mexico-fora-26-jogador",
-    "team": "México",
     "name": "México Fora 26",
+    "team": "México",
     "category": "Seleções",
     "version": "Jogador",
     "price": 160,
     "badge": "LANÇAMENTO",
-    "published": true
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 1,
+      "G": 0,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": [
+      "assets/images/catalog/mexico-fora-26-jogador/01.png"
+    ]
   },
   {
     "id": "inter-miami-fora-26-27-jogador",
