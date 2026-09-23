@@ -8,7 +8,7 @@ function headers(){return {'Authorization':'Bearer '+token,'Accept':'application
 function msg(t,ok=true){$('#authMsg').textContent=t;$('#status').textContent=t;$('#authMsg').style.color=ok?'var(--green)':'var(--danger)';}
 async function gh(path,opts={}){const r=await fetch(API+'/repos/'+OWNER+'/'+REPO+'/contents/'+path,{...opts,headers:{...headers(),...(opts.headers||{})}});if(!r.ok){let d={};try{d=await r.json()}catch{}throw new Error(d.message||('GitHub HTTP '+r.status));}return r.json();}
 async function repoCheck(){const r=await fetch(API+'/repos/'+OWNER+'/'+REPO,{headers:headers()});if(!r.ok)throw new Error('Token sem acesso ao repositório.');return r.json();}
-async function loadData(){const r=await fetch('../data/products.json?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('Não foi possível ler o catálogo.');products=await r.json();renderList();updateStats();}
+async function loadData(){const r=await fetch('../data/products.json?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('Não foi possível ler o catálogo.');products=await r.json();renderList();updateStats();if(typeof renderSaleProducts==='function')renderSaleProducts();if(typeof renderSales==='function')renderSales();}
 function updateStats(){const teams=new Set(products.map(p=>p.team).filter(Boolean));const units=products.reduce((n,p)=>n+Object.values(p.stock||{}).reduce((a,v)=>a+Number(v||0),0),0);$('#statProducts').textContent=products.length;$('#statTeams').textContent=teams.size;$('#statStock').textContent=units;}
 function thumb(p){const src=(p.images&&p.images[0])||p.image;return src?'<img src="../'+esc(src)+'" alt="">':'<span>⚽</span>';}
 function renderList(){
