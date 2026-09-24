@@ -1,7 +1,7 @@
 const API='https://api.github.com';
 const OWNER='amorafut',REPO='amorafuta-cat-logo-vip',BRANCH='main',DATA='data/products.json';
 let token=sessionStorage.getItem('amora_github_token')||localStorage.getItem('amora_github_token')||'';
-let products=[],currentId=null,pendingFiles=[],originalImages=[],pendingByProduct={},pendingFilesByProduct={};
+let products=[],currentId=null,pendingFiles=[],originalImages=[],pendingByProduct={},pendingFilesByProduct={},slugManuallyEdited=false;
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 function headers(){return {'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};}
@@ -20,7 +20,7 @@ function blank(){return {id:'',team:'',name:'',category:'Brasileiras',version:'T
 function captureDraft(){if(!currentId)return;try{const d=readForm();pendingByProduct[currentId]={product:JSON.parse(JSON.stringify(d)),files:[...(pendingFiles||[])]};pendingFilesByProduct[currentId]=[...(pendingFiles||[])];}catch(e){}}
 function setForm(p){
  if(currentId&&currentId!==(p&&p.id))captureDraft();const d=p&&p.id?pendingByProduct[p.id]:null;if(d&&d.product)p=d.product;
- currentId=p.id||null;originalImages=[...(p.images||[])];pendingFiles=pendingFilesByProduct[p.id]?[...pendingFilesByProduct[p.id]]:(d?[...(d.files||[])]:[]);$('#emptyEditor').classList.add('hidden');$('#form').classList.remove('hidden');$('#editMode').textContent=p.id?'EDITAR PRODUTO':'NOVO PRODUTO';$('#formTitle').textContent=p.name||'Novo produto';
+ currentId=p.id||null;slugManuallyEdited=!!p.id;originalImages=[...(p.images||[])];pendingFiles=pendingFilesByProduct[p.id]?[...pendingFilesByProduct[p.id]]:(d?[...(d.files||[])]:[]);$('#emptyEditor').classList.add('hidden');$('#form').classList.remove('hidden');$('#editMode').textContent=p.id?'EDITAR PRODUTO':'NOVO PRODUTO';$('#formTitle').textContent=p.name||'Novo produto';
  $('#fId').value=p.id||'';$('#fName').value=p.name||'';$('#fTeam').value=p.team||'';$('#fCategory').value=p.category||'Brasileiras';$('#fVersion').value=p.version||'Torcedor';$('#fPrice').value=p.price??'';$('#fOldPrice').value=p.oldPrice??'';$('#fBadge').value=p.badge||'';$('#fDescription').value=p.description||'';$('#fPublished').checked=p.published!==false;$('#fSold').checked=!!p.soldOut;
  const s=p.stock||{};['P','M','G','GG','3G'].forEach(x=>$('#s'+x).value=Number(s[x]||0));renderPreviews(p.images||[]);
  $('#delete').style.visibility=p.id?'visible':'hidden';renderList();
@@ -51,6 +51,10 @@ async function publish(){
  }catch(e){msg(e.message||'Erro ao publicar.',false);}finally{$('#publish').disabled=false;}
 }
 $('#connect').onclick=async()=>{token=$('#token').value.trim();if(!token)return msg('Cole seu GitHub token.',false);try{await repoCheck();if($('#remember').checked)localStorage.setItem('amora_github_token',token);else{localStorage.removeItem('amora_github_token');sessionStorage.setItem('amora_github_token',token);}$('#authCard').classList.add('hidden');$('#app').classList.remove('hidden');await loadData();msg('GitHub conectado.');}catch(e){msg(e.message,false);}};
+function slugify(value){return String(value||'').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').replace(/-+/g,'-');}
+function uniqueSlug(value){const base=slugify(value);if(!base)return '';let candidate=base,n=2;while(products.some(p=>p.id===candidate&&p.id!==currentId)){candidate=base+'-'+n++;}return candidate;}
+$('#fName').addEventListener('input',()=>{if(!slugManuallyEdited){$('#fId').value=uniqueSlug($('#fName').value);}});
+$('#fId').addEventListener('input',()=>{slugManuallyEdited=true;});
 $('#newProduct').onclick=newProduct;$('#reload').onclick=loadData;
 $('#changeToken').onclick=()=>{sessionStorage.removeItem('amora_github_token');localStorage.removeItem('amora_github_token');token='';$('#token').value='';$('#remember').checked=false;$('#app').classList.add('hidden');$('#authCard').classList.remove('hidden');msg('Token limpo. Cole o novo token e clique em Conectar.');};$('#filter').oninput=renderList;$('#publish').onclick=publish;$('#cancel').onclick=()=>{if(currentId)edit(currentId);else $('#form').classList.add('hidden');};
 $('#delete').onclick=()=>{if(!currentId)return;if(confirm('Excluir este produto do catálogo local? Depois clique em Publicar alterações.')){products=products.filter(p=>p.id!==currentId);currentId=null;$('#form').classList.add('hidden');$('#emptyEditor').classList.remove('hidden');renderList();updateStats();msg('Produto removido localmente. Clique em Publicar alterações.');}};
