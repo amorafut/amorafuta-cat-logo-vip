@@ -8,6 +8,7 @@
         product: JSON.parse(JSON.stringify(draft||products.find(x=>x.id===currentId)||{})),
         files:[...(pendingFiles||[])]
       };
+      pendingFilesByProduct[currentId]=[...(pendingFiles||[])];
     }catch(e){
       pendingByProduct[currentId]={
         product: products.find(x=>x.id===currentId),
@@ -20,9 +21,10 @@
     if(d){
       // Recarrega todos os campos salvos do produto antes de restaurar as fotos pendentes.
       if(d.product && typeof window.setFormBase==='function') window.setFormBase(d.product);
-      pendingFiles=[...(d.files||[])];
+      pendingFiles=pendingFilesByProduct[currentId]?[...pendingFilesByProduct[currentId]]:[...(d.files||[])];
     }else{
       pendingFiles=[];
+      if(currentId)pendingFilesByProduct[currentId]=[];
     }
   }
   function esc2(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
@@ -145,7 +147,8 @@
         // Normaliza os formatos antigos/novos usados pelo editor.
         // Alguns rascunhos podem guardar diretamente o File; outros guardam
         // {file,url,name}. Ambos precisam chegar aqui como File.
-        let queue=(draft.files||[]).map(x=>x&&x.file?x:{file:x}).filter(x=>x.file);
+        let storedFiles=pendingFilesByProduct[p.id]||draft.files||[];
+        let queue=storedFiles.map(x=>x&&x.file?x:{file:x}).filter(x=>x.file);
         if(p.id===currentId&&order.length){
           queue=order
             .filter(x=>x.kind==='pending'&&x.file)
@@ -181,6 +184,7 @@
       // Só confirma rascunhos e vendas depois que o commit inteiro foi aceito.
       for(const id of Object.keys(uploadedByProduct))delete pendingByProduct[id];
       pendingFiles=[];
+      pendingFilesByProduct={};
       products=working;
       finalizeSales();
 
@@ -204,7 +208,8 @@
     const target=draft&&draft.product?JSON.parse(JSON.stringify(draft.product)):p;
     // Carrega o produto-alvo sem apagar o rascunho de nenhum outro produto.
     originalSet(target);
-    pendingFiles=draft?[...(draft.files||[])]:[];
+    pendingFiles=pendingFilesByProduct[p.id]?[...pendingFilesByProduct[p.id]]:(draft?[...(draft.files||[])]:[]);
+    if(p&&p.id)pendingFilesByProduct[p.id]=[...(pendingFiles||[])];
     order=[];
     setTimeout(draw,0);
   };
