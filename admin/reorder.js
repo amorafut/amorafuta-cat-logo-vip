@@ -1,5 +1,12 @@
 (function(){
   let order=[];
+  // Banco temporário persistente no navegador: guarda blobs por produto (IndexedDB).
+  const DB_NAME='amora_fut_image_drafts_v1', DB_STORE='queues';
+  function openImageDB(){return new Promise((resolve,reject)=>{const req=indexedDB.open(DB_NAME,1);req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains(DB_STORE))req.result.createObjectStore(DB_STORE,{keyPath:'id'});};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error||new Error('Falha ao abrir banco temporário de imagens.'));});}
+  async function saveImageQueue(id,files){if(!id)return;const db=await openImageDB();await new Promise((resolve,reject)=>{const tx=db.transaction(DB_STORE,'readwrite');tx.objectStore(DB_STORE).put({id,files:(files||[]).map(x=>({blob:x.file||x, name:(x.file||x).name||'imagem',type:(x.file||x).type||'image/jpeg',lastModified:(x.file||x).lastModified||Date.now()}))});tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});db.close();}
+  async function readImageQueue(id){if(!id)return [];const db=await openImageDB();const record=await new Promise((resolve,reject)=>{const req=db.transaction(DB_STORE,'readonly').objectStore(DB_STORE).get(id);req.onsuccess=()=>resolve(req.result||null);req.onerror=()=>reject(req.error);});db.close();return (record?.files||[]).map(x=>{const file=new File([x.blob],x.name,{type:x.type,lastModified:x.lastModified});return {file,url:URL.createObjectURL(file)};});}
+  async function clearImageQueues(ids){const db=await openImageDB();await new Promise((resolve,reject)=>{const tx=db.transaction(DB_STORE,'readwrite'),st=tx.objectStore(DB_STORE);(ids||[]).forEach(id=>st.delete(id));tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});db.close();}
+
   function stashCurrent(){
     if(!currentId)return;
     try{
@@ -9,6 +16,7 @@
         files:[...(pendingFiles||[])]
       };
       pendingFilesByProduct[currentId]=[...(pendingFiles||[])];
+      saveImageQueue(currentId,pendingFiles).catch(e=>msg('Não foi possível guardar fotos temporárias: '+e.message,false));
     }catch(e){
       pendingByProduct[currentId]={
         product: products.find(x=>x.id===currentId),
@@ -49,7 +57,7 @@
     const p=products.find(x=>x.id===currentId);
     if(p)p.images=order.filter(x=>x.kind==='existing').map(x=>x.path);
     pendingFiles=order.filter(x=>x.kind==='pending');
-    if(currentId)pendingFilesByProduct[currentId]=[...(pendingFiles||[])];
+    if(currentId){pendingFilesByProduct[currentId]=[...(pendingFiles||[])];saveImageQueue(currentId,pendingFiles).catch(e=>msg('Falha ao guardar fotos temporárias: '+e.message,false));}
     if(currentId&&pendingByProduct[currentId])pendingByProduct[currentId].files=[...(pendingFiles||[])];
   }
 
@@ -149,7 +157,7 @@
         // Normaliza os formatos antigos/novos usados pelo editor.
         // Alguns rascunhos podem guardar diretamente o File; outros guardam
         // {file,url,name}. Ambos precisam chegar aqui como File.
-        let storedFiles=(pendingFilesByProduct[p.id]&&pendingFilesByProduct[p.id].length)?pendingFilesByProduct[p.id]:(draft.files||[]);
+        let storedFiles=(pendingFilesByProduct[p.id]&&pendingFilesByProduct[p.id].length)?pendingFilesByProduct[p.id]:(draft.files||[]);\n        if(!storedFiles.length)storedFiles=await readImageQueue(p.id);
         let queue=storedFiles.map(x=>x&&x.file?x:{file:x}).filter(x=>x.file);
         if(p.id===currentId&&order.length){
           queue=order
@@ -185,6 +193,7 @@
 
       // Só confirma rascunhos e vendas depois que o commit inteiro foi aceito.
       for(const id of Object.keys(uploadedByProduct))delete pendingByProduct[id];
+      await clearImageQueues(Object.keys(uploadedByProduct));
       pendingFiles=[];
       pendingFilesByProduct={};
       products=working;
@@ -211,7 +220,7 @@
     // Carrega o produto-alvo sem apagar o rascunho de nenhum outro produto.
     originalSet(target);
     pendingFiles=pendingFilesByProduct[p.id]?[...pendingFilesByProduct[p.id]]:(draft?[...(draft.files||[])]:[]);
-    if(p&&p.id)pendingFilesByProduct[p.id]=[...(pendingFiles||[])];
+    if(p&&p.id){pendingFilesByProduct[p.id]=[...(pendingFiles||[])];readImageQueue(p.id).then(saved=>{if(saved.length){pendingFiles=saved;pendingFilesByProduct[p.id]=[...saved];if(pendingByProduct[p.id])pendingByProduct[p.id].files=[...saved];order=[];draw();}}).catch(e=>msg('Não foi possível recuperar fotos temporárias: '+e.message,false));}
     order=[];
     setTimeout(draw,0);
   };
@@ -224,7 +233,7 @@
     draw();
   };
   const ph=document.querySelector('#photos');
-  if(ph)ph.addEventListener('change',()=>setTimeout(draw,0));
+  if(ph)ph.addEventListener('change',()=>{setTimeout(draw,0);if(currentId)saveImageQueue(currentId,pendingFiles).catch(e=>msg('Falha ao guardar fotos temporárias: '+e.message,false));});
   document.addEventListener('DOMContentLoaded',()=>{setTimeout(draw,50);const pb=document.querySelector('#publish');if(pb)pb.onclick=publishOrdered;});
   setInterval(()=>{const box=document.querySelector('#previews');if(box&&box.dataset.reorderReady!=='1'){box.dataset.reorderReady='1';draw()}},500);
 })();
