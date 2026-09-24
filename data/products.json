@@ -1,5 +1,75 @@
 [
   {
+    "id": "barcelona-home-26",
+    "name": "Barcelona casa 26",
+    "team": "Barcelona",
+    "category": "Internacionais",
+    "version": "Torcedor",
+    "price": 130,
+    "badge": "LANÇAMENTO",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 1,
+      "GG": 1,
+      "3G": 0
+    },
+    "description": "",
+    "images": [
+      "assets/images/catalog/barcelona-home-26/01.png",
+      "assets/images/catalog/barcelona-home-26/02.jpg",
+      "assets/images/catalog/barcelona-home-26/03.jpg",
+      "assets/images/catalog/barcelona-home-26/04.jpg",
+      "assets/images/catalog/barcelona-home-26/05.jpg",
+      "assets/images/catalog/barcelona-home-26/06.jpg",
+      "assets/images/catalog/barcelona-home-26/07.jpg",
+      "assets/images/catalog/barcelona-home-26/08.jpg",
+      "assets/images/catalog/barcelona-home-26/09.jpg"
+    ]
+  },
+  {
+    "id": "barcelona-away-24",
+    "name": "Barcelona away 24",
+    "team": "Barcelona",
+    "category": "Internacionais",
+    "version": "Torcedor",
+    "price": 130,
+    "badge": "DESTAQUE",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 1,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": []
+  },
+  {
+    "id": "barcelona-away-26",
+    "name": "Barcelona away 26",
+    "team": "Barcelona",
+    "category": "Internacionais",
+    "version": "Torcedor",
+    "price": 130,
+    "badge": "LANÇAMENTO",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 1,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": []
+  },
+  {
     "id": "barcelona-retro-ronaldinho",
     "name": "Barcelona retrô Ronaldinho gaúcho",
     "team": "Barcelona",
