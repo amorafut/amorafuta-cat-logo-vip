@@ -43,9 +43,9 @@ function chooseFreight(id){selectedFreight=freightOptions.find(x=>x._id===String
 function checkoutCart(){
  const c=getCart();if(!c.length)return;
  if(!selectedFreight){alert('Informe o CEP e calcule o frete. Depois, selecione uma opção de entrega.');return}
- let t='Olá! Quero fazer um pedido na Amora Fut:\\n\\n';
- c.forEach((i,n)=>t+=(n+1)+'. '+i.name+(i.size?' — tamanho '+i.size:'')+' — '+i.qty+' un. — '+money(i.price*i.qty)+'\\n');
- t+='\\nCEP de entrega: '+freightCep+'\\nFrete ('+selectedFreight._name+'): '+money(shippingPrice())+'\\nSubtotal dos produtos: '+money(cartTotal())+'\\nTotal com frete: '+money(orderTotal())+'\\n\\nGostaria de confirmar disponibilidade e pagamento.';
+ let t='Olá! Quero fazer um pedido na Amora Fut:\n\n';
+ c.forEach((i,n)=>t+=(n+1)+'. '+i.name+(i.size?' — tamanho '+i.size:'')+' — '+i.qty+' un. — '+money(i.price*i.qty)+'\n');
+ t+='\nCEP de entrega: '+freightCep+'\nFrete ('+selectedFreight._name+'): '+money(shippingPrice())+'\nSubtotal dos produtos: '+money(cartTotal())+'\nTotal com frete: '+money(orderTotal())+'\n\nGostaria de confirmar disponibilidade e pagamento.';
  window.open('https://wa.me/'+WA_CART+'?text='+encodeURIComponent(t),'_blank','noopener');
 }
 const CART_ICON='<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 6h3l2.2 13.2a2 2 0 0 0 2 1.7h11.9a2 2 0 0 0 1.9-1.5L28 10H8"/><circle cx="12.5" cy="26" r="2"/><circle cx="24" cy="26" r="2"/></svg>';
