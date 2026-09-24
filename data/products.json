@@ -1,5 +1,51 @@
 [
   {
+    "id": "barcelona-retro-ronaldinho",
+    "name": "Barcelona retrô Ronaldinho gaúcho",
+    "team": "Barcelona",
+    "category": "Internacionais",
+    "version": "Torcedor",
+    "price": 180,
+    "badge": "DESTAQUE",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 1,
+      "GG": 1,
+      "3G": 0
+    },
+    "description": "",
+    "images": []
+  },
+  {
+    "id": "it-lia-home-26",
+    "name": "Itália home 26",
+    "team": "Itália",
+    "category": "Seleções",
+    "version": "Torcedor",
+    "price": 130,
+    "badge": "DESTAQUE",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 1,
+      "GG": 1,
+      "3G": 0
+    },
+    "description": "",
+    "images": [
+      "assets/images/catalog/it-lia-home-26/01.png",
+      "assets/images/catalog/it-lia-home-26/02.jpg",
+      "assets/images/catalog/it-lia-home-26/03.jpg",
+      "assets/images/catalog/it-lia-home-26/04.jpg",
+      "assets/images/catalog/it-lia-home-26/05.jpg"
+    ]
+  },
+  {
     "id": "argentina-homr-26",
     "name": "Argentina home 26",
     "team": "Argentina",
