@@ -687,8 +687,9 @@
     "stock": {
       "P": 1,
       "M": 2,
-      "G": 2,
-      "GG": 1
+      "G": 1,
+      "GG": 1,
+      "3G": 0
     },
     "description": "",
     "images": [
@@ -699,8 +700,7 @@
       "assets/images/catalog/real-madrid-casa-26-27-torcedor/ord-1790112537853-05.webp",
       "assets/images/catalog/real-madrid-casa-26-27-torcedor/ord-1790112541287-06.webp",
       "assets/images/catalog/real-madrid-casa-26-27-torcedor/ord-1790112544607-07.webp"
-    ],
-    "weight_g": 240
+    ]
   },
   {
     "id": "flamengo-treino-bege-26-27-torcedor",
