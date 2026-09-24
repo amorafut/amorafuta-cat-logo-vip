@@ -125,7 +125,7 @@ function preparePendingSales(list){
    if(!size)throw new Error('A venda de '+s.produtoNome+' precisa de tamanho.');
    const current=Number((p.stock||{})[size]||0);
    const qty=Math.max(1,Math.floor(Number(s.quantidade||1)));
-   if(current<qty)throw new Error('Estoque insuficiente para '+s.produtoNome+' tamanho '+size+'. Estoque atual: '+stock+'. Quantidade solicitada: '+qty+'.');
+   if(current<qty)throw new Error('Estoque insuficiente para '+s.produtoNome+' tamanho '+size+'. Estoque atual: '+current+'. Quantidade solicitada: '+qty+'.');
    backups.push({p,size,current});
    p.stock=p.stock||{};p.stock[size]=current-qty;
    const total=Object.values(p.stock).reduce((a,v)=>a+Number(v||0),0);
