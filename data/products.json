@@ -97,7 +97,15 @@
       "3G": 0
     },
     "description": "",
-    "images": []
+    "images": [
+      "assets/images/catalog/helsea-away/01.png",
+      "assets/images/catalog/helsea-away/02.jpg",
+      "assets/images/catalog/helsea-away/03.jpg",
+      "assets/images/catalog/helsea-away/04.jpg",
+      "assets/images/catalog/helsea-away/05.jpg",
+      "assets/images/catalog/helsea-away/06.jpg",
+      "assets/images/catalog/helsea-away/07.jpg"
+    ]
   },
   {
     "id": "nglaterra-away",
