@@ -137,18 +137,27 @@
       for(const p of working){
         const draft=p.id?pendingByProduct[p.id]:null;
         if(!draft)continue;
+
+        // Cada produto possui seu próprio rascunho. Nunca usa as fotos do produto atual
+        // como fonte para outro produto.
         Object.assign(p,JSON.parse(JSON.stringify(draft.product||{})));
 
-        let queue=[...(draft.files||[])];
+        // Normaliza os formatos antigos/novos usados pelo editor.
+        // Alguns rascunhos podem guardar diretamente o File; outros guardam
+        // {file,url,name}. Ambos precisam chegar aqui como File.
+        let queue=(draft.files||[]).map(x=>x&&x.file?x:{file:x}).filter(x=>x.file);
         if(p.id===currentId&&order.length){
-          queue=order.filter(x=>x.kind==='pending').map(x=>({file:x.file,name:x.name,url:x.url}));
+          queue=order
+            .filter(x=>x.kind==='pending'&&x.file)
+            .map(x=>({file:x.file,name:x.name,url:x.url}));
         }
+
         if(!queue.length)continue;
 
         const base=[...(p.images||[])];
         let n=base.length+1;
         for(const x of queue){
-          msg('Preparando foto '+n+' de '+queue.length+' — '+p.name+'...');
+          msg('Preparando fotos de '+p.name+' — '+n+' de '+(base.length+queue.length)+'...');
           const wf=await imageToWebP(x.file);
           const path='assets/images/catalog/'+p.id+'/ord-'+Date.now()+'-'+String(n).padStart(2,'0')+'.webp';
           const b64=await b64File(wf);
@@ -192,9 +201,10 @@
   window.setForm=function(p){
     stashCurrent();
     const draft=p&&p.id?pendingByProduct[p.id]:null;
-    originalSet(draft&&draft.product?draft.product:p);
-    if(draft) pendingFiles=[...(draft.files||[])];
-    else pendingFiles=[];
+    const target=draft&&draft.product?JSON.parse(JSON.stringify(draft.product)):p;
+    // Carrega o produto-alvo sem apagar o rascunho de nenhum outro produto.
+    originalSet(target);
+    pendingFiles=draft?[...(draft.files||[])]:[];
     order=[];
     setTimeout(draw,0);
   };
