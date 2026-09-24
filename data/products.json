@@ -61,7 +61,17 @@
       "3G": 0
     },
     "description": "",
-    "images": []
+    "images": [
+      "assets/images/catalog/barcelona-3-25/01.png",
+      "assets/images/catalog/barcelona-3-25/02.jpg",
+      "assets/images/catalog/barcelona-3-25/03.jpg",
+      "assets/images/catalog/barcelona-3-25/04.jpg",
+      "assets/images/catalog/barcelona-3-25/05.jpg",
+      "assets/images/catalog/barcelona-3-25/06.jpg",
+      "assets/images/catalog/barcelona-3-25/07.jpg",
+      "assets/images/catalog/barcelona-3-25/08.jpg",
+      "assets/images/catalog/barcelona-3-25/09.jpg"
+    ]
   },
   {
     "id": "barcelona-home-26",
