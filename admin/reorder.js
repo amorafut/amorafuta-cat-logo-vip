@@ -49,6 +49,8 @@
     const p=products.find(x=>x.id===currentId);
     if(p)p.images=order.filter(x=>x.kind==='existing').map(x=>x.path);
     pendingFiles=order.filter(x=>x.kind==='pending');
+    if(currentId)pendingFilesByProduct[currentId]=[...(pendingFiles||[])];
+    if(currentId&&pendingByProduct[currentId])pendingByProduct[currentId].files=[...(pendingFiles||[])];
   }
 
   function imageToWebP(file){
@@ -147,7 +149,7 @@
         // Normaliza os formatos antigos/novos usados pelo editor.
         // Alguns rascunhos podem guardar diretamente o File; outros guardam
         // {file,url,name}. Ambos precisam chegar aqui como File.
-        let storedFiles=pendingFilesByProduct[p.id]||draft.files||[];
+        let storedFiles=(pendingFilesByProduct[p.id]&&pendingFilesByProduct[p.id].length)?pendingFilesByProduct[p.id]:(draft.files||[]);
         let queue=storedFiles.map(x=>x&&x.file?x:{file:x}).filter(x=>x.file);
         if(p.id===currentId&&order.length){
           queue=order
