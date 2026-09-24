@@ -111,7 +111,17 @@
       "3G": 0
     },
     "description": "",
-    "images": []
+    "images": [
+      "assets/images/catalog/barcelona-away-24/01.png",
+      "assets/images/catalog/barcelona-away-24/02.jpg",
+      "assets/images/catalog/barcelona-away-24/03.jpg",
+      "assets/images/catalog/barcelona-away-24/04.jpg",
+      "assets/images/catalog/barcelona-away-24/05.jpg",
+      "assets/images/catalog/barcelona-away-24/06.jpg",
+      "assets/images/catalog/barcelona-away-24/07.jpg",
+      "assets/images/catalog/barcelona-away-24/08.jpg",
+      "assets/images/catalog/barcelona-away-24/09.jpg"
+    ]
   },
   {
     "id": "barcelona-away-26",
