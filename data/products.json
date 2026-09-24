@@ -1,5 +1,145 @@
 [
   {
+    "id": "eal-adrid-asa",
+    "name": "Real Madrid Casa 25",
+    "team": "Real Madrid",
+    "category": "Internacionais",
+    "version": "Torcedor",
+    "price": 130,
+    "badge": "LANÇAMENTO",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 1,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": []
+  },
+  {
+    "id": "rgentina-home",
+    "name": "Argentina home 26",
+    "team": "Argentina",
+    "category": "Seleções",
+    "version": "Torcedor",
+    "price": 130,
+    "badge": "",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 1,
+      "GG": 1,
+      "3G": 0
+    },
+    "description": "",
+    "images": []
+  },
+  {
+    "id": "otaogo",
+    "name": "Botafogo 3 25",
+    "team": "Botafogo",
+    "category": "Brasileiras",
+    "version": "Torcedor",
+    "price": 130,
+    "badge": "DESTAQUE",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 1,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": []
+  },
+  {
+    "id": "ortgal-home-2",
+    "name": "Portugal home 26",
+    "team": "Portugal",
+    "category": "Seleções",
+    "version": "Torcedor",
+    "price": 130,
+    "badge": "DESTAQUE",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 1,
+      "G": 0,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": []
+  },
+  {
+    "id": "antos-home",
+    "name": "Santos home 24",
+    "team": "Santos",
+    "category": "Brasileiras",
+    "version": "Torcedor",
+    "price": 130,
+    "badge": "",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 1,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": []
+  },
+  {
+    "id": "ortgal-home",
+    "name": "Portugal home 26",
+    "team": "Portugal",
+    "category": "Brasileiras",
+    "version": "Jogador",
+    "price": 160,
+    "badge": "DESTAQUE",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 1,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": []
+  },
+  {
+    "id": "lamengo-home",
+    "name": "Flamengo home 25",
+    "team": "Flamengo",
+    "category": "Brasileiras",
+    "version": "Torcedor",
+    "price": 130,
+    "badge": "DESTAQUE",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 1,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": []
+  },
+  {
     "id": "almeiras-away",
     "name": "Palmeiras away 26",
     "team": "Palmeiras",
