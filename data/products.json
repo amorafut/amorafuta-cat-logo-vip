@@ -142,7 +142,15 @@
       "3G": 0
     },
     "description": "",
-    "images": []
+    "images": [
+      "assets/images/catalog/nglaterra-away/01.png",
+      "assets/images/catalog/nglaterra-away/02.jpg",
+      "assets/images/catalog/nglaterra-away/03.jpg",
+      "assets/images/catalog/nglaterra-away/04.jpg",
+      "assets/images/catalog/nglaterra-away/05.jpg",
+      "assets/images/catalog/nglaterra-away/06.jpg",
+      "assets/images/catalog/nglaterra-away/07.jpg"
+    ]
   },
   {
     "id": "nter-iami-away-3",
