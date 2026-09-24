@@ -157,7 +157,8 @@
         // Normaliza os formatos antigos/novos usados pelo editor.
         // Alguns rascunhos podem guardar diretamente o File; outros guardam
         // {file,url,name}. Ambos precisam chegar aqui como File.
-        let storedFiles=(pendingFilesByProduct[p.id]&&pendingFilesByProduct[p.id].length)?pendingFilesByProduct[p.id]:(draft.files||[]);\n        if(!storedFiles.length)storedFiles=await readImageQueue(p.id);
+        let storedFiles=(pendingFilesByProduct[p.id]&&pendingFilesByProduct[p.id].length)?pendingFilesByProduct[p.id]:(draft.files||[]);
+        if(!storedFiles.length)storedFiles=await readImageQueue(p.id);
         let queue=storedFiles.map(x=>x&&x.file?x:{file:x}).filter(x=>x.file);
         if(p.id===currentId&&order.length){
           queue=order
@@ -220,7 +221,7 @@
     // Carrega o produto-alvo sem apagar o rascunho de nenhum outro produto.
     originalSet(target);
     pendingFiles=pendingFilesByProduct[p.id]?[...pendingFilesByProduct[p.id]]:(draft?[...(draft.files||[])]:[]);
-    if(p&&p.id){pendingFilesByProduct[p.id]=[...(pendingFiles||[])];readImageQueue(p.id).then(saved=>{if(saved.length){pendingFiles=saved;pendingFilesByProduct[p.id]=[...saved];if(pendingByProduct[p.id])pendingByProduct[p.id].files=[...saved];order=[];draw();}}).catch(e=>msg('Não foi possível recuperar fotos temporárias: '+e.message,false));}
+    if(p&&p.id){pendingFilesByProduct[p.id]=[...(pendingFiles||[])];const selectedId=p.id;readImageQueue(selectedId).then(saved=>{if(saved.length&&currentId===selectedId&&!(pendingFilesByProduct[selectedId]||[]).length){pendingFiles=saved;pendingFilesByProduct[selectedId]=[...saved];const base=products.find(x=>x.id===selectedId);if(!pendingByProduct[selectedId]&&base)pendingByProduct[selectedId]={product:JSON.parse(JSON.stringify(base)),files:[...saved]};else if(pendingByProduct[selectedId])pendingByProduct[selectedId].files=[...saved];order=[];draw();}}).catch(e=>msg('Não foi possível recuperar fotos temporárias: '+e.message,false));}
     order=[];
     setTimeout(draw,0);
   };
