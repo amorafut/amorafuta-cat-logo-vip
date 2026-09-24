@@ -21,7 +21,8 @@
       "assets/images/catalog/flamengo-lifestyle/01.webp",
       "assets/images/catalog/flamengo-lifestyle/02.webp",
       "assets/images/catalog/flamengo-lifestyle/03.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "barcelona-casa-24",
@@ -51,7 +52,8 @@
       "assets/images/catalog/barcelona-casa-24/07.webp",
       "assets/images/catalog/barcelona-casa-24/08.webp",
       "assets/images/catalog/barcelona-casa-24/09.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "barcelona-3-25",
@@ -81,7 +83,8 @@
       "assets/images/catalog/barcelona-3-25/07.webp",
       "assets/images/catalog/barcelona-3-25/08.webp",
       "assets/images/catalog/barcelona-3-25/09.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "barcelona-home-26",
@@ -111,7 +114,8 @@
       "assets/images/catalog/barcelona-home-26/07.webp",
       "assets/images/catalog/barcelona-home-26/08.webp",
       "assets/images/catalog/barcelona-home-26/09.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "barcelona-away-24",
@@ -141,7 +145,8 @@
       "assets/images/catalog/barcelona-away-24/07.webp",
       "assets/images/catalog/barcelona-away-24/08.webp",
       "assets/images/catalog/barcelona-away-24/09.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "barcelona-away-26",
@@ -170,7 +175,8 @@
       "assets/images/catalog/barcelona-away-26/06.webp",
       "assets/images/catalog/barcelona-away-26/07.webp",
       "assets/images/catalog/barcelona-away-26/08.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "barcelona-retro-ronaldinho",
@@ -198,7 +204,8 @@
       "assets/images/catalog/barcelona-retro-ronaldinho/05.webp",
       "assets/images/catalog/barcelona-retro-ronaldinho/06.webp",
       "assets/images/catalog/barcelona-retro-ronaldinho/07.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "it-lia-home-26",
@@ -224,7 +231,8 @@
       "assets/images/catalog/it-lia-home-26/03.webp",
       "assets/images/catalog/it-lia-home-26/04.webp",
       "assets/images/catalog/it-lia-home-26/05.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "argentina-homr-26",
@@ -254,7 +262,8 @@
       "assets/images/catalog/argentina-homr-26/07.webp",
       "assets/images/catalog/argentina-homr-26/08.webp",
       "assets/images/catalog/argentina-homr-26/09.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "fran-a-away-26",
@@ -282,7 +291,8 @@
       "assets/images/catalog/fran-a-away-26/05.webp",
       "assets/images/catalog/fran-a-away-26/06.webp",
       "assets/images/catalog/fran-a-away-26/07.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "barcelona-casa-24-25",
@@ -312,7 +322,8 @@
       "assets/images/catalog/barcelona-casa-24-25/ord-1790182780043-07.webp",
       "assets/images/catalog/barcelona-casa-24-25/ord-1790182786658-08.webp",
       "assets/images/catalog/barcelona-casa-24-25/ord-1790182792762-09.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "flamengo-3-26",
@@ -334,7 +345,8 @@
     "description": "",
     "images": [
       "assets/images/catalog/flamengo-3-26/01.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "real-madrid-fora-26-27-torcedor",
@@ -355,7 +367,8 @@
     "description": "",
     "images": [
       "assets/images/catalog/real-madrid-fora-26-27-torcedor/01.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "real-madrid-casa-26-27-torcedor",
@@ -382,7 +395,8 @@
       "assets/images/catalog/real-madrid-casa-26-27-torcedor/ord-1790112537853-05.webp",
       "assets/images/catalog/real-madrid-casa-26-27-torcedor/ord-1790112541287-06.webp",
       "assets/images/catalog/real-madrid-casa-26-27-torcedor/ord-1790112544607-07.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "flamengo-treino-bege-26-27-torcedor",
@@ -409,7 +423,8 @@
       "assets/images/catalog/flamengo-treino-bege-26-27-torcedor/ord-1790112048298-03.webp",
       "assets/images/catalog/flamengo-treino-bege-26-27-torcedor/ord-1790112052806-04.webp",
       "assets/images/catalog/flamengo-treino-bege-26-27-torcedor/ord-1790112056876-05.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "flamengo-treino-marrom-26-27-torcedor",
@@ -435,7 +450,8 @@
       "assets/images/catalog/flamengo-treino-marrom-26-27-torcedor/03.webp",
       "assets/images/catalog/flamengo-treino-marrom-26-27-torcedor/04.webp",
       "assets/images/catalog/flamengo-treino-marrom-26-27-torcedor/05.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "borussia-dortmund-casa-26-27-torcedor",
@@ -464,7 +480,8 @@
       "assets/images/catalog/borussia-dortmund-casa-26-27-torcedor/06.webp",
       "assets/images/catalog/borussia-dortmund-casa-26-27-torcedor/07.webp",
       "assets/images/catalog/borussia-dortmund-casa-26-27-torcedor/08.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "manchester-city-casa-26-27-torcedor",
@@ -493,7 +510,8 @@
       "assets/images/catalog/manchester-city-casa-26-27-torcedor/06.webp",
       "assets/images/catalog/manchester-city-casa-26-27-torcedor/07.webp",
       "assets/images/catalog/manchester-city-casa-26-27-torcedor/08.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "atletico-mineiro-casa-26-27-torcedor",
@@ -515,7 +533,8 @@
     "description": "",
     "images": [
       "assets/images/catalog/atletico-mineiro-casa-26-27-torcedor/01.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "corinthians-casa-26-27-torcedor",
@@ -535,7 +554,8 @@
       "3G": 0
     },
     "description": "",
-    "images": []
+    "images": [],
+    "weight_g": 240
   },
   {
     "id": "cruzeiro-treino-azul-26-27-torcedor",
@@ -557,7 +577,8 @@
     "description": "",
     "images": [
       "assets/images/catalog/cruzeiro-treino-azul-26-27-torcedor/01.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "flamengo-casa-26-27-torcedor",
@@ -579,7 +600,8 @@
     "description": "",
     "images": [
       "assets/images/catalog/flamengo-casa-26-27-torcedor/01.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "flamengo-fora-26-27-torcedor",
@@ -606,7 +628,8 @@
       "assets/images/catalog/flamengo-fora-26-27-torcedor/04.webp",
       "assets/images/catalog/flamengo-fora-26-27-torcedor/05.webp",
       "assets/images/catalog/flamengo-fora-26-27-torcedor/06.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "palmeiras-casa-26-27-torcedor",
@@ -634,7 +657,8 @@
       "assets/images/catalog/palmeiras-casa-26-27-torcedor/ord-1790182459033-05.webp",
       "assets/images/catalog/palmeiras-casa-26-27-torcedor/ord-1790182463971-06.webp",
       "assets/images/catalog/palmeiras-casa-26-27-torcedor/ord-1790182469819-07.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "vasco-casa-26-27-torcedor",
@@ -662,7 +686,8 @@
       "assets/images/catalog/vasco-casa-26-27-torcedor/05.webp",
       "assets/images/catalog/vasco-casa-26-27-torcedor/06.webp",
       "assets/images/catalog/vasco-casa-26-27-torcedor/07.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "corinthians-treino-vinho-26-27-torcedor",
@@ -688,7 +713,8 @@
       "assets/images/catalog/corinthians-treino-vinho-26-27-torcedor/03.webp",
       "assets/images/catalog/corinthians-treino-vinho-26-27-torcedor/04.webp",
       "assets/images/catalog/corinthians-treino-vinho-26-27-torcedor/05.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "selecao-brasileira-casa-26-27-jogador",
@@ -716,7 +742,8 @@
       "assets/images/catalog/selecao-brasileira-casa-26-27-jogador/04.webp",
       "assets/images/catalog/selecao-brasileira-casa-26-27-jogador/05.webp",
       "assets/images/catalog/selecao-brasileira-casa-26-27-jogador/06.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "fluminense-casa-26-27-torcedor",
@@ -738,7 +765,8 @@
     "description": "",
     "images": [
       "assets/images/catalog/fluminense-casa-26-27-torcedor/01.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "arsenal-fora-26-27-jogador",
@@ -760,7 +788,8 @@
     "description": "",
     "images": [
       "assets/images/catalog/arsenal-fora-26-27-jogador/01.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "mexico-fora-26-jogador",
@@ -782,7 +811,8 @@
     "description": "",
     "images": [
       "assets/images/catalog/mexico-fora-26-jogador/01.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "inter-miami-fora-26-27-jogador",
@@ -792,7 +822,8 @@
     "version": "Jogador",
     "price": 160,
     "badge": "LANÇAMENTO",
-    "published": true
+    "published": true,
+    "weight_g": 240
   },
   {
     "id": "manchester-united-iii-25-26-torcedor",
@@ -820,7 +851,8 @@
       "assets/images/catalog/manchester-united-iii-25-26-torcedor/05.webp",
       "assets/images/catalog/manchester-united-iii-25-26-torcedor/06.webp",
       "assets/images/catalog/manchester-united-iii-25-26-torcedor/07.webp"
-    ]
+    ],
+    "weight_g": 240
   },
   {
     "id": "atletico-madrid-retro-04-05-f-torres",
@@ -832,6 +864,7 @@
     "oldPrice": 140,
     "badge": "ESGOTADO",
     "soldOut": true,
-    "published": true
+    "published": true,
+    "weight_g": 240
   }
 ]
