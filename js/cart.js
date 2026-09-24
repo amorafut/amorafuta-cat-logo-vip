@@ -5,12 +5,12 @@ function getCart(){try{return JSON.parse(localStorage.getItem(CART_KEY)||'[]')}c
 function saveCart(c){localStorage.setItem(CART_KEY,JSON.stringify(c));clearFreightQuote();renderCart()}
 function cartCount(){return getCart().reduce((n,i)=>n+Number(i.qty||0),0)}
 function cartTotal(){return getCart().reduce((s,i)=>s+i.price*i.qty,0)}
-let freightCep=(localStorage.getItem(CEP_KEY)||'').replace(/\\D/g,'').slice(0,8),freightOptions=[],selectedFreight=null,freightLoading=false,freightError='';
+let freightCep=(localStorage.getItem(CEP_KEY)||'').replace(/[^\d]/g,'').slice(0,8),freightOptions=[],selectedFreight=null,freightLoading=false,freightError='';
 function clearFreightQuote(){freightOptions=[];selectedFreight=null;freightError='';}
 function addToCart(p,size,qty=1){const c=getCart(),key=p.id+'::'+(size||'ÚNICO'),max=p.stock&&size?Number(p.stock[size]||0):null,found=c.find(i=>i.key===key);if(found)found.qty=max?Math.min(max,found.qty+qty):found.qty+qty;else c.push({key,id:p.id,name:p.name,team:p.team||'',version:p.version||'',price:Number(p.price||0),size:size||'',qty:Number(qty||1),image:(p.images&&p.images[0])||p.image||'',stock:max});saveCart(c);openCart()}
 function changeCart(key,d){const c=getCart(),i=c.findIndex(x=>x.key===key);if(i<0)return;const max=c[i].stock;c[i].qty=max?Math.min(max,c[i].qty+d):c[i].qty+d;if(c[i].qty<=0)c.splice(i,1);saveCart(c)}
 function removeCart(key){saveCart(getCart().filter(x=>x.key!==key))}
-function setFreightCep(v){freightCep=String(v||'').replace(/\D/g,'').slice(0,8);const input=document.getElementById('freightCep');if(input){const digits=freightCep;input.value=digits.length>5?digits.slice(0,5)+'-'+digits.slice(5):digits;}clearFreightQuote()}
+function setFreightCep(v){freightCep=String(v||'').replace(/[^\d]/g,'').slice(0,8);localStorage.setItem(CEP_KEY,freightCep);const input=document.getElementById('freightCep');if(input){const digits=freightCep;input.value=digits.length>5?digits.slice(0,5)+'-'+digits.slice(5):digits;}clearFreightQuote()}
 function shippingPrice(){return selectedFreight?Number(selectedFreight.price||0):0}
 function orderTotal(){return cartTotal()+shippingPrice()}
 function safeText(v){return String(v==null?'':v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
