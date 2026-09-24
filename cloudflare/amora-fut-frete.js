@@ -80,7 +80,7 @@ export default {
         method: "POST",
         headers: {
           "Authorization": "Bearer " + env.SUPERFRETE_TOKEN,
-          "User-Agent": "Amora Fut Streetwear (integracao de frete)",
+          "User-Agent": "Amora Fut Streetwear (integracao de frete) - amorafut@gmail.com",
           "Accept": "application/json",
           "Content-Type": "application/json"
         },
