@@ -1,5 +1,27 @@
 [
   {
+    "id": "nter-iami-away-2",
+    "name": "Inter Miami away 26",
+    "team": "Inter Miami",
+    "category": "Internacionais",
+    "version": "Torcedor",
+    "price": 130,
+    "badge": "LANÇAMENTO",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 0,
+      "GG": 1,
+      "3G": 0
+    },
+    "description": "",
+    "images": [
+      "assets/images/catalog/nter-iami-away-2/01.png"
+    ]
+  },
+  {
     "id": "nter-iami-away",
     "name": "Inter Miami away 23",
     "team": "Inter Miami",
