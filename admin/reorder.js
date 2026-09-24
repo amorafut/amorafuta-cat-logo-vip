@@ -81,61 +81,110 @@
     });
   }
 
+  async function apiJson(path,opts={}){
+    const r=await fetch(API+path,{...opts,headers:{...headers(),...(opts.headers||{}),'Content-Type':'application/json'}});
+    if(!r.ok){let d={};try{d=await r.json()}catch{}throw new Error(d.message||('GitHub HTTP '+r.status));}
+    return r.json();
+  }
+  async function createBlob(base64){
+    const d=await apiJson('/repos/'+OWNER+'/'+REPO+'/git/blobs',{
+      method:'POST',body:JSON.stringify({content:base64,encoding:'base64'})
+    });
+    return d.sha;
+  }
+  async function commitAll(changes,message){
+    let lastErr=null;
+    for(let attempt=1;attempt<=3;attempt++){
+      try{
+        const ref=await apiJson('/repos/'+OWNER+'/'+REPO+'/git/ref/heads/'+BRANCH);
+        const headSha=ref.object.sha;
+        const head=await apiJson('/repos/'+OWNER+'/'+REPO+'/git/commits/'+headSha);
+        const treeEntries=[];
+        for(const x of changes){
+          const blobSha=await createBlob(x.content);
+          treeEntries.push({path:x.path,mode:'100644',type:'blob',sha:blobSha});
+        }
+        const tree=await apiJson('/repos/'+OWNER+'/'+REPO+'/git/trees',{
+          method:'POST',body:JSON.stringify({base_tree:head.tree.sha,tree:treeEntries})
+        });
+        const commit=await apiJson('/repos/'+OWNER+'/'+REPO+'/git/commits',{
+          method:'POST',body:JSON.stringify({message,tree:tree.sha,parents:[headSha]})
+        });
+        await apiJson('/repos/'+OWNER+'/'+REPO+'/git/refs/heads/'+BRANCH,{
+          method:'PATCH',body:JSON.stringify({sha:commit.sha,force:false})
+        });
+        return commit.sha;
+      }catch(e){
+        lastErr=e;
+        if(attempt<3)await new Promise(r=>setTimeout(r,1200*attempt));
+      }
+    }
+    throw lastErr||new Error('Não foi possível publicar.');
+  }
+
   async function publishOrdered(){
     if(!token){msg('Conecte o GitHub primeiro.',false);return}
-    $('#publish').disabled=true;msg('Publicando todos os produtos e fotos...');
+    $('#publish').disabled=true;
+    msg('Preparando publicação de todos os produtos...');
     try{
-      // Captura o que estiver aberto neste momento antes de publicar.
       stashCurrent();
 
-      // Reserva as vendas pendentes e deduz o estoque somente após o JSON ser publicado.
-      const finalizeSales=window.preparePendingSales?window.preparePendingSales(products):()=>{};
+      // Monta uma fotografia completa dos produtos antes de alterar qualquer dado.
+      const working=products.map(p=>JSON.parse(JSON.stringify(p)));
+      const changes=[];
+      const uploadedByProduct={};
 
-      for(const p of products){
+      for(const p of working){
         const draft=p.id?pendingByProduct[p.id]:null;
-        if(draft&&draft.product){
-          Object.assign(p,JSON.parse(JSON.stringify(draft.product)));
-        }
+        if(!draft)continue;
+        Object.assign(p,JSON.parse(JSON.stringify(draft.product||{})));
 
-        const files=draft&&draft.files?draft.files:[];
-        if(!files.length) continue;
-
-        // Para o produto atual, respeita a ordem definida no painel.
-        let queue;
+        let queue=[...(draft.files||[])];
         if(p.id===currentId&&order.length){
-          queue=order.filter(x=>x.kind==='pending');
-        }else{
-          queue=files.map(x=>({kind:'pending',file:x.file,url:x.url,name:x.file.name}));
+          queue=order.filter(x=>x.kind==='pending').map(x=>({file:x.file,name:x.name,url:x.url}));
         }
+        if(!queue.length)continue;
 
         const base=[...(p.images||[])];
         let n=base.length+1;
         for(const x of queue){
-          msg('Enviando foto '+n+' de '+queue.length+' — '+p.name+'...');
-          const f=await imageToWebP(x.file);
+          msg('Preparando foto '+n+' de '+queue.length+' — '+p.name+'...');
+          const wf=await imageToWebP(x.file);
           const path='assets/images/catalog/'+p.id+'/ord-'+Date.now()+'-'+String(n).padStart(2,'0')+'.webp';
-          await publishFile(path,await b64File(f));
+          const b64=await b64File(wf);
+          changes.push({path,content:b64});
           base.push(path);
           n++;
         }
         p.images=base;
-        delete pendingByProduct[p.id];
+        uploadedByProduct[p.id]=true;
       }
 
-      const json=btoa(unescape(encodeURIComponent(JSON.stringify(products,null,2))));
-      await publishFile(DATA,json);
+      // Vendas pendentes entram na mesma publicação.
+      const finalizeSales=window.preparePendingSales?window.preparePendingSales(working):()=>{};
+
+      const json=btoa(unescape(encodeURIComponent(JSON.stringify(working,null,2))));
+      changes.push({path:DATA,content:json});
+
+      msg('Enviando '+changes.length+' arquivo(s) em uma única publicação...');
+      const sha=await commitAll(changes,'Atualizar catálogo Amora Fut — publicação em lote');
+
+      // Só confirma rascunhos e vendas depois que o commit inteiro foi aceito.
+      for(const id of Object.keys(uploadedByProduct))delete pendingByProduct[id];
+      pendingFiles=[];
+      products=working;
       finalizeSales();
 
-      pendingFiles=[];
+      try{localStorage.setItem('amora_fut_admin_drafts_v1',JSON.stringify({}));}catch(e){}
       order=(products.find(x=>x.id===currentId)?.images||[]).map((x,i)=>({kind:'existing',path:x,url:'../'+x,name:x.split('/').pop(),i}));
       renderPreviews((products.find(x=>x.id===currentId)?.images)||[]);
       renderList();
       updateStats();
-      msg('Publicado! Todos os produtos e fotos foram enviados ao site.');
+      msg('Publicado com sucesso! Todos os produtos, dados e fotos foram enviados juntos. Commit: '+sha.slice(0,7),true);
     }catch(e){
-      msg(e.message||'Erro ao publicar.',false)
+      msg('Publicação não concluída: '+(e.message||e),false);
     }finally{
-      $('#publish').disabled=false
+      $('#publish').disabled=false;
     }
   }
   const originalSet=window.setForm;
