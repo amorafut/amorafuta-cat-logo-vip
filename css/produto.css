@@ -16,3 +16,34 @@
 .thumb img{width:100%;height:100%;object-fit:contain!important;object-position:center center;border-radius:4px}
 @media(max-width:820px){.gallery-main{height:min(62vh,620px)!important;min-height:360px}.thumb{flex-basis:62px!important;width:62px!important;height:62px!important}.thumbs{gap:8px;margin-top:12px!important}}
 @media(max-width:480px){.gallery-main{height:min(58vh,520px)!important;min-height:300px}.product-media{padding:12px}.thumb{flex-basis:60px!important;width:60px!important;height:60px!important}}
+
+
+/* RESPONSIVIDADE DA GALERIA — AJUSTE PARA QUALQUER SMARTPHONE */
+html,body{max-width:100%;overflow-x:hidden}
+.product-page,.product-wrap,.product-box,.product-media{max-width:100%;min-width:0;box-sizing:border-box}
+.product-box{width:100%}
+.product-media{overflow:hidden}
+.gallery-main{width:100%;max-width:100%;min-width:0;box-sizing:border-box;overflow:hidden}
+.gallery-main img{max-width:100%;min-width:0;box-sizing:border-box;object-fit:contain}
+.thumbs{max-width:100%;min-width:0;box-sizing:border-box}
+@media(max-width:820px){
+  .product-page{width:100%;padding-left:10px;padding-right:10px}
+  .product-wrap{width:100%}
+  .product-box{width:100%;display:block}
+  .product-media{width:100%;padding:12px}
+  .gallery-main{width:100%;height:auto!important;min-height:0!important;aspect-ratio:3/4!important}
+  .gallery-main img{width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain}
+  .product-info{width:100%;box-sizing:border-box;padding:28px 18px}
+}
+@media(max-width:480px){
+  .product-page{padding-left:8px;padding-right:8px}
+  .product-media{padding:8px}
+  .gallery-main{width:100%;aspect-ratio:3/4!important;height:auto!important}
+  .gallery-main img{width:100%;height:100%;object-fit:contain}
+  .thumbs{width:100%;overflow-x:auto;overflow-y:hidden}
+}
+@media(max-width:360px){
+  .product-page{padding-left:6px;padding-right:6px}
+  .product-media{padding:6px}
+  .product-info{padding-left:14px;padding-right:14px}
+}
