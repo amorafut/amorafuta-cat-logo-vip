@@ -57,7 +57,15 @@
       "3G": 0
     },
     "description": "",
-    "images": []
+    "images": [
+      "assets/images/catalog/helsea-home/01.png",
+      "assets/images/catalog/helsea-home/02.jpg",
+      "assets/images/catalog/helsea-home/03.jpg",
+      "assets/images/catalog/helsea-home/04.jpg",
+      "assets/images/catalog/helsea-home/05.jpg",
+      "assets/images/catalog/helsea-home/06.jpg",
+      "assets/images/catalog/helsea-home/07.jpg"
+    ]
   },
   {
     "id": "iverpool-away",
