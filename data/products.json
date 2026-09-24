@@ -1,5 +1,85 @@
 [
   {
+    "id": "almeiras-away",
+    "name": "Palmeiras away 26",
+    "team": "Palmeiras",
+    "category": "Brasileiras",
+    "version": "Torcedor",
+    "price": 130,
+    "badge": "LANÇAMENTO",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 1,
+      "M": 0,
+      "G": 0,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": []
+  },
+  {
+    "id": "lamengo-iamantes-egros",
+    "name": "Flamengo Diamantes Negros",
+    "team": "Flamengo",
+    "category": "Brasileiras",
+    "version": "Torcedor",
+    "price": 130,
+    "badge": "DESTAQUE",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 1,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": []
+  },
+  {
+    "id": "rac-ao",
+    "name": "Curaçao 3 26",
+    "team": "Curaçao",
+    "category": "Seleções",
+    "version": "Jogador",
+    "price": 160,
+    "badge": "DESTAQUE",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 0,
+      "GG": 1,
+      "3G": 0
+    },
+    "description": "",
+    "images": []
+  },
+  {
+    "id": "spanha-home-icampea",
+    "name": "Espanha home 26 Bicampeã",
+    "team": "Espanha",
+    "category": "Seleções",
+    "version": "Torcedor",
+    "price": 130,
+    "badge": "LANÇAMENTO",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 1,
+      "GG": 1,
+      "3G": 0
+    },
+    "description": "",
+    "images": []
+  },
+  {
     "id": "spanha-away-icampea",
     "name": "Espanha away 26 Bicampeã",
     "team": "Espanha",
