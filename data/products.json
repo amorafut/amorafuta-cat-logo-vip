@@ -181,7 +181,15 @@
       "3G": 0
     },
     "description": "",
-    "images": []
+    "images": [
+      "assets/images/catalog/barcelona-retro-ronaldinho/01.png",
+      "assets/images/catalog/barcelona-retro-ronaldinho/02.jpg",
+      "assets/images/catalog/barcelona-retro-ronaldinho/03.jpg",
+      "assets/images/catalog/barcelona-retro-ronaldinho/04.jpg",
+      "assets/images/catalog/barcelona-retro-ronaldinho/05.jpg",
+      "assets/images/catalog/barcelona-retro-ronaldinho/06.jpg",
+      "assets/images/catalog/barcelona-retro-ronaldinho/07.jpg"
+    ]
   },
   {
     "id": "it-lia-home-26",
