@@ -1,11 +1,11 @@
-const CART_KEY='amora_fut_cart_v1',WA_CART='5585998022643';
+const CART_KEY='amora_fut_cart_v1',CEP_KEY='amora_fut_freight_cep_v1',WA_CART='5585998022643';
 const FREIGHT_API='https://amora-fut-frete.amorafut.workers.dev/';
 const money=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 function getCart(){try{return JSON.parse(localStorage.getItem(CART_KEY)||'[]')}catch{return[]}}
 function saveCart(c){localStorage.setItem(CART_KEY,JSON.stringify(c));clearFreightQuote();renderCart()}
 function cartCount(){return getCart().reduce((n,i)=>n+Number(i.qty||0),0)}
 function cartTotal(){return getCart().reduce((s,i)=>s+i.price*i.qty,0)}
-let freightCep='',freightOptions=[],selectedFreight=null,freightLoading=false,freightError='';
+let freightCep=(localStorage.getItem(CEP_KEY)||'').replace(/\\D/g,'').slice(0,8),freightOptions=[],selectedFreight=null,freightLoading=false,freightError='';
 function clearFreightQuote(){freightOptions=[];selectedFreight=null;freightError='';}
 function addToCart(p,size,qty=1){const c=getCart(),key=p.id+'::'+(size||'ÚNICO'),max=p.stock&&size?Number(p.stock[size]||0):null,found=c.find(i=>i.key===key);if(found)found.qty=max?Math.min(max,found.qty+qty):found.qty+qty;else c.push({key,id:p.id,name:p.name,team:p.team||'',version:p.version||'',price:Number(p.price||0),size:size||'',qty:Number(qty||1),image:(p.images&&p.images[0])||p.image||'',stock:max});saveCart(c);openCart()}
 function changeCart(key,d){const c=getCart(),i=c.findIndex(x=>x.key===key);if(i<0)return;const max=c[i].stock;c[i].qty=max?Math.min(max,c[i].qty+d):c[i].qty+d;if(c[i].qty<=0)c.splice(i,1);saveCart(c)}
