@@ -496,7 +496,16 @@
       "3G": 0
     },
     "description": "",
-    "images": []
+    "images": [
+      "assets/images/catalog/eara-away/01.png",
+      "assets/images/catalog/eara-away/02.jpg",
+      "assets/images/catalog/eara-away/03.jpg",
+      "assets/images/catalog/eara-away/04.jpg",
+      "assets/images/catalog/eara-away/05.jpg",
+      "assets/images/catalog/eara-away/06.jpg",
+      "assets/images/catalog/eara-away/07.jpg",
+      "assets/images/catalog/eara-away/08.jpg"
+    ]
   },
   {
     "id": "nter-iami-away-2",
@@ -1101,13 +1110,13 @@
     },
     "description": "",
     "images": [
-      "assets/images/catalog/corinthians-casa-26-27-torcedor/01.webp",
-      "assets/images/catalog/corinthians-casa-26-27-torcedor/02.webp",
-      "assets/images/catalog/corinthians-casa-26-27-torcedor/03.webp",
-      "assets/images/catalog/corinthians-casa-26-27-torcedor/04.webp",
-      "assets/images/catalog/corinthians-casa-26-27-torcedor/05.webp",
-      "assets/images/catalog/corinthians-casa-26-27-torcedor/06.webp",
-      "assets/images/catalog/corinthians-casa-26-27-torcedor/07.webp"
+      "assets/images/catalog/corinthians-casa-26-27-torcedor/01.png",
+      "assets/images/catalog/corinthians-casa-26-27-torcedor/02.jpg",
+      "assets/images/catalog/corinthians-casa-26-27-torcedor/03.jpg",
+      "assets/images/catalog/corinthians-casa-26-27-torcedor/04.jpg",
+      "assets/images/catalog/corinthians-casa-26-27-torcedor/05.jpg",
+      "assets/images/catalog/corinthians-casa-26-27-torcedor/06.jpg",
+      "assets/images/catalog/corinthians-casa-26-27-torcedor/07.jpg"
     ]
   },
   {
