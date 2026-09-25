@@ -1399,8 +1399,7 @@
       "assets/images/catalog/corinthians-treino-vinho-26-27-torcedor/03.webp",
       "assets/images/catalog/corinthians-treino-vinho-26-27-torcedor/04.webp",
       "assets/images/catalog/corinthians-treino-vinho-26-27-torcedor/05.webp"
-    ],
-    "weight_g": 240
+    ]
   },
   {
     "id": "selecao-brasileira-casa-26-27-jogador",
@@ -1578,13 +1577,13 @@
     "description": "",
     "oldPrice": 140,
     "images": [
-      "assets/images/catalog/atletico-madrid-retro-04-05-f-torres/01.webp",
-      "assets/images/catalog/atletico-madrid-retro-04-05-f-torres/02.webp",
-      "assets/images/catalog/atletico-madrid-retro-04-05-f-torres/03.webp",
-      "assets/images/catalog/atletico-madrid-retro-04-05-f-torres/04.webp",
-      "assets/images/catalog/atletico-madrid-retro-04-05-f-torres/05.webp",
-      "assets/images/catalog/atletico-madrid-retro-04-05-f-torres/06.webp",
-      "assets/images/catalog/atletico-madrid-retro-04-05-f-torres/07.webp"
+      "assets/images/catalog/atletico-madrid-retro-04-05-f-torres/01.png",
+      "assets/images/catalog/atletico-madrid-retro-04-05-f-torres/02.jpg",
+      "assets/images/catalog/atletico-madrid-retro-04-05-f-torres/03.jpg",
+      "assets/images/catalog/atletico-madrid-retro-04-05-f-torres/04.jpg",
+      "assets/images/catalog/atletico-madrid-retro-04-05-f-torres/05.jpg",
+      "assets/images/catalog/atletico-madrid-retro-04-05-f-torres/06.jpg",
+      "assets/images/catalog/atletico-madrid-retro-04-05-f-torres/07.jpg"
     ]
   }
 ]
