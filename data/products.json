@@ -459,7 +459,17 @@
       "3G": 0
     },
     "description": "",
-    "images": []
+    "images": [
+      "assets/images/catalog/almeiras-away/01.png",
+      "assets/images/catalog/almeiras-away/02.jpg",
+      "assets/images/catalog/almeiras-away/03.jpg",
+      "assets/images/catalog/almeiras-away/04.jpg",
+      "assets/images/catalog/almeiras-away/05.jpg",
+      "assets/images/catalog/almeiras-away/06.jpg",
+      "assets/images/catalog/almeiras-away/07.jpg",
+      "assets/images/catalog/almeiras-away/08.jpg",
+      "assets/images/catalog/almeiras-away/09.jpg"
+    ]
   },
   {
     "id": "lamengo-iamantes-egros",
@@ -480,13 +490,13 @@
     },
     "description": "",
     "images": [
-      "assets/images/catalog/lamengo-iamantes-egros/01.webp",
-      "assets/images/catalog/lamengo-iamantes-egros/02.webp",
-      "assets/images/catalog/lamengo-iamantes-egros/03.webp",
-      "assets/images/catalog/lamengo-iamantes-egros/04.webp",
-      "assets/images/catalog/lamengo-iamantes-egros/05.webp",
-      "assets/images/catalog/lamengo-iamantes-egros/06.webp",
-      "assets/images/catalog/lamengo-iamantes-egros/07.webp"
+      "assets/images/catalog/lamengo-iamantes-egros/01.png",
+      "assets/images/catalog/lamengo-iamantes-egros/02.jpg",
+      "assets/images/catalog/lamengo-iamantes-egros/03.jpg",
+      "assets/images/catalog/lamengo-iamantes-egros/04.jpg",
+      "assets/images/catalog/lamengo-iamantes-egros/05.jpg",
+      "assets/images/catalog/lamengo-iamantes-egros/06.jpg",
+      "assets/images/catalog/lamengo-iamantes-egros/07.jpg"
     ]
   },
   {
