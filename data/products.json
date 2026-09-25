@@ -1,5 +1,33 @@
 [
   {
+    "id": "e-xico-away-2",
+    "name": "México away 26",
+    "team": "México",
+    "category": "Seleções",
+    "version": "Torcedor",
+    "price": 130,
+    "badge": "DESTAQUE",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 1,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": [
+      "assets/images/catalog/e-xico-away-2/01.png",
+      "assets/images/catalog/e-xico-away-2/02.jpg",
+      "assets/images/catalog/e-xico-away-2/03.jpg",
+      "assets/images/catalog/e-xico-away-2/04.jpg",
+      "assets/images/catalog/e-xico-away-2/05.jpg",
+      "assets/images/catalog/e-xico-away-2/06.jpg",
+      "assets/images/catalog/e-xico-away-2/07.jpg"
+    ]
+  },
+  {
     "id": "e-xico-away",
     "name": "México away 26",
     "team": "México",
