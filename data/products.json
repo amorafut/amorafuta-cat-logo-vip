@@ -1560,15 +1560,31 @@
   },
   {
     "id": "atletico-madrid-retro-04-05-f-torres",
-    "team": "Atlético de Madrid",
     "name": "Atlético de Madrid Retrô 04/05 F. Torres",
+    "team": "Atlético de Madrid",
     "category": "Internacionais",
     "version": "Torcedor",
     "price": 120,
-    "oldPrice": 140,
-    "badge": "ESGOTADO",
-    "soldOut": true,
+    "badge": "",
     "published": true,
-    "weight_g": 240
+    "soldOut": true,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 0,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "oldPrice": 140,
+    "images": [
+      "assets/images/catalog/atletico-madrid-retro-04-05-f-torres/01.png",
+      "assets/images/catalog/atletico-madrid-retro-04-05-f-torres/02.jpg",
+      "assets/images/catalog/atletico-madrid-retro-04-05-f-torres/03.jpg",
+      "assets/images/catalog/atletico-madrid-retro-04-05-f-torres/04.jpg",
+      "assets/images/catalog/atletico-madrid-retro-04-05-f-torres/05.jpg",
+      "assets/images/catalog/atletico-madrid-retro-04-05-f-torres/06.jpg",
+      "assets/images/catalog/atletico-madrid-retro-04-05-f-torres/07.jpg"
+    ]
   }
 ]
