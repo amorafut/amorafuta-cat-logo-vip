@@ -18,13 +18,13 @@
     },
     "description": "",
     "images": [
-      "assets/images/catalog/orinthians-asa/01.webp",
-      "assets/images/catalog/orinthians-asa/02.webp",
-      "assets/images/catalog/orinthians-asa/03.webp",
-      "assets/images/catalog/orinthians-asa/04.webp",
-      "assets/images/catalog/orinthians-asa/05.webp",
-      "assets/images/catalog/orinthians-asa/06.webp",
-      "assets/images/catalog/orinthians-asa/07.webp"
+      "assets/images/catalog/orinthians-asa/01.png",
+      "assets/images/catalog/orinthians-asa/02.jpg",
+      "assets/images/catalog/orinthians-asa/03.jpg",
+      "assets/images/catalog/orinthians-asa/04.jpg",
+      "assets/images/catalog/orinthians-asa/05.jpg",
+      "assets/images/catalog/orinthians-asa/06.jpg",
+      "assets/images/catalog/orinthians-asa/07.jpg"
     ]
   },
   {
@@ -491,7 +491,16 @@
       "3G": 0
     },
     "description": "",
-    "images": []
+    "images": [
+      "assets/images/catalog/rac-ao/01.png",
+      "assets/images/catalog/rac-ao/02.jpg",
+      "assets/images/catalog/rac-ao/03.jpg",
+      "assets/images/catalog/rac-ao/04.jpg",
+      "assets/images/catalog/rac-ao/05.jpg",
+      "assets/images/catalog/rac-ao/06.jpg",
+      "assets/images/catalog/rac-ao/07.jpg",
+      "assets/images/catalog/rac-ao/08.jpg"
+    ]
   },
   {
     "id": "spanha-home-icampea",
