@@ -275,7 +275,15 @@
       "3G": 0
     },
     "description": "",
-    "images": []
+    "images": [
+      "assets/images/catalog/eal-adrid-asa/01.png",
+      "assets/images/catalog/eal-adrid-asa/02.jpg",
+      "assets/images/catalog/eal-adrid-asa/03.jpg",
+      "assets/images/catalog/eal-adrid-asa/04.jpg",
+      "assets/images/catalog/eal-adrid-asa/05.jpg",
+      "assets/images/catalog/eal-adrid-asa/06.jpg",
+      "assets/images/catalog/eal-adrid-asa/07.jpg"
+    ]
   },
   {
     "id": "rgentina-home",
