@@ -37,7 +37,16 @@
       "3G": 0
     },
     "description": "",
-    "images": []
+    "images": [
+      "assets/images/catalog/almeiras-home/01.png",
+      "assets/images/catalog/almeiras-home/02.jpg",
+      "assets/images/catalog/almeiras-home/03.jpg",
+      "assets/images/catalog/almeiras-home/04.jpg",
+      "assets/images/catalog/almeiras-home/05.jpg",
+      "assets/images/catalog/almeiras-home/06.jpg",
+      "assets/images/catalog/almeiras-home/07.jpg",
+      "assets/images/catalog/almeiras-home/08.jpg"
+    ]
   },
   {
     "id": "helsea-home",
@@ -199,16 +208,16 @@
     },
     "description": "",
     "images": [
-      "assets/images/catalog/arcelona-home/01.webp",
-      "assets/images/catalog/arcelona-home/02.webp",
-      "assets/images/catalog/arcelona-home/03.webp",
-      "assets/images/catalog/arcelona-home/04.webp",
-      "assets/images/catalog/arcelona-home/05.webp",
-      "assets/images/catalog/arcelona-home/06.webp",
-      "assets/images/catalog/arcelona-home/07.webp",
-      "assets/images/catalog/arcelona-home/08.webp",
-      "assets/images/catalog/arcelona-home/09.webp",
-      "assets/images/catalog/arcelona-home/10.webp"
+      "assets/images/catalog/arcelona-home/01.png",
+      "assets/images/catalog/arcelona-home/02.jpg",
+      "assets/images/catalog/arcelona-home/03.jpg",
+      "assets/images/catalog/arcelona-home/04.jpg",
+      "assets/images/catalog/arcelona-home/05.jpg",
+      "assets/images/catalog/arcelona-home/06.jpg",
+      "assets/images/catalog/arcelona-home/07.jpg",
+      "assets/images/catalog/arcelona-home/08.jpg",
+      "assets/images/catalog/arcelona-home/09.jpg",
+      "assets/images/catalog/arcelona-home/10.jpg"
     ]
   },
   {
