@@ -1100,8 +1100,15 @@
       "3G": 0
     },
     "description": "",
-    "images": [],
-    "weight_g": 240
+    "images": [
+      "assets/images/catalog/corinthians-casa-26-27-torcedor/01.png",
+      "assets/images/catalog/corinthians-casa-26-27-torcedor/02.jpg",
+      "assets/images/catalog/corinthians-casa-26-27-torcedor/03.jpg",
+      "assets/images/catalog/corinthians-casa-26-27-torcedor/04.jpg",
+      "assets/images/catalog/corinthians-casa-26-27-torcedor/05.jpg",
+      "assets/images/catalog/corinthians-casa-26-27-torcedor/06.jpg",
+      "assets/images/catalog/corinthians-casa-26-27-torcedor/07.jpg"
+    ]
   },
   {
     "id": "cruzeiro-treino-azul-26-27-torcedor",
