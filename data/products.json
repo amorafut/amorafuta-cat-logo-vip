@@ -247,14 +247,15 @@
     },
     "description": "",
     "images": [
-      "assets/images/catalog/ilan-away/01.webp",
-      "assets/images/catalog/ilan-away/02.webp",
-      "assets/images/catalog/ilan-away/03.webp",
-      "assets/images/catalog/ilan-away/04.webp",
-      "assets/images/catalog/ilan-away/05.webp",
-      "assets/images/catalog/ilan-away/06.webp",
-      "assets/images/catalog/ilan-away/07.webp",
-      "assets/images/catalog/ilan-away/08.webp"
+      "assets/images/catalog/ilan-away/01.png",
+      "assets/images/catalog/ilan-away/02.jpg",
+      "assets/images/catalog/ilan-away/03.jpg",
+      "assets/images/catalog/ilan-away/04.jpg",
+      "assets/images/catalog/ilan-away/05.jpg",
+      "assets/images/catalog/ilan-away/06.jpg",
+      "assets/images/catalog/ilan-away/07.jpg",
+      "assets/images/catalog/ilan-away/08.jpg",
+      "assets/images/catalog/ilan-away/09.jpg"
     ]
   },
   {
