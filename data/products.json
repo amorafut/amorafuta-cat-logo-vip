@@ -303,7 +303,16 @@
       "3G": 0
     },
     "description": "",
-    "images": []
+    "images": [
+      "assets/images/catalog/rgentina-home/01.png",
+      "assets/images/catalog/rgentina-home/02.jpg",
+      "assets/images/catalog/rgentina-home/03.jpg",
+      "assets/images/catalog/rgentina-home/04.jpg",
+      "assets/images/catalog/rgentina-home/05.jpg",
+      "assets/images/catalog/rgentina-home/06.jpg",
+      "assets/images/catalog/rgentina-home/07.jpg",
+      "assets/images/catalog/rgentina-home/08.jpg"
+    ]
   },
   {
     "id": "otaogo",
@@ -459,7 +468,17 @@
       "3G": 0
     },
     "description": "",
-    "images": []
+    "images": [
+      "assets/images/catalog/almeiras-away/01.webp",
+      "assets/images/catalog/almeiras-away/02.webp",
+      "assets/images/catalog/almeiras-away/03.webp",
+      "assets/images/catalog/almeiras-away/04.webp",
+      "assets/images/catalog/almeiras-away/05.webp",
+      "assets/images/catalog/almeiras-away/06.webp",
+      "assets/images/catalog/almeiras-away/07.webp",
+      "assets/images/catalog/almeiras-away/08.webp",
+      "assets/images/catalog/almeiras-away/09.webp"
+    ]
   },
   {
     "id": "lamengo-iamantes-egros",
