@@ -1,5 +1,34 @@
 [
   {
+    "id": "e-xico-away",
+    "name": "México away 26",
+    "team": "México",
+    "category": "Seleções",
+    "version": "Jogador",
+    "price": 160,
+    "badge": "DESTAQUE",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 0,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": [
+      "assets/images/catalog/e-xico-away/01.png",
+      "assets/images/catalog/e-xico-away/02.jpg",
+      "assets/images/catalog/e-xico-away/03.jpg",
+      "assets/images/catalog/e-xico-away/04.jpg",
+      "assets/images/catalog/e-xico-away/05.jpg",
+      "assets/images/catalog/e-xico-away/06.jpg",
+      "assets/images/catalog/e-xico-away/07.jpg",
+      "assets/images/catalog/e-xico-away/08.jpg"
+    ]
+  },
+  {
     "id": "orinthians-asa",
     "name": "Corinthians Casa 26",
     "team": "Corinthians",
