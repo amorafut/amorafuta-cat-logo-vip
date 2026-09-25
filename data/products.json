@@ -448,7 +448,15 @@
       "3G": 0
     },
     "description": "",
-    "images": []
+    "images": [
+      "assets/images/catalog/lamengo-home/01.png",
+      "assets/images/catalog/lamengo-home/02.jpg",
+      "assets/images/catalog/lamengo-home/03.jpg",
+      "assets/images/catalog/lamengo-home/04.jpg",
+      "assets/images/catalog/lamengo-home/05.jpg",
+      "assets/images/catalog/lamengo-home/06.jpg",
+      "assets/images/catalog/lamengo-home/07.jpg"
+    ]
   },
   {
     "id": "almeiras-away",
