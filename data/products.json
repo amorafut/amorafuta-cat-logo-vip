@@ -862,16 +862,19 @@
     "soldOut": false,
     "stock": {
       "P": 0,
-      "M": 0,
-      "G": 1,
+      "M": 1,
+      "G": 2,
       "GG": 2,
       "3G": 0
     },
     "description": "",
     "images": [
-      "assets/images/catalog/flamengo-3-26/01.webp"
-    ],
-    "weight_g": 240
+      "assets/images/catalog/flamengo-3-26/01.jpg",
+      "assets/images/catalog/flamengo-3-26/02.jpg",
+      "assets/images/catalog/flamengo-3-26/03.jpg",
+      "assets/images/catalog/flamengo-3-26/04.jpg",
+      "assets/images/catalog/flamengo-3-26/05.jpg"
+    ]
   },
   {
     "id": "real-madrid-fora-26-27-torcedor",
