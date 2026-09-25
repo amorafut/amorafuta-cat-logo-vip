@@ -459,17 +459,7 @@
       "3G": 0
     },
     "description": "",
-    "images": [
-      "assets/images/catalog/almeiras-away/01.webp",
-      "assets/images/catalog/almeiras-away/02.webp",
-      "assets/images/catalog/almeiras-away/03.webp",
-      "assets/images/catalog/almeiras-away/04.webp",
-      "assets/images/catalog/almeiras-away/05.webp",
-      "assets/images/catalog/almeiras-away/06.webp",
-      "assets/images/catalog/almeiras-away/07.webp",
-      "assets/images/catalog/almeiras-away/08.webp",
-      "assets/images/catalog/almeiras-away/09.webp"
-    ]
+    "images": []
   },
   {
     "id": "lamengo-iamantes-egros",
