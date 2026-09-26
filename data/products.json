@@ -918,7 +918,7 @@
     "team": "Barcelona",
     "category": "Internacionais",
     "version": "Torcedor",
-    "price": 180,
+    "price": 160,
     "badge": "DESTAQUE",
     "published": true,
     "soldOut": false,
@@ -930,6 +930,7 @@
       "3G": 0
     },
     "description": "",
+    "oldPrice": 180,
     "images": [
       "assets/images/catalog/barcelona-retro-ronaldinho/01.webp",
       "assets/images/catalog/barcelona-retro-ronaldinho/02.webp",
@@ -938,8 +939,7 @@
       "assets/images/catalog/barcelona-retro-ronaldinho/05.webp",
       "assets/images/catalog/barcelona-retro-ronaldinho/06.webp",
       "assets/images/catalog/barcelona-retro-ronaldinho/07.webp"
-    ],
-    "weight_g": 240
+    ]
   },
   {
     "id": "it-lia-home-26",
