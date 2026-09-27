@@ -1,5 +1,33 @@
 [
   {
+    "id": "lamengo",
+    "name": "Flamengo 3 25",
+    "team": "Flamengo",
+    "category": "Brasileiras",
+    "version": "Torcedor",
+    "price": 130,
+    "badge": "DESTAQUE",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 1,
+      "M": 1,
+      "G": 2,
+      "GG": 1,
+      "3G": 0
+    },
+    "description": "",
+    "images": [
+      "assets/images/catalog/lamengo/01.png",
+      "assets/images/catalog/lamengo/02.jpg",
+      "assets/images/catalog/lamengo/03.jpg",
+      "assets/images/catalog/lamengo/04.jpg",
+      "assets/images/catalog/lamengo/05.jpg",
+      "assets/images/catalog/lamengo/06.jpg",
+      "assets/images/catalog/lamengo/07.jpg"
+    ]
+  },
+  {
     "id": "a-o-alo-away",
     "name": "São Paulo away 24",
     "team": "São Paulo",
