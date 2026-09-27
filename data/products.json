@@ -701,7 +701,7 @@
     "stock": {
       "P": 0,
       "M": 0,
-      "G": 1,
+      "G": 2,
       "GG": 1,
       "3G": 0
     },
@@ -918,8 +918,8 @@
     "stock": {
       "P": 0,
       "M": 0,
-      "G": 1,
-      "GG": 1,
+      "G": 2,
+      "GG": 2,
       "3G": 0
     },
     "description": "",
@@ -933,8 +933,7 @@
       "assets/images/catalog/barcelona-home-26/07.webp",
       "assets/images/catalog/barcelona-home-26/08.webp",
       "assets/images/catalog/barcelona-home-26/09.webp"
-    ],
-    "weight_g": 240
+    ]
   },
   {
     "id": "barcelona-away-24",
