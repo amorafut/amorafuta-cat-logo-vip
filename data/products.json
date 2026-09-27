@@ -1112,14 +1112,14 @@
     "weight_g": 240
   },
   {
-    "id": "barcelona-casa-24-25",
-    "name": "Barcelona casa 24/25",
+    "id": "barcelona-casa-25-26",
+    "name": "Barcelona casa 25/26",
     "team": "Barcelona",
     "category": "Internacionais",
     "version": "Torcedor",
     "price": 130,
     "badge": "DESTAQUE",
-    "published": true,
+    "published": false,
     "soldOut": false,
     "stock": {
       "P": 0,
@@ -1130,17 +1130,16 @@
     },
     "description": "",
     "images": [
-      "assets/images/catalog/barcelona-casa-24-25/01.webp",
-      "assets/images/catalog/barcelona-casa-24-25/ord-1790182754347-02.webp",
-      "assets/images/catalog/barcelona-casa-24-25/ord-1790182758786-03.webp",
-      "assets/images/catalog/barcelona-casa-24-25/ord-1790182762338-04.webp",
-      "assets/images/catalog/barcelona-casa-24-25/ord-1790182767275-05.webp",
-      "assets/images/catalog/barcelona-casa-24-25/ord-1790182771755-06.webp",
-      "assets/images/catalog/barcelona-casa-24-25/ord-1790182780043-07.webp",
-      "assets/images/catalog/barcelona-casa-24-25/ord-1790182786658-08.webp",
-      "assets/images/catalog/barcelona-casa-24-25/ord-1790182792762-09.webp"
-    ],
-    "weight_g": 240
+      "assets/images/catalog/barcelona-casa-25-26/01.png",
+      "assets/images/catalog/barcelona-casa-25-26/02.jpg",
+      "assets/images/catalog/barcelona-casa-25-26/03.jpg",
+      "assets/images/catalog/barcelona-casa-25-26/04.jpg",
+      "assets/images/catalog/barcelona-casa-25-26/05.jpg",
+      "assets/images/catalog/barcelona-casa-25-26/06.jpg",
+      "assets/images/catalog/barcelona-casa-25-26/07.jpg",
+      "assets/images/catalog/barcelona-casa-25-26/08.jpg",
+      "assets/images/catalog/barcelona-casa-25-26/09.jpg"
+    ]
   },
   {
     "id": "flamengo-3-26",
