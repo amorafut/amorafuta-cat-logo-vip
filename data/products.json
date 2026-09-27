@@ -1,5 +1,32 @@
 [
   {
+    "id": "lamengo-home-2",
+    "name": "Flamengo home 26",
+    "team": "Flamengo",
+    "category": "Brasileiras",
+    "version": "Jogador",
+    "price": 160,
+    "badge": "LANÇAMENTO",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 1,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "",
+    "images": [
+      "assets/images/catalog/lamengo-home-2/01.png",
+      "assets/images/catalog/lamengo-home-2/02.jpg",
+      "assets/images/catalog/lamengo-home-2/03.jpg",
+      "assets/images/catalog/lamengo-home-2/04.jpg",
+      "assets/images/catalog/lamengo-home-2/05.jpg",
+      "assets/images/catalog/lamengo-home-2/06.jpg"
+    ]
+  },
+  {
     "id": "lamengo",
     "name": "Flamengo 3 25",
     "team": "Flamengo",
