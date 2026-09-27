@@ -1,5 +1,30 @@
 [
   {
+    "id": "ta-lia-home",
+    "name": "Itália home 26",
+    "team": "Itália",
+    "category": "Seleções",
+    "version": "Torcedor",
+    "price": 130,
+    "badge": "DESTAQUE",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 0,
+      "G": 2,
+      "GG": 1,
+      "3G": 0
+    },
+    "description": "",
+    "images": [
+      "assets/images/catalog/ta-lia-home/01.png",
+      "assets/images/catalog/ta-lia-home/02.jpg",
+      "assets/images/catalog/ta-lia-home/03.jpg",
+      "assets/images/catalog/ta-lia-home/04.jpg"
+    ]
+  },
+  {
     "id": "lamengo-home-2",
     "name": "Flamengo home 26",
     "team": "Flamengo",
