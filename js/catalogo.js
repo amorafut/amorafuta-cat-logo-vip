@@ -46,9 +46,29 @@ function setSearch(q){
  syncSearchUI();render();
 }
 function renderTeams(){const box=$('#teamFilters');const teams=[...new Set(PRODUCTS.filter(p=>p.published!==false).map(p=>p.team).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt-BR'));box.innerHTML='<button class="team-chip active" data-team="Todos">Todos os times</button>'+teams.map(t=>'<button class="team-chip" data-team="'+esc(t)+'">'+esc(t)+'</button>').join('');box.querySelectorAll('.team-chip').forEach(b=>b.addEventListener('click',()=>setTeam(b.dataset.team)));}
+function normalizeSupabaseProduct(p){
+ return {id:p.id,name:p.name,team:p.team||'',category:p.category||'Brasileiras',version:p.version||'Torcedor',price:Number(p.price||0),oldPrice:p.old_price==null?undefined:Number(p.old_price),badge:p.badge||'',description:p.description||'',published:p.published!==false,soldOut:!!p.sold_out,stock:p.stock||{},images:Array.isArray(p.images)?p.images:[],sortOrder:Number(p.sort_order||0)};
+}
+async function loadProducts(){
+ const cfg=window.AMORA_SUPABASE_CONFIG;
+ if(cfg?.url&&cfg?.publishableKey){
+  try{
+   const r=await fetch(cfg.url+'/rest/v1/amora_products?select=*&published=eq.true&order=sort_order.asc,created_at.desc',{
+    headers:{apikey:cfg.publishableKey,Authorization:'Bearer '+cfg.publishableKey}
+   });
+   if(r.ok){
+    const rows=await r.json();
+    if(rows.length)return rows.map(normalizeSupabaseProduct);
+   }
+  }catch(e){console.warn('Supabase indisponível; usando catálogo de segurança.',e);}
+ }
+ const r=await fetch('data/products.json?v='+Date.now(),{cache:'no-store'});
+ if(!r.ok)throw new Error('Falha ao carregar catálogo');
+ return await r.json();
+}
 async function init(){
  try{
-  const r=await fetch('data/products.json?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('Falha ao carregar catálogo');PRODUCTS=await r.json();
+  PRODUCTS=await loadProducts();
   renderTeams();
   document.querySelectorAll('.category-card').forEach(b=>b.addEventListener('click',()=>setCat(b.dataset.cat)));
   document.querySelectorAll('[data-nav-cat]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();setCat(a.dataset.navCat)}));
