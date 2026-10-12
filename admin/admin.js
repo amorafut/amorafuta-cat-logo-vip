@@ -18,12 +18,43 @@ function renderPreviews(existing=[]){const list=[...existing.map((x,i)=>({url:x,
 $('#photos').addEventListener('change',e=>{pendingFiles=[...pendingFiles,...[...e.target.files].map(file=>({file,url:URL.createObjectURL(file)}))];renderPreviews((products.find(x=>x.id===currentId)||{}).images||[]);e.target.value='';});
 async function uploadPending(p){const imgs=[...(p.images||[])];for(const item of pendingFiles){const ext=(item.file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';const path=p.id+'/'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+'.'+ext;const {error}=await db.storage.from(window.AMORA_SUPABASE_CONFIG.bucket).upload(path,item.file,{upsert:false,contentType:item.file.type||'image/jpeg'});if(error)throw error;const {data}=db.storage.from(window.AMORA_SUPABASE_CONFIG.bucket).getPublicUrl(path);imgs.push(data.publicUrl);}return imgs;}
 async function saveProduct(p){p.images=await uploadPending(p);const {error}=await db.from('amora_products').upsert(toRow(p),{onConflict:'id'});if(error)throw error;products=products.filter(x=>x.id!==p.id);products.unshift(p);pendingFiles=[];delete pendingFilesByProduct[p.id];renderList();updateStats();if(typeof renderSaleProducts==='function')renderSaleProducts();renderPreviews(p.images);msg('Produto salvo no Supabase. Já pode aparecer no catálogo.');}
+async function migrateLegacyCatalog(){
+ if(!confirm('Importar os produtos atuais e copiar as fotos do GitHub para o Supabase? Faça isso apenas uma vez, antes de começar a cadastrar os novos produtos.'))return;
+ const btn=$('#migrateLegacy');btn.disabled=true;msg('Lendo catálogo atual...');
+ try{
+  const response=await fetch('../data/products.json?v='+Date.now(),{cache:'no-store'});
+  if(!response.ok)throw new Error('Não consegui ler o catálogo atual do GitHub.');
+  const legacy=await response.json();let done=0,total=legacy.length;
+  for(const old of legacy){
+   const p={id:old.id,name:old.name,team:old.team||'',category:old.category||'Brasileiras',version:old.version||'Torcedor',price:Number(old.price||0),oldPrice:old.oldPrice??null,badge:old.badge||'',description:old.description||'',published:old.published!==false,soldOut:!!old.soldOut,stock:old.stock||{P:0,M:0,G:0,GG:0,'3G':0},images:[],sortOrder:old.sortOrder||0};
+   const sourceImages=(old.images&&old.images.length?old.images:(old.image?[old.image]:[]));
+   for(let i=0;i<sourceImages.length;i++){
+    const src=sourceImages[i];
+    if(/^https?:\/\//i.test(src)&&src.includes('.supabase.co/storage/')){p.images.push(src);continue;}
+    const imgResponse=await fetch('../'+String(src).replace(/^\//,''));
+    if(!imgResponse.ok)throw new Error('Falha ao copiar foto de '+old.name+': '+src);
+    const blob=await imgResponse.blob();
+    const filename=String(src).split('/').pop()||('foto-'+(i+1)+'.jpg');
+    const path=p.id+'/'+String(i+1).padStart(2,'0')+'-'+filename.replace(/[^a-zA-Z0-9._-]/g,'-');
+    const {error:uploadError}=await db.storage.from(window.AMORA_SUPABASE_CONFIG.bucket).upload(path,blob,{upsert:true,contentType:blob.type||'image/jpeg'});
+    if(uploadError)throw uploadError;
+    const {data}=db.storage.from(window.AMORA_SUPABASE_CONFIG.bucket).getPublicUrl(path);p.images.push(data.publicUrl);
+   }
+   const {error}=await db.from('amora_products').upsert(toRow(p),{onConflict:'id'});
+   if(error)throw error;
+   done++;msg('Importando catálogo: '+done+' de '+total+' produtos...');
+  }
+  await loadData();msg('Migração concluída: '+done+' produtos importados, com suas fotos e estoque.');
+  alert('Migração concluída! Confira o catálogo antes de ativar a versão principal.');
+ }catch(e){msg('Migração interrompida: '+(e.message||'erro desconhecido')+'. Você pode executar novamente; os produtos são atualizados pelo ID.',false);}
+ finally{btn.disabled=false;}
+}
 async function publish(){msg('Sincronizando produtos e estoque...');$('#publish').disabled=true;try{const markApplied=preparePendingSales(products);for(const p of products){const {error}=await db.from('amora_products').upsert(toRow(p),{onConflict:'id'});if(error)throw error;}markApplied();await loadData();msg('Produtos e estoque sincronizados com o Supabase.');}catch(e){msg(e.message||'Não foi possível sincronizar.',false);}finally{$('#publish').disabled=false;}}
 $('#connect').onclick=async()=>{const email=$('#email').value.trim(),password=$('#password').value;if(!email||!password)return msg('Informe e-mail e senha.',false);try{const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;const {data:admin,error:ae}=await db.from('amora_admin_users').select('user_id').eq('user_id',data.user.id).maybeSingle();if(ae)throw ae;if(!admin)throw new Error('Usuário ainda não autorizado na tabela amora_admin_users.');$('#authCard').classList.add('hidden');$('#app').classList.remove('hidden');await loadData();msg('Acesso autorizado.');}catch(e){msg(e.message||'Falha no acesso.',false);}};
 function slugify(value){return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').replace(/-+/g,'-');}
 function uniqueSlug(value){const base=slugify(value);if(!base)return '';let candidate=base,n=2;while(products.some(p=>p.id===candidate&&p.id!==currentId)){candidate=base+'-'+n++;}return candidate;}
 $('#fName').addEventListener('input',()=>{if(!slugManuallyEdited)$('#fId').value=uniqueSlug($('#fName').value);});$('#fId').addEventListener('input',()=>{slugManuallyEdited=true;});
-$('#newProduct').onclick=newProduct;$('#reload').onclick=()=>loadData().then(()=>msg('Produtos atualizados.')).catch(e=>msg(e.message,false));$('#changeToken').textContent='↪ Sair';$('#changeToken').onclick=async()=>{await db.auth.signOut();$('#app').classList.add('hidden');$('#authCard').classList.remove('hidden');$('#password').value='';msg('Sessão encerrada.');};$('#filter').oninput=renderList;$('#publish').onclick=publish;$('#cancel').onclick=()=>{if(currentId)edit(currentId);else $('#form').classList.add('hidden');};
+$('#newProduct').onclick=newProduct;$('#migrateLegacy').onclick=migrateLegacyCatalog;$('#reload').onclick=()=>loadData().then(()=>msg('Produtos atualizados.')).catch(e=>msg(e.message,false));$('#changeToken').textContent='↪ Sair';$('#changeToken').onclick=async()=>{await db.auth.signOut();$('#app').classList.add('hidden');$('#authCard').classList.remove('hidden');$('#password').value='';msg('Sessão encerrada.');};$('#filter').oninput=renderList;$('#publish').onclick=publish;$('#cancel').onclick=()=>{if(currentId)edit(currentId);else $('#form').classList.add('hidden');};
 $('#delete').onclick=async()=>{if(!currentId)return;if(!confirm('Excluir este produto do Supabase?'))return;try{const {error}=await db.from('amora_products').delete().eq('id',currentId);if(error)throw error;products=products.filter(x=>x.id!==currentId);currentId=null;$('#form').classList.add('hidden');$('#emptyEditor').classList.remove('hidden');renderList();updateStats();msg('Produto excluído.');}catch(e){msg(e.message||'Erro ao excluir.',false);}};
 $('#form').onsubmit=async e=>{e.preventDefault();const p=readForm();if(!p.id||!p.name||!p.team){alert('Preencha ID, nome e time.');return;}if(products.some(x=>x.id===p.id&&x.id!==currentId)){alert('Esse ID já existe.');return;}const submit=$('#form button[type="submit"]');submit.disabled=true;try{await saveProduct(p);currentId=p.id;$('#editMode').textContent='EDITAR PRODUTO';$('#formTitle').textContent=p.name;$('#delete').style.visibility='visible';}catch(err){msg(err.message||'Não foi possível salvar.',false);}finally{submit.disabled=false;}};
 (async()=>{try{const cfg=window.AMORA_SUPABASE_CONFIG;if(!cfg||!cfg.url||!cfg.publishableKey)throw new Error('Configuração do Supabase não encontrada.');db=window.supabase.createClient(cfg.url,cfg.publishableKey);const {data}=await db.auth.getSession();if(data.session){const {data:admin}=await db.from('amora_admin_users').select('user_id').eq('user_id',data.session.user.id).maybeSingle();if(admin){$('#authCard').classList.add('hidden');$('#app').classList.remove('hidden');await loadData();}}db.auth.onAuthStateChange(async(_event,session)=>{if(!session){$('#app').classList.add('hidden');$('#authCard').classList.remove('hidden');}});}catch(e){msg(e.message||'Não foi possível iniciar o painel.',false);}})();
