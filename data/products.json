@@ -1124,7 +1124,7 @@
     "stock": {
       "P": 0,
       "M": 0,
-      "G": 1,
+      "G": 0,
       "GG": 0,
       "3G": 0
     },
@@ -1137,8 +1137,7 @@
       "assets/images/catalog/fran-a-away-26/05.webp",
       "assets/images/catalog/fran-a-away-26/06.webp",
       "assets/images/catalog/fran-a-away-26/07.webp"
-    ],
-    "weight_g": 240
+    ]
   },
   {
     "id": "barcelona-casa-25-26",
