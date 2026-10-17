@@ -15,7 +15,7 @@ function isCat(p,cat){
 }
 function visual(p){
  const src=(p.images&&p.images[0])||p.image;
- return src?'<img src="'+esc(src)+'" alt="'+esc(p.name)+'" width="300" height="400" loading="lazy" decoding="async" onerror="this.style.display=\'none\';this.parentElement.classList.add(\'no-image\')">':'';
+ return src?'<img src="'+esc(src)+'" alt="'+esc(p.name)+'" width="300" height="400" loading="lazy" decoding="async" onerror="this.style.display=&quot;none&quot;;this.parentElement.classList.add(&quot;no-image&quot;)">':'';
 }
 function card(p){
  const badge=p.soldOut?'ESGOTADO':(p.badge||'');
@@ -46,15 +46,51 @@ function setSearch(q){
  syncSearchUI();render();
 }
 function renderTeams(){const box=$('#teamFilters');const teams=[...new Set(PRODUCTS.filter(p=>p.published!==false).map(p=>p.team).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt-BR'));box.innerHTML='<button class="team-chip active" data-team="Todos">Todos os times</button>'+teams.map(t=>'<button class="team-chip" data-team="'+esc(t)+'">'+esc(t)+'</button>').join('');box.querySelectorAll('.team-chip').forEach(b=>b.addEventListener('click',()=>setTeam(b.dataset.team)));}
+function normalizeSupabaseProduct(p){
+ return {id:p.id,name:p.name,team:p.team||'',category:p.category||'Brasileiras',version:p.version||'Torcedor',price:Number(p.price||0),oldPrice:p.old_price==null?undefined:Number(p.old_price),badge:p.badge||'',description:p.description||'',published:p.published!==false,soldOut:!!p.sold_out,stock:p.stock||{},images:Array.isArray(p.images)?p.images:[],sortOrder:Number(p.sort_order||0)};
+}
+async function loadLegacyProducts(){
+ const r=await fetch('data/products.json?v='+Date.now(),{cache:'no-store'});
+ if(!r.ok)throw new Error('Falha ao carregar o catálogo de segurança do GitHub.');
+ return await r.json();
+}
+async function loadProducts(){
+ const cfg=window.AMORA_SUPABASE_CONFIG;
+ if(!cfg?.url||!cfg?.publishableKey){
+  console.warn('Configuração do Supabase ausente; usando catálogo de segurança do GitHub.');
+  return await loadLegacyProducts();
+ }
+ let r;
+ try{
+  r=await fetch(cfg.url+'/rest/v1/amora_products?select=*&published=eq.true&order=sort_order.asc,created_at.desc',{
+   headers:{apikey:cfg.publishableKey,Authorization:'Bearer '+cfg.publishableKey}
+  });
+ }catch(e){
+  console.warn('Supabase indisponível; usando catálogo de segurança do GitHub.',e);
+  return await loadLegacyProducts();
+ }
+ if(!r.ok){
+  console.warn('Supabase respondeu com erro HTTP '+r.status+'; usando catálogo de segurança do GitHub.');
+  return await loadLegacyProducts();
+ }
+ const rows=await r.json();
+ if(!Array.isArray(rows))throw new Error('Resposta inesperada do Supabase ao carregar o catálogo.');
+ if(rows.length===0)throw new Error('O Supabase respondeu, mas não há produtos publicados. Confira a importação do catálogo no painel administrativo antes de continuar.');
+ return rows.map(normalizeSupabaseProduct);
+}
 async function init(){
  try{
-  const r=await fetch('data/products.json?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('Falha ao carregar catálogo');PRODUCTS=await r.json();
+  PRODUCTS=await loadProducts();
   renderTeams();
   document.querySelectorAll('.category-card').forEach(b=>b.addEventListener('click',()=>setCat(b.dataset.cat)));
   document.querySelectorAll('[data-nav-cat]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();setCat(a.dataset.navCat)}));
   const sync=e=>setSearch(e.target.value);
   $('#search').addEventListener('input',sync);$('#searchMobile').addEventListener('input',sync);$('#sort').addEventListener('change',e=>{state.sort=e.target.value;render();});
   syncSearchUI();render();
- }catch(e){$('#grid').innerHTML='<div class="empty"><strong>Não foi possível carregar o catálogo.</strong><span>Tente atualizar a página em alguns segundos.</span></div>';console.error(e);}
+ }catch(e){
+  const detail=e&&e.message?e.message:'Tente atualizar a página em alguns segundos.';
+  $('#grid').innerHTML='<div class="empty"><strong>Não foi possível carregar o catálogo.</strong><span>'+esc(detail)+'</span></div>';
+  console.error(e);
+ }
 }
 document.addEventListener('DOMContentLoaded',init);

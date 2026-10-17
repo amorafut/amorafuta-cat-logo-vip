@@ -28,5 +28,20 @@ function render(p){
  }
  document.querySelectorAll('.size:not(.disabled)').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.size').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');document.querySelector('#waBtn').href=wa(p,b.dataset.size);}));let qty=1;const qv=document.querySelector('#qtyValue'),qm=document.querySelector('#qtyMinus'),qp=document.querySelector('#qtyPlus'),addBtn=document.querySelector('#addCartBtn');const selectedSize=()=>document.querySelector('.size.selected')?.dataset.size||'';const maxQty=()=>{const s=selectedSize();return p.stock&&s?Number(p.stock[s]||0):null};const syncQty=()=>{const m=maxQty();if(m!==null&&m>0)qty=Math.min(qty,m);qv.textContent=qty};qm?.addEventListener('click',()=>{qty=Math.max(1,qty-1);syncQty()});qp?.addEventListener('click',()=>{const m=maxQty();if(m===null||qty<m)qty++;syncQty()});addBtn?.addEventListener('click',()=>{if(p.soldOut)return;const s=selectedSize();if(p.stock&&Object.keys(p.stock).length&&!s){alert('Selecione um tamanho.');return}addToCart(p,s,qty)});
 }
-async function init(){try{const r=await fetch('data/products.json?v='+Date.now(),{cache:'no-store'});const ps=await r.json();const p=ps.find(x=>x.id===id&&x.published!==false);if(!p)throw new Error('Produto não encontrado');render(p);}catch(e){document.querySelector('#productRoot').innerHTML='<div class="empty"><strong>Produto não encontrado.</strong><span><a href="index.html#catalogo">Voltar ao catálogo</a></span></div>';}}
+function normalizeSupabaseProduct(p){
+ return {id:p.id,name:p.name,team:p.team||'',category:p.category||'Brasileiras',version:p.version||'Torcedor',price:Number(p.price||0),oldPrice:p.old_price==null?undefined:Number(p.old_price),badge:p.badge||'',description:p.description||'',published:p.published!==false,soldOut:!!p.sold_out,stock:p.stock||{},images:Array.isArray(p.images)?p.images:[]};
+}
+async function init(){
+ try{
+  let ps=null;const cfg=window.AMORA_SUPABASE_CONFIG;
+  if(cfg?.url&&cfg?.publishableKey){
+   try{
+    const r=await fetch(cfg.url+'/rest/v1/amora_products?select=*&id=eq.'+encodeURIComponent(id)+'&published=eq.true&limit=1',{headers:{apikey:cfg.publishableKey,Authorization:'Bearer '+cfg.publishableKey}});
+    if(r.ok){const rows=await r.json();if(rows.length)ps=rows.map(normalizeSupabaseProduct);}
+   }catch(e){console.warn('Supabase indisponível; consultando catálogo estático.',e);}
+  }
+  if(!ps){const r=await fetch('data/products.json?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('Falha ao carregar catálogo');ps=await r.json();}
+  const p=ps.find(x=>x.id===id&&x.published!==false);if(!p)throw new Error('Produto não encontrado');render(p);
+ }catch(e){document.querySelector('#productRoot').innerHTML='<div class="empty"><strong>Produto não encontrado.</strong><span><a href="index.html#catalogo">Voltar ao catálogo</a></span></div>';}
+}
 document.addEventListener('DOMContentLoaded',init);

@@ -1,65 +1,78 @@
-const API='https://api.github.com';
-const OWNER='amorafut',REPO='amorafuta-cat-logo-vip',BRANCH='main',DATA='data/products.json';
-let token=sessionStorage.getItem('amora_github_token')||localStorage.getItem('amora_github_token')||'';
-let products=[],currentId=null,pendingFiles=[],originalImages=[],pendingByProduct={},pendingFilesByProduct={},slugManuallyEdited=false;
+let db=null,products=[],currentId=null,pendingFiles=[],pendingByProduct={},pendingFilesByProduct={},slugManuallyEdited=false;
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-function headers(){return {'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};}
 function msg(t,ok=true){$('#authMsg').textContent=t;$('#status').textContent=t;$('#authMsg').style.color=ok?'var(--green)':'var(--danger)';}
-async function gh(path,opts={}){const r=await fetch(API+'/repos/'+OWNER+'/'+REPO+'/contents/'+path,{...opts,headers:{...headers(),...(opts.headers||{})}});if(!r.ok){let d={};try{d=await r.json()}catch{}throw new Error(d.message||('GitHub HTTP '+r.status));}return r.json();}
-async function repoCheck(){const r=await fetch(API+'/repos/'+OWNER+'/'+REPO,{headers:headers()});if(!r.ok)throw new Error('Token sem acesso ao repositório.');return r.json();}
-async function loadData(){const r=await fetch('../data/products.json?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('Não foi possível ler o catálogo.');products=await r.json();pendingByProduct={};pendingFilesByProduct={};try{const saved=JSON.parse(localStorage.getItem('amora_fut_admin_drafts_v1')||'{}');for(const [id,d] of Object.entries(saved)){if(d?.product&&products.some(p=>p.id===id))pendingByProduct[id]={product:d.product,files:[]};pendingFilesByProduct[id]=[];}}catch(e){}renderList();updateStats();if(typeof renderSaleProducts==='function')renderSaleProducts();if(typeof renderSales==='function')renderSales();}
+function fromRow(r){return {id:r.id,name:r.name,team:r.team||'',category:r.category||'Brasileiras',version:r.version||'Torcedor',price:Number(r.price||0),oldPrice:r.old_price==null?'':Number(r.old_price),badge:r.badge||'',description:r.description||'',published:r.published!==false,soldOut:!!r.sold_out,stock:r.stock||{P:0,M:0,G:0,GG:0,'3G':0},images:Array.isArray(r.images)?r.images:[],sortOrder:Number(r.sort_order||0)};}
+function toRow(p){return {id:p.id,name:p.name,team:p.team||'',category:p.category||'Brasileiras',version:p.version||'Torcedor',price:Number(p.price||0),old_price:p.oldPrice===''||p.oldPrice==null?null:Number(p.oldPrice),badge:p.badge||'',description:p.description||'',published:p.published!==false,sold_out:!!p.soldOut,stock:p.stock||{},images:p.images||[],sort_order:Number(p.sortOrder||0),updated_at:new Date().toISOString()};}
+async function loadData(){const {data,error}=await db.from('amora_products').select('*').order('sort_order',{ascending:true}).order('created_at',{ascending:false});if(error)throw error;products=(data||[]).map(fromRow);pendingByProduct={};pendingFilesByProduct={};renderList();updateStats();if(typeof renderSaleProducts==='function')renderSaleProducts();if(typeof renderSales==='function')renderSales();}
 function updateStats(){const teams=new Set(products.map(p=>p.team).filter(Boolean));const units=products.reduce((n,p)=>n+Object.values(p.stock||{}).reduce((a,v)=>a+Number(v||0),0),0);$('#statProducts').textContent=products.length;$('#statTeams').textContent=teams.size;$('#statStock').textContent=units;}
-function thumb(p){const src=(p.images&&p.images[0])||p.image;return src?'<img src="../'+esc(src)+'" alt="">':'<span>⚽</span>';}
-function renderList(){
- const q=($('#filter').value||'').toLowerCase();const arr=products.filter(p=>(p.name+' '+(p.team||'')).toLowerCase().includes(q));
- $('#list').innerHTML=arr.map(p=>'<div class="list-item '+(p.id===currentId?'active':'')+'" data-id="'+esc(p.id)+'"><div class="list-thumb">'+thumb(p)+'</div><div><strong>'+esc(p.name)+'</strong><small>'+esc(p.team||'')+' · '+esc(p.version||'')+'</small><span class="pill">'+(p.published===false?'RASCUNHO':(p.soldOut?'ESGOTADO':'PUBLICADO'))+'</span></div></div>').join('');
- document.querySelectorAll('.list-item').forEach(x=>x.onclick=()=>edit(x.dataset.id));
-}
+function thumb(p){const src=(p.images&&p.images[0])||p.image;return src?'<img src="'+esc(src)+'" alt="">':'<span>⚽</span>';}
+function renderList(){const q=($('#filter').value||'').toLowerCase();const arr=products.filter(p=>(p.name+' '+(p.team||'')).toLowerCase().includes(q));$('#list').innerHTML=arr.map(p=>'<div class="list-item '+(p.id===currentId?'active':'')+'" data-id="'+esc(p.id)+'"><div class="list-thumb">'+thumb(p)+'</div><div><strong>'+esc(p.name)+'</strong><small>'+esc(p.team||'')+' · '+esc(p.version||'')+'</small><span class="pill">'+(p.published===false?'RASCUNHO':(p.soldOut?'ESGOTADO':'PUBLICADO'))+'</span></div></div>').join('');document.querySelectorAll('.list-item').forEach(x=>x.onclick=()=>edit(x.dataset.id));}
 function blank(){return {id:'',team:'',name:'',category:'Brasileiras',version:'Torcedor',price:'',oldPrice:'',badge:'',description:'',published:true,soldOut:false,stock:{P:0,M:0,G:0,GG:0,'3G':0},images:[]};}
-function captureDraft(){if(!currentId)return;try{const d=readForm();pendingByProduct[currentId]={product:JSON.parse(JSON.stringify(d)),files:[...(pendingFiles||[])]};pendingFilesByProduct[currentId]=[...(pendingFiles||[])];}catch(e){}}
-function setForm(p){
- if(currentId&&currentId!==(p&&p.id))captureDraft();const d=p&&p.id?pendingByProduct[p.id]:null;if(d&&d.product)p=d.product;
- currentId=p.id||null;slugManuallyEdited=!!p.id;originalImages=[...(p.images||[])];pendingFiles=pendingFilesByProduct[p.id]?[...pendingFilesByProduct[p.id]]:(d?[...(d.files||[])]:[]);$('#emptyEditor').classList.add('hidden');$('#form').classList.remove('hidden');$('#editMode').textContent=p.id?'EDITAR PRODUTO':'NOVO PRODUTO';$('#formTitle').textContent=p.name||'Novo produto';
- $('#fId').value=p.id||'';$('#fName').value=p.name||'';$('#fTeam').value=p.team||'';$('#fCategory').value=p.category||'Brasileiras';$('#fVersion').value=p.version||'Torcedor';$('#fPrice').value=p.price??'';$('#fOldPrice').value=p.oldPrice??'';$('#fBadge').value=p.badge||'';$('#fDescription').value=p.description||'';$('#fPublished').checked=p.published!==false;$('#fSold').checked=!!p.soldOut;
- const s=p.stock||{};['P','M','G','GG','3G'].forEach(x=>$('#s'+x).value=Number(s[x]||0));renderPreviews(p.images||[]);
- $('#delete').style.visibility=p.id?'visible':'hidden';renderList();
-}
+function setForm(p){if(currentId&&currentId!==(p&&p.id))captureDraft();const d=p&&p.id?pendingByProduct[p.id]:null;if(d&&d.product)p=d.product;currentId=p.id||null;slugManuallyEdited=!!p.id;pendingFiles=pendingFilesByProduct[p.id]?[...pendingFilesByProduct[p.id]]:[];$('#emptyEditor').classList.add('hidden');$('#form').classList.remove('hidden');$('#editMode').textContent=p.id?'EDITAR PRODUTO':'NOVO PRODUTO';$('#formTitle').textContent=p.name||'Novo produto';$('#fId').value=p.id||'';$('#fName').value=p.name||'';$('#fTeam').value=p.team||'';$('#fCategory').value=p.category||'Brasileiras';$('#fVersion').value=p.version||'Torcedor';$('#fPrice').value=p.price??'';$('#fOldPrice').value=p.oldPrice??'';$('#fBadge').value=p.badge||'';$('#fDescription').value=p.description||'';$('#fPublished').checked=p.published!==false;$('#fSold').checked=!!p.soldOut;const s=p.stock||{};['P','M','G','GG','3G'].forEach(x=>$('#s'+x).value=Number(s[x]||0));renderPreviews(p.images||[]);$('#delete').style.visibility=p.id?'visible':'hidden';renderList();}
+function captureDraft(){if(!currentId)return;try{pendingByProduct[currentId]={product:readForm()};pendingFilesByProduct[currentId]=[...pendingFiles];}catch(e){}}
 function readForm(){const p={id:$('#fId').value.trim().toLowerCase().replace(/[^a-z0-9-]+/g,'-'),name:$('#fName').value.trim(),team:$('#fTeam').value.trim(),category:$('#fCategory').value,version:$('#fVersion').value,price:Number($('#fPrice').value||0),badge:$('#fBadge').value||'',published:$('#fPublished').checked,soldOut:$('#fSold').checked,stock:{P:Number($('#sP').value||0),M:Number($('#sM').value||0),G:Number($('#sG').value||0),GG:Number($('#sGG').value||0),'3G':Number($('#s3G').value||0)},description:$('#fDescription').value.trim()};const old=Number($('#fOldPrice').value||0);if(old)p.oldPrice=old;const existing=products.find(x=>x.id===currentId);p.images=(existing&&existing.images)||[];return p;}
-function edit(id){const p=products.find(x=>x.id===id);if(p){if(typeof window.setForm==='function')window.setForm(p);else setForm(p);}}
-function newProduct(){if(currentId)captureDraft();pendingFiles=[];window.setFormBase?window.setFormBase(blank()):setForm(blank());}
-function renderPreviews(existing=[]){const list=[...existing.map((x,i)=>({url:'../'+x,name:x.split('/').pop(),kind:'existing',index:i})),...pendingFiles.map((x,i)=>({url:x.url,name:x.file.name,kind:'pending',index:i}))];$('#previews').innerHTML=list.map(x=>'<div class="preview"><img src="'+esc(x.url)+'" alt=""><span>'+esc(x.name)+'</span><button type="button" class="remove-photo" data-kind="'+x.kind+'" data-index="'+x.index+'">×</button></div>').join('');document.querySelectorAll('.remove-photo').forEach(b=>b.onclick=()=>{const kind=b.dataset.kind,i=Number(b.dataset.index);if(kind==='pending'){const item=pendingFiles[i];if(item?.url)URL.revokeObjectURL(item.url);pendingFiles.splice(i,1);}else{const p=products.find(x=>x.id===currentId);if(p?.images)p.images.splice(i,1);}const p=products.find(x=>x.id===currentId);renderPreviews(p?.images||[]);msg('Foto removida. Salve o produto e depois publique as alterações.');});}
-$('#photos').addEventListener('change',e=>{pendingFiles=[...pendingFiles,...[...e.target.files].map(file=>({file,url:URL.createObjectURL(file)}))];if(currentId){captureDraft();pendingFilesByProduct[currentId]=[...(pendingFiles||[])];}renderPreviews((products.find(x=>x.id===currentId)||{}).images||[]);e.target.value='';});
-function b64File(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result.split(',')[1]);r.onerror=reject;r.readAsDataURL(file);});}
-async function fileSha(path){try{const r=await gh(path);return r.sha}catch(e){if(String(e.message).includes('Not Found'))return null;throw e;}}
-async function put(path,content,sha){const body={message:'Atualizar catálogo Amora Fut',content,branch:BRANCH};if(sha)body.sha=sha;const r=await fetch(API+'/repos/'+OWNER+'/'+REPO+'/contents/'+path,{method:'PUT',headers:{...headers(),'Content-Type':'application/json'},body:JSON.stringify(body)});if(!r.ok){let d={};try{d=await r.json()}catch{}throw new Error(d.message||'Falha ao publicar '+path);}return r.json();}
-async function publishFile(path,base64){const sha=await fileSha(path);return put(path,base64,sha);}
-async function publish(){
- if(!token){msg('Conecte o GitHub primeiro.',false);return;}
- $('#publish').disabled=true;msg('Publicando...');try{
-  for(const p of products){
-   if(p.id!==currentId&&pendingFiles.length===0)continue;
-  }
-  const p=currentId?products.find(x=>x.id===currentId):null;
-  if(p&&pendingFiles.length){
-   const imgs=[];for(let i=0;i<pendingFiles.length;i++){const f=pendingFiles[i].file;const ext=(f.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';const path='assets/images/catalog/'+p.id+'/'+String(i+1).padStart(2,'0')+'.'+ext;await publishFile(path,await b64File(f));imgs.push(path);}p.images=imgs;
-  }
-  const json=btoa(unescape(encodeURIComponent(JSON.stringify(products,null,2))));
-  await publishFile(DATA,json);
-  msg('Publicado! Aguarde alguns segundos para o GitHub Pages atualizar.');
-  pendingFiles=[];if(currentId)delete pendingFilesByProduct[currentId];originalImages=[...((p&&p.images)||[])];renderPreviews((p&&p.images)||[]);renderList();updateStats();
- }catch(e){msg(e.message||'Erro ao publicar.',false);}finally{$('#publish').disabled=false;}
+function edit(id){const p=products.find(x=>x.id===id);if(p)setForm(p);}
+function newProduct(){if(currentId)captureDraft();pendingFiles=[];setForm(blank());}
+function renderPreviews(existing=[]){const list=[...existing.map((x,i)=>({url:x,name:'Imagem '+(i+1),kind:'existing',index:i})),...pendingFiles.map((x,i)=>({url:x.url,name:x.file.name,kind:'pending',index:i}))];$('#previews').innerHTML=list.map(x=>'<div class="preview"><img src="'+esc(x.url)+'" alt=""><span>'+esc(x.name)+'</span><button type="button" class="remove-photo" data-kind="'+x.kind+'" data-index="'+x.index+'">×</button></div>').join('');document.querySelectorAll('.remove-photo').forEach(b=>b.onclick=()=>{const kind=b.dataset.kind,i=Number(b.dataset.index);if(kind==='pending'){const item=pendingFiles[i];if(item&&item.url)URL.revokeObjectURL(item.url);pendingFiles.splice(i,1);}else{const p=products.find(x=>x.id===currentId);if(p&&p.images)p.images.splice(i,1);}const p=products.find(x=>x.id===currentId);renderPreviews(p?p.images||[]:[]);});}
+$('#photos').addEventListener('change',e=>{pendingFiles=[...pendingFiles,...[...e.target.files].map(file=>({file,url:URL.createObjectURL(file)}))];renderPreviews((products.find(x=>x.id===currentId)||{}).images||[]);e.target.value='';});
+async function uploadPending(p){const imgs=[...(p.images||[])];for(const item of pendingFiles){const ext=(item.file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';const path=p.id+'/'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+'.'+ext;const {error}=await db.storage.from(window.AMORA_SUPABASE_CONFIG.bucket).upload(path,item.file,{upsert:false,contentType:item.file.type||'image/jpeg'});if(error)throw error;const {data}=db.storage.from(window.AMORA_SUPABASE_CONFIG.bucket).getPublicUrl(path);imgs.push(data.publicUrl);}return imgs;}
+async function saveProduct(p){
+ p.images=await uploadPending(p);
+ const row=toRow(p);
+ const {data:saved,error}=await db.from('amora_products').upsert(row,{onConflict:'id'}).select('id,name,published,images,stock').single();
+ if(error)throw error;
+ if(!saved||saved.id!==p.id)throw new Error('O Supabase não confirmou o salvamento deste produto. Nenhuma confirmação foi exibida.');
+ const {data:check,error:checkError}=await db.from('amora_products').select('id,name,published,images,stock').eq('id',p.id).maybeSingle();
+ if(checkError)throw checkError;
+ if(!check)throw new Error('O produto foi enviado, mas não foi encontrado na leitura de confirmação do Supabase. Confira as permissões antes de continuar.');
+ p=fromRow({...row,...check});
+ products=products.filter(x=>x.id!==p.id);products.unshift(p);
+ pendingFiles=[];delete pendingFilesByProduct[p.id];delete pendingByProduct[p.id];
+ renderList();updateStats();if(typeof renderSaleProducts==='function')renderSaleProducts();renderPreviews(p.images);
+ msg('Produto salvo e confirmado no Supabase. Ele continuará cadastrado após recarregar o painel.');
+ return p;
 }
-$('#connect').onclick=async()=>{token=$('#token').value.trim();if(!token)return msg('Cole seu GitHub token.',false);try{await repoCheck();if($('#remember').checked)localStorage.setItem('amora_github_token',token);else{localStorage.removeItem('amora_github_token');sessionStorage.setItem('amora_github_token',token);}$('#authCard').classList.add('hidden');$('#app').classList.remove('hidden');await loadData();msg('GitHub conectado.');}catch(e){msg(e.message,false);}};
-function slugify(value){return String(value||'').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').replace(/-+/g,'-');}
+async function migrateLegacyCatalog(){
+ if(!confirm('Importar os produtos atuais e copiar as fotos do GitHub para o Supabase? Faça isso apenas uma vez, antes de começar a cadastrar os novos produtos.'))return;
+ const btn=$('#migrateLegacy');btn.disabled=true;msg('Lendo catálogo atual...');
+ try{
+  const response=await fetch('../data/products.json?v='+Date.now(),{cache:'no-store'});
+  if(!response.ok)throw new Error('Não consegui ler o catálogo atual do GitHub.');
+  const legacy=await response.json();let done=0,total=legacy.length;
+  for(const old of legacy){
+   const p={id:old.id,name:old.name,team:old.team||'',category:old.category||'Brasileiras',version:old.version||'Torcedor',price:Number(old.price||0),oldPrice:old.oldPrice??null,badge:old.badge||'',description:old.description||'',published:old.published!==false,soldOut:!!old.soldOut,stock:old.stock||{P:0,M:0,G:0,GG:0,'3G':0},images:[],sortOrder:old.sortOrder||0};
+   const sourceImages=(old.images&&old.images.length?old.images:(old.image?[old.image]:[]));
+   for(let i=0;i<sourceImages.length;i++){
+    const src=sourceImages[i];
+    if(/^https?:\/\//i.test(src)&&src.includes('.supabase.co/storage/')){p.images.push(src);continue;}
+    const imgResponse=await fetch('../'+String(src).replace(/^\//,''));
+    if(!imgResponse.ok)throw new Error('Falha ao copiar foto de '+old.name+': '+src);
+    const blob=await imgResponse.blob();
+    const filename=String(src).split('/').pop()||('foto-'+(i+1)+'.jpg');
+    const path=p.id+'/'+String(i+1).padStart(2,'0')+'-'+filename.replace(/[^a-zA-Z0-9._-]/g,'-');
+    const {error:uploadError}=await db.storage.from(window.AMORA_SUPABASE_CONFIG.bucket).upload(path,blob,{upsert:true,contentType:blob.type||'image/jpeg'});
+    if(uploadError)throw uploadError;
+    const {data}=db.storage.from(window.AMORA_SUPABASE_CONFIG.bucket).getPublicUrl(path);p.images.push(data.publicUrl);
+   }
+   const {error}=await db.from('amora_products').upsert(toRow(p),{onConflict:'id'});
+   if(error)throw error;
+   done++;msg('Importando catálogo: '+done+' de '+total+' produtos...');
+  }
+  await loadData();msg('Migração concluída: '+done+' produtos importados, com suas fotos e estoque.');
+  alert('Migração concluída! Confira o catálogo antes de ativar a versão principal.');
+ }catch(e){msg('Migração interrompida: '+(e.message||'erro desconhecido')+'. Você pode executar novamente; os produtos são atualizados pelo ID.',false);}
+ finally{btn.disabled=false;}
+}
+async function publish(){msg('Sincronizando produtos e estoque...');$('#publish').disabled=true;try{const markApplied=preparePendingSales(products);for(const p of products){const {error}=await db.from('amora_products').upsert(toRow(p),{onConflict:'id'});if(error)throw error;}markApplied();await loadData();msg('Produtos e estoque sincronizados com o Supabase.');}catch(e){msg(e.message||'Não foi possível sincronizar.',false);}finally{$('#publish').disabled=false;}}
+$('#connect').onclick=async()=>{const email=$('#email').value.trim(),password=$('#password').value;if(!email||!password)return msg('Informe e-mail e senha.',false);try{const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;const {data:admin,error:ae}=await db.from('amora_admin_users').select('user_id').eq('user_id',data.user.id).maybeSingle();if(ae)throw ae;if(!admin)throw new Error('Usuário ainda não autorizado na tabela amora_admin_users.');$('#authCard').classList.add('hidden');$('#app').classList.remove('hidden');await loadData();msg('Acesso autorizado.');}catch(e){msg(e.message||'Falha no acesso.',false);}};
+function slugify(value){return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').replace(/-+/g,'-');}
 function uniqueSlug(value){const base=slugify(value);if(!base)return '';let candidate=base,n=2;while(products.some(p=>p.id===candidate&&p.id!==currentId)){candidate=base+'-'+n++;}return candidate;}
-$('#fName').addEventListener('input',()=>{if(!slugManuallyEdited){$('#fId').value=uniqueSlug($('#fName').value);}});
-$('#fId').addEventListener('input',()=>{slugManuallyEdited=true;});
-$('#newProduct').onclick=newProduct;$('#reload').onclick=loadData;
-$('#changeToken').onclick=()=>{sessionStorage.removeItem('amora_github_token');localStorage.removeItem('amora_github_token');token='';$('#token').value='';$('#remember').checked=false;$('#app').classList.add('hidden');$('#authCard').classList.remove('hidden');msg('Token limpo. Cole o novo token e clique em Conectar.');};$('#filter').oninput=renderList;$('#publish').onclick=publish;$('#cancel').onclick=()=>{if(currentId)edit(currentId);else $('#form').classList.add('hidden');};
-$('#delete').onclick=()=>{if(!currentId)return;if(confirm('Excluir este produto do catálogo local? Depois clique em Publicar alterações.')){products=products.filter(p=>p.id!==currentId);currentId=null;$('#form').classList.add('hidden');$('#emptyEditor').classList.remove('hidden');renderList();updateStats();msg('Produto removido localmente. Clique em Publicar alterações.');}};
-$('#form').onsubmit=e=>{e.preventDefault();const p=readForm();if(!p.id||!p.name||!p.team){alert('Preencha ID, nome e time.');return;}const i=products.findIndex(x=>x.id===currentId);if(i>=0)products[i]=p;else{if(products.some(x=>x.id===p.id)){alert('Esse ID já existe.');return;}products.unshift(p);}currentId=p.id;pendingByProduct[p.id]={product:JSON.parse(JSON.stringify(p)),files:[...(pendingFiles||[])]};pendingFilesByProduct[p.id]=[...(pendingFiles||[])];localStorage.setItem('amora_fut_admin_drafts_v1',JSON.stringify(Object.fromEntries(Object.entries(pendingByProduct).map(([k,v])=>[k,{product:v.product}]))));$('#emptyEditor').classList.add('hidden');$('#form').classList.remove('hidden');$('#editMode').textContent='EDITAR PRODUTO';$('#formTitle').textContent=p.name;$('#delete').style.visibility='visible';renderList();updateStats();msg('Produto salvo no painel. As fotos ficam preservadas. Clique em Publicar alterações para enviar ao site.');};
-(async()=>{if(token){try{await repoCheck();$('#token').value=token;$('#authCard').classList.add('hidden');$('#app').classList.remove('hidden');await loadData();}catch(e){sessionStorage.removeItem('amora_github_token');localStorage.removeItem('amora_github_token');token='';}}})();
+$('#fName').addEventListener('input',()=>{if(!slugManuallyEdited)$('#fId').value=uniqueSlug($('#fName').value);});$('#fId').addEventListener('input',()=>{slugManuallyEdited=true;});
+$('#newProduct').onclick=newProduct;$('#migrateLegacy').onclick=migrateLegacyCatalog;$('#reload').onclick=()=>loadData().then(()=>msg('Produtos atualizados.')).catch(e=>msg(e.message,false));$('#changeToken').textContent='↪ Sair';$('#changeToken').onclick=async()=>{await db.auth.signOut();$('#app').classList.add('hidden');$('#authCard').classList.remove('hidden');$('#password').value='';msg('Sessão encerrada.');};$('#filter').oninput=renderList;$('#publish').onclick=publish;$('#cancel').onclick=()=>{if(currentId)edit(currentId);else $('#form').classList.add('hidden');};
+$('#delete').onclick=async()=>{if(!currentId)return;if(!confirm('Excluir este produto do Supabase?'))return;try{const {error}=await db.from('amora_products').delete().eq('id',currentId);if(error)throw error;products=products.filter(x=>x.id!==currentId);currentId=null;$('#form').classList.add('hidden');$('#emptyEditor').classList.remove('hidden');renderList();updateStats();msg('Produto excluído.');}catch(e){msg(e.message||'Erro ao excluir.',false);}};
+$('#form').onsubmit=async e=>{e.preventDefault();const p=readForm();if(!p.id||!p.name||!p.team){alert('Preencha ID, nome e time.');return;}if(products.some(x=>x.id===p.id&&x.id!==currentId)){alert('Esse ID já existe.');return;}const submit=$('#form button[type="submit"]');submit.disabled=true;try{await saveProduct(p);currentId=p.id;$('#editMode').textContent='EDITAR PRODUTO';$('#formTitle').textContent=p.name;$('#delete').style.visibility='visible';}catch(err){msg(err.message||'Não foi possível salvar.',false);}finally{submit.disabled=false;}};
+(async()=>{try{const cfg=window.AMORA_SUPABASE_CONFIG;if(!cfg||!cfg.url||!cfg.publishableKey)throw new Error('Configuração do Supabase não encontrada.');db=window.supabase.createClient(cfg.url,cfg.publishableKey);const {data}=await db.auth.getSession();if(data.session){const {data:admin}=await db.from('amora_admin_users').select('user_id').eq('user_id',data.session.user.id).maybeSingle();if(admin){$('#authCard').classList.add('hidden');$('#app').classList.remove('hidden');await loadData();}}db.auth.onAuthStateChange(async(_event,session)=>{if(!session){$('#app').classList.add('hidden');$('#authCard').classList.remove('hidden');}});}catch(e){msg(e.message||'Não foi possível iniciar o painel.',false);}})();
 /* CONTROLE DE VENDAS — armazenamento local e dedução no estoque */
 const SALES_KEY='amora_fut_sales_v1';
 function getSales(){try{return JSON.parse(localStorage.getItem(SALES_KEY)||'[]')}catch(e){return[]}}
