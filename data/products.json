@@ -1,5 +1,28 @@
 [
   {
+    "id": "este-teste",
+    "name": "Teste 3 teste",
+    "team": "Teste 3",
+    "category": "Brasileiras",
+    "version": "Torcedor",
+    "price": 2,
+    "badge": "LANÇAMENTO",
+    "published": true,
+    "soldOut": false,
+    "stock": {
+      "P": 1,
+      "M": 1,
+      "G": 1,
+      "GG": 1,
+      "3G": 0
+    },
+    "description": "Teste 3",
+    "images": [
+      "assets/images/catalog/este-teste/01.jpg",
+      "assets/images/catalog/este-teste/02.jpg"
+    ]
+  },
+  {
     "id": "este-time",
     "name": "Teste time",
     "team": "Time",
