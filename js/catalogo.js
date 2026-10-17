@@ -15,7 +15,7 @@ function isCat(p,cat){
 }
 function visual(p){
  const src=(p.images&&p.images[0])||p.image;
- return src?'<img src="'+esc(src)+'" alt="'+esc(p.name)+'" width="300" height="400" loading="lazy" decoding="async" onerror="this.style.display=\'none\';this.parentElement.classList.add(\'no-image\')">':'';
+ return src?'<img src="'+esc(src)+'" alt="'+esc(p.name)+'" width="300" height="400" loading="lazy" decoding="async" onerror="this.style.display=\\'none\\';this.parentElement.classList.add(\\'no-image\\')">':'';
 }
 function card(p){
  const badge=p.soldOut?'ESGOTADO':(p.badge||'');
@@ -49,22 +49,34 @@ function renderTeams(){const box=$('#teamFilters');const teams=[...new Set(PRODU
 function normalizeSupabaseProduct(p){
  return {id:p.id,name:p.name,team:p.team||'',category:p.category||'Brasileiras',version:p.version||'Torcedor',price:Number(p.price||0),oldPrice:p.old_price==null?undefined:Number(p.old_price),badge:p.badge||'',description:p.description||'',published:p.published!==false,soldOut:!!p.sold_out,stock:p.stock||{},images:Array.isArray(p.images)?p.images:[],sortOrder:Number(p.sort_order||0)};
 }
+async function loadLegacyProducts(){
+ const r=await fetch('data/products.json?v='+Date.now(),{cache:'no-store'});
+ if(!r.ok)throw new Error('Falha ao carregar o catálogo de segurança do GitHub.');
+ return await r.json();
+}
 async function loadProducts(){
  const cfg=window.AMORA_SUPABASE_CONFIG;
- if(cfg?.url&&cfg?.publishableKey){
-  try{
-   const r=await fetch(cfg.url+'/rest/v1/amora_products?select=*&published=eq.true&order=sort_order.asc,created_at.desc',{
-    headers:{apikey:cfg.publishableKey,Authorization:'Bearer '+cfg.publishableKey}
-   });
-   if(r.ok){
-    const rows=await r.json();
-    if(rows.length)return rows.map(normalizeSupabaseProduct);
-   }
-  }catch(e){console.warn('Supabase indisponível; usando catálogo de segurança.',e);}
+ if(!cfg?.url||!cfg?.publishableKey){
+  console.warn('Configuração do Supabase ausente; usando catálogo de segurança do GitHub.');
+  return await loadLegacyProducts();
  }
- const r=await fetch('data/products.json?v='+Date.now(),{cache:'no-store'});
- if(!r.ok)throw new Error('Falha ao carregar catálogo');
- return await r.json();
+ let r;
+ try{
+  r=await fetch(cfg.url+'/rest/v1/amora_products?select=*&published=eq.true&order=sort_order.asc,created_at.desc',{
+   headers:{apikey:cfg.publishableKey,Authorization:'Bearer '+cfg.publishableKey}
+  });
+ }catch(e){
+  console.warn('Supabase indisponível; usando catálogo de segurança do GitHub.',e);
+  return await loadLegacyProducts();
+ }
+ if(!r.ok){
+  console.warn('Supabase respondeu com erro HTTP '+r.status+'; usando catálogo de segurança do GitHub.');
+  return await loadLegacyProducts();
+ }
+ const rows=await r.json();
+ if(!Array.isArray(rows))throw new Error('Resposta inesperada do Supabase ao carregar o catálogo.');
+ if(rows.length===0)throw new Error('O Supabase respondeu, mas não há produtos publicados. Confira a importação do catálogo no painel administrativo antes de continuar.');
+ return rows.map(normalizeSupabaseProduct);
 }
 async function init(){
  try{
@@ -75,6 +87,10 @@ async function init(){
   const sync=e=>setSearch(e.target.value);
   $('#search').addEventListener('input',sync);$('#searchMobile').addEventListener('input',sync);$('#sort').addEventListener('change',e=>{state.sort=e.target.value;render();});
   syncSearchUI();render();
- }catch(e){$('#grid').innerHTML='<div class="empty"><strong>Não foi possível carregar o catálogo.</strong><span>Tente atualizar a página em alguns segundos.</span></div>';console.error(e);}
+ }catch(e){
+  const detail=e&&e.message?e.message:'Tente atualizar a página em alguns segundos.';
+  $('#grid').innerHTML='<div class="empty"><strong>Não foi possível carregar o catálogo.</strong><span>'+esc(detail)+'</span></div>';
+  console.error(e);
+ }
 }
 document.addEventListener('DOMContentLoaded',init);
