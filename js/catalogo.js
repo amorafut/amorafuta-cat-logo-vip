@@ -15,7 +15,7 @@ function isCat(p,cat){
 }
 function visual(p){
  const src=(p.images&&p.images[0])||p.image;
- return src?'<img src="'+esc(src)+'" alt="'+esc(p.name)+'" width="300" height="400" loading="lazy" decoding="async" onerror="this.style.display=\\'none\\';this.parentElement.classList.add(\\'no-image\\')">':'';
+ return src?'<img src="'+esc(src)+'" alt="'+esc(p.name)+'" width="300" height="400" loading="lazy" decoding="async" onerror="this.style.display=&quot;none&quot;;this.parentElement.classList.add(&quot;no-image&quot;)">':'';
 }
 function card(p){
  const badge=p.soldOut?'ESGOTADO':(p.badge||'');
