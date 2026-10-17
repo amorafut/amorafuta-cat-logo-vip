@@ -1,5 +1,29 @@
 [
   {
+    "id": "este-time",
+    "name": "Teste time",
+    "team": "Time",
+    "category": "Brasileiras",
+    "version": "Torcedor",
+    "price": 1,
+    "badge": "DESTAQUE",
+    "published": false,
+    "soldOut": false,
+    "stock": {
+      "P": 0,
+      "M": 1,
+      "G": 1,
+      "GG": 0,
+      "3G": 0
+    },
+    "description": "Teste teste teste",
+    "images": [
+      "assets/images/catalog/este-time/01.jpg",
+      "assets/images/catalog/este-time/02.jpg",
+      "assets/images/catalog/este-time/03.jpg"
+    ]
+  },
+  {
     "id": "ta-lia-home",
     "name": "Itália home 26",
     "team": "Itália",
