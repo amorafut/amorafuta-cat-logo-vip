@@ -17,7 +17,22 @@ function newProduct(){if(currentId)captureDraft();pendingFiles=[];setForm(blank(
 function renderPreviews(existing=[]){const list=[...existing.map((x,i)=>({url:x,name:'Imagem '+(i+1),kind:'existing',index:i})),...pendingFiles.map((x,i)=>({url:x.url,name:x.file.name,kind:'pending',index:i}))];$('#previews').innerHTML=list.map(x=>'<div class="preview"><img src="'+esc(x.url)+'" alt=""><span>'+esc(x.name)+'</span><button type="button" class="remove-photo" data-kind="'+x.kind+'" data-index="'+x.index+'">×</button></div>').join('');document.querySelectorAll('.remove-photo').forEach(b=>b.onclick=()=>{const kind=b.dataset.kind,i=Number(b.dataset.index);if(kind==='pending'){const item=pendingFiles[i];if(item&&item.url)URL.revokeObjectURL(item.url);pendingFiles.splice(i,1);}else{const p=products.find(x=>x.id===currentId);if(p&&p.images)p.images.splice(i,1);}const p=products.find(x=>x.id===currentId);renderPreviews(p?p.images||[]:[]);});}
 $('#photos').addEventListener('change',e=>{pendingFiles=[...pendingFiles,...[...e.target.files].map(file=>({file,url:URL.createObjectURL(file)}))];renderPreviews((products.find(x=>x.id===currentId)||{}).images||[]);e.target.value='';});
 async function uploadPending(p){const imgs=[...(p.images||[])];for(const item of pendingFiles){const ext=(item.file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';const path=p.id+'/'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+'.'+ext;const {error}=await db.storage.from(window.AMORA_SUPABASE_CONFIG.bucket).upload(path,item.file,{upsert:false,contentType:item.file.type||'image/jpeg'});if(error)throw error;const {data}=db.storage.from(window.AMORA_SUPABASE_CONFIG.bucket).getPublicUrl(path);imgs.push(data.publicUrl);}return imgs;}
-async function saveProduct(p){p.images=await uploadPending(p);const {error}=await db.from('amora_products').upsert(toRow(p),{onConflict:'id'});if(error)throw error;products=products.filter(x=>x.id!==p.id);products.unshift(p);pendingFiles=[];delete pendingFilesByProduct[p.id];renderList();updateStats();if(typeof renderSaleProducts==='function')renderSaleProducts();renderPreviews(p.images);msg('Produto salvo no Supabase. Já pode aparecer no catálogo.');}
+async function saveProduct(p){
+ p.images=await uploadPending(p);
+ const row=toRow(p);
+ const {data:saved,error}=await db.from('amora_products').upsert(row,{onConflict:'id'}).select('id,name,published,images,stock').single();
+ if(error)throw error;
+ if(!saved||saved.id!==p.id)throw new Error('O Supabase não confirmou o salvamento deste produto. Nenhuma confirmação foi exibida.');
+ const {data:check,error:checkError}=await db.from('amora_products').select('id,name,published,images,stock').eq('id',p.id).maybeSingle();
+ if(checkError)throw checkError;
+ if(!check)throw new Error('O produto foi enviado, mas não foi encontrado na leitura de confirmação do Supabase. Confira as permissões antes de continuar.');
+ p=fromRow({...row,...check});
+ products=products.filter(x=>x.id!==p.id);products.unshift(p);
+ pendingFiles=[];delete pendingFilesByProduct[p.id];delete pendingByProduct[p.id];
+ renderList();updateStats();if(typeof renderSaleProducts==='function')renderSaleProducts();renderPreviews(p.images);
+ msg('Produto salvo e confirmado no Supabase. Ele continuará cadastrado após recarregar o painel.');
+ return p;
+}
 async function migrateLegacyCatalog(){
  if(!confirm('Importar os produtos atuais e copiar as fotos do GitHub para o Supabase? Faça isso apenas uma vez, antes de começar a cadastrar os novos produtos.'))return;
  const btn=$('#migrateLegacy');btn.disabled=true;msg('Lendo catálogo atual...');
