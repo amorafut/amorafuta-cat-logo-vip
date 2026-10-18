@@ -14,6 +14,7 @@ create table if not exists public.amora_products (
   category text not null default 'Brasileiras',
   version text not null default 'Torcedor',
   price numeric(10,2) not null default 0,
+  wholesale_price numeric(10,2) not null default 0,
   old_price numeric(10,2),
   badge text not null default '',
   description text not null default '',
@@ -85,3 +86,6 @@ using (
   bucket_id = 'amora-product-images'
   and exists (select 1 from public.amora_admin_users a where a.user_id = (select auth.uid()))
 );
+
+-- Compatibilidade com projetos já inicializados antes do preço de atacado.
+alter table public.amora_products add column if not exists wholesale_price numeric(10,2) not null default 0;
