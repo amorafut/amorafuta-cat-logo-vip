@@ -1,5 +1,6 @@
 const WA='5585998022643';
 const fmt=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+function calcWholesale(version,price,fallback=0){const v=String(version||'');const p=Number(price||0);if(/jogador/i.test(v))return Math.round(p*0.6875*100)/100;if(/torcedor/i.test(v))return Math.round(p*0.69231*100)/100;return Number(fallback||0);}
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 const params=new URLSearchParams(location.search),id=params.get('id');
 function wa(p,size){let t='Olá! Vi no catálogo VIP da Amora Fut e tenho interesse na '+p.name+' ('+(p.version||'')+')';if(size)t+=' no tamanho '+size;t+=', por '+fmt(p.price)+'. Gostaria de confirmar disponibilidade.';return 'https://wa.me/'+WA+'?text='+encodeURIComponent(t);}
@@ -16,7 +17,7 @@ function render(p){
  document.title=p.name+' — Amora Fut Streetwear';
  const imgs=(p.images&&p.images.length?p.images:(p.image?[p.image]:[]));
  const badge=p.soldOut?'ESGOTADO':(p.badge||'CATÁLOGO VIP');
- document.querySelector('#productRoot').innerHTML='<div class="product-breadcrumb"><a href="index.html">Início</a> / <a href="index.html#catalogo">Catálogo</a> / '+esc(p.name)+'</div><section class="product-box"><div class="product-media">'+imageGallery(p)+'</div><div class="product-info"><div class="product-tag">'+esc(badge)+'</div><h1>'+esc(p.name)+'</h1><div class="product-meta">'+esc(p.team||'')+' • '+esc(p.category||'')+' • '+esc(p.version||'')+'</div><div class="product-price">'+(p.oldPrice?'<del>'+fmt(p.oldPrice)+'</del>':'')+'<strong>'+fmt(p.price)+'</strong></div><div class="product-pix">PIX · '+fmt(Number(p.price||0)*.95)+' — 5% OFF</div>'+(p.description?'<p class="product-description">'+esc(p.description)+'</p>':'')+'<div class="size-label">TAMANHOS</div>'+sizeButtons(p)+'<div class="product-points"><div>✓ Envio para todo o Brasil</div><div>✓ Atendimento personalizado</div><div>✓ Confirmação de estoque pelo WhatsApp</div></div><div class="product-cart-row"><div class="product-qty"><button type="button" id="qtyMinus">−</button><strong id="qtyValue">1</strong><button type="button" id="qtyPlus">+</button></div><button id="addCartBtn" class="product-btn primary '+(p.soldOut?'disabled':'')+'" type="button" '+(p.soldOut?'disabled':'')+'>🛒 Adicionar ao carrinho</button></div><div class="product-actions"><a id="waBtn" class="product-btn secondary" '+(p.soldOut?'aria-disabled="true"':'href="'+wa(p)+'" target="_blank" rel="noopener"')+'>'+(p.soldOut?'Produto esgotado':'Pedir direto pelo WhatsApp')+'</a><a class="product-btn secondary" href="index.html#catalogo">← Voltar ao catálogo</a></div></div></section>';
+ document.querySelector('#productRoot').innerHTML='<div class="product-breadcrumb"><a href="index.html">Início</a> / <a href="index.html#catalogo">Catálogo</a> / '+esc(p.name)+'</div><section class="product-box"><div class="product-media">'+imageGallery(p)+'</div><div class="product-info"><div class="product-tag">'+esc(badge)+'</div><h1>'+esc(p.name)+'</h1><div class="product-meta">'+esc(p.team||'')+' • '+esc(p.category||'')+' • '+esc(p.version||'')+'</div><div class="product-price">'+(p.oldPrice?'<del>'+fmt(p.oldPrice)+'</del>':'')+'<strong>'+fmt(p.price)+'</strong></div>'+(p.wholesalePrice>0?'<div class="wholesale-price">Atacado: <strong>'+fmt(p.wholesalePrice)+'/un.</strong> a partir de 5 peças no pedido</div>':'')+'<div class="product-pix">PIX · '+fmt(Number(p.price||0)*.95)+' — 5% OFF</div>'+(p.description?'<p class="product-description">'+esc(p.description)+'</p>':'')+'<div class="size-label">TAMANHOS</div>'+sizeButtons(p)+'<div class="product-points"><div>✓ Envio para todo o Brasil</div><div>✓ Atendimento personalizado</div><div>✓ Confirmação de estoque pelo WhatsApp</div></div><div class="product-cart-row"><div class="product-qty"><button type="button" id="qtyMinus">−</button><strong id="qtyValue">1</strong><button type="button" id="qtyPlus">+</button></div><button id="addCartBtn" class="product-btn primary '+(p.soldOut?'disabled':'')+'" type="button" '+(p.soldOut?'disabled':'')+'>🛒 Adicionar ao carrinho</button></div><div class="product-actions"><a id="waBtn" class="product-btn secondary" '+(p.soldOut?'aria-disabled="true"':'href="'+wa(p)+'" target="_blank" rel="noopener"')+'>'+(p.soldOut?'Produto esgotado':'Pedir direto pelo WhatsApp')+'</a><a class="product-btn secondary" href="index.html#catalogo">← Voltar ao catálogo</a></div></div></section>';
  const mainImage=document.querySelector('#mainProductImage');
  const setGalleryImage=(index)=>{if(!mainImage||!imgs.length)return;const i=(index+imgs.length)%imgs.length;mainImage.src=imgs[i];document.querySelectorAll('.thumb').forEach((x,n)=>x.classList.toggle('active',n===i));};
  document.querySelectorAll('.thumb').forEach((b,i)=>b.addEventListener('click',()=>setGalleryImage(i)));
@@ -28,5 +29,26 @@ function render(p){
  }
  document.querySelectorAll('.size:not(.disabled)').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.size').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');document.querySelector('#waBtn').href=wa(p,b.dataset.size);}));let qty=1;const qv=document.querySelector('#qtyValue'),qm=document.querySelector('#qtyMinus'),qp=document.querySelector('#qtyPlus'),addBtn=document.querySelector('#addCartBtn');const selectedSize=()=>document.querySelector('.size.selected')?.dataset.size||'';const maxQty=()=>{const s=selectedSize();return p.stock&&s?Number(p.stock[s]||0):null};const syncQty=()=>{const m=maxQty();if(m!==null&&m>0)qty=Math.min(qty,m);qv.textContent=qty};qm?.addEventListener('click',()=>{qty=Math.max(1,qty-1);syncQty()});qp?.addEventListener('click',()=>{const m=maxQty();if(m===null||qty<m)qty++;syncQty()});addBtn?.addEventListener('click',()=>{if(p.soldOut)return;const s=selectedSize();if(p.stock&&Object.keys(p.stock).length&&!s){alert('Selecione um tamanho.');return}addToCart(p,s,qty)});
 }
-async function init(){try{const r=await fetch('data/products.json?v='+Date.now(),{cache:'no-store'});const ps=await r.json();const p=ps.find(x=>x.id===id&&x.published!==false);if(!p)throw new Error('Produto não encontrado');render(p);}catch(e){document.querySelector('#productRoot').innerHTML='<div class="empty"><strong>Produto não encontrado.</strong><span><a href="index.html#catalogo">Voltar ao catálogo</a></span></div>';}}
+function normalizeSupabaseProduct(p){
+ return {id:p.id,name:p.name,team:p.team||'',category:p.category||'Brasileiras',version:p.version||'Torcedor',price:Number(p.price||0),wholesalePrice:calcWholesale(p.version,p.price,p.wholesale_price),oldPrice:p.old_price==null?undefined:Number(p.old_price),badge:p.badge||'',description:p.description||'',published:p.published!==false,soldOut:!!p.sold_out,stock:p.stock||{},images:Array.isArray(p.images)?p.images:[]};
+}
+async function init(){
+ try{
+  const cfg=window.AMORA_SUPABASE_CONFIG;
+  if(!cfg?.url||!cfg?.publishableKey)throw new Error('Configuração do Supabase ausente nesta versão de teste.');
+  let r;
+  try{
+   r=await fetch(cfg.url+'/rest/v1/amora_products?select=*&id=eq.'+encodeURIComponent(id)+'&published=eq.true&limit=1',{headers:{apikey:cfg.publishableKey}});
+  }catch(e){throw new Error('Não foi possível conectar ao Supabase. Os dados antigos não serão usados como substitutos.');}
+  if(!r.ok)throw new Error('O Supabase respondeu com erro HTTP '+r.status+'.');
+  const rows=await r.json();
+  if(!Array.isArray(rows)||!rows.length)throw new Error('Este produto ainda não está publicado no banco novo. Volte ao catálogo de teste ou importe os produtos pelo painel após confirmar a migração.');
+  const p=rows.map(normalizeSupabaseProduct).find(x=>x.id===id&&x.published!==false);
+  if(!p)throw new Error('Produto não encontrado no catálogo novo.');
+  render(p);
+ }catch(e){
+  const root=document.querySelector('#productRoot');
+  root.innerHTML='<div class="empty"><strong>Não foi possível carregar este produto.</strong><span>'+esc(e&&e.message?e.message:'Tente atualizar a página.')+' <a href="index.html#catalogo">Voltar ao catálogo</a></span></div>';
+ }
+}
 document.addEventListener('DOMContentLoaded',init);
