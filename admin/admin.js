@@ -34,14 +34,14 @@ async function saveProduct(p){
  return p;
 }
 async function migrateLegacyCatalog(){
- if(!confirm('Importar os produtos atuais e copiar as fotos do GitHub para o Supabase? Faça isso apenas uma vez, antes de começar a cadastrar os novos produtos.'))return;
+ if(!confirm('Importar apenas os produtos que ainda não existem no Supabase? Os produtos já cadastrados serão preservados, sem sobrescrever seus preços, fotos ou estoque.'))return;
  const btn=$('#migrateLegacy');btn.disabled=true;msg('Lendo catálogo atual...');
  try{
   const response=await fetch('../data/products.json?v='+Date.now(),{cache:'no-store'});
   if(!response.ok)throw new Error('Não consegui ler o catálogo atual do GitHub.');
-  const legacy=await response.json();let done=0,total=legacy.length;
+  const legacy=await response.json();let done=0,skipped=0,total=legacy.length;
   for(const old of legacy){
-   const existing=products.find(item=>item.id===old.id);const p={id:old.id,name:old.name,team:old.team||'',category:old.category||'Brasileiras',version:old.version||'Torcedor',price:Number(old.price||0),wholesalePrice:Number(old.wholesalePrice??old.wholesale_price??existing?.wholesalePrice??0),oldPrice:old.oldPrice??null,badge:old.badge||'',description:old.description||'',published:old.published!==false,soldOut:!!old.soldOut,stock:old.stock||{P:0,M:0,G:0,GG:0,'3G':0},images:[],sortOrder:old.sortOrder||0};
+   const existing=products.find(item=>item.id===old.id);if(existing){skipped++;msg('Preservando produtos já cadastrados: '+skipped+' ignorados; '+done+' novos importados.');continue;}const p={id:old.id,name:old.name,team:old.team||'',category:old.category||'Brasileiras',version:old.version||'Torcedor',price:Number(old.price||0),wholesalePrice:Number(old.wholesalePrice??old.wholesale_price??existing?.wholesalePrice??0),oldPrice:old.oldPrice??null,badge:old.badge||'',description:old.description||'',published:old.published!==false,soldOut:!!old.soldOut,stock:old.stock||{P:0,M:0,G:0,GG:0,'3G':0},images:[],sortOrder:old.sortOrder||0};
    const sourceImages=(old.images&&old.images.length?old.images:(old.image?[old.image]:[]));
    for(let i=0;i<sourceImages.length;i++){
     const src=sourceImages[i];
@@ -59,8 +59,8 @@ async function migrateLegacyCatalog(){
    if(error)throw error;
    done++;msg('Importando catálogo: '+done+' de '+total+' produtos...');
   }
-  await loadData();msg('Migração concluída: '+done+' produtos importados, com suas fotos e estoque.');
-  alert('Migração concluída! Confira o catálogo antes de ativar a versão principal.');
+  await loadData();msg('Importação concluída: '+done+' produtos novos importados; '+skipped+' já existentes preservados.');
+  alert('Importação concluída! '+done+' produtos novos importados e '+skipped+' produtos já cadastrados preservados. Confira o catálogo antes de ativar a versão principal.');
  }catch(e){msg('Migração interrompida: '+(e.message||'erro desconhecido')+'. Você pode executar novamente; os produtos são atualizados pelo ID.',false);}
  finally{btn.disabled=false;}
 }
