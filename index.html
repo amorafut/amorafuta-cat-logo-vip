@@ -23,11 +23,11 @@
 #cartRoot .cart-drawer{position:fixed!important;top:0!important;right:0!important;width:min(430px,94vw)!important;height:100vh!important;margin:0!important;padding:0!important;background:#202124!important;border-left:1px solid #55575d!important;box-shadow:-20px 0 60px rgba(0,0,0,.45)!important;transform:translateX(105%)!important;transition:.28s!important;z-index:9991!important;display:flex!important;flex-direction:column!important;color:#fff!important}
 body.cart-open #cartRoot .cart-overlay{opacity:1!important;visibility:visible!important;pointer-events:auto!important}
 body.cart-open #cartRoot .cart-drawer{transform:translateX(0)!important}
-#cartRoot .cart-float{position:fixed!important;right:92px!important;bottom:22px!important;width:58px!important;height:58px!important;border-radius:50%!important;background:#fff!important;color:#17181a!important;border:0!important;z-index:9992!important;cursor:pointer!important;box-shadow:0 12px 32px rgba(0,0,0,.35)!important}
+#cartRoot .cart-float{position:fixed!important;right:auto!important;left:16px!important;bottom:22px!important;width:58px!important;height:58px!important;border-radius:50%!important;background:#fff!important;color:#17181a!important;border:0!important;z-index:9992!important;cursor:pointer!important;box-shadow:0 12px 32px rgba(0,0,0,.35)!important}
 #cartRoot .cart-head{padding:24px 22px!important;border-bottom:1px solid #45474c!important;display:flex!important;justify-content:space-between!important;align-items:center!important}
 #cartRoot .cart-items{flex:1!important;overflow:auto!important;padding:14px!important}
 #cartRoot .cart-foot{padding:18px!important;border-top:1px solid #45474c!important;background:#191a1c!important}
-@media(max-width:480px){#cartRoot .cart-float{right:76px!important;bottom:14px!important;width:52px!important;height:52px!important}}
+@media(max-width:480px){#cartRoot .cart-float{right:auto!important;left:14px!important;bottom:14px!important;width:52px!important;height:52px!important}}
 
 /* Carrinho compacto responsivo: componentes reduzidos e layout adaptável */
 #cartRoot .cart-drawer{width:min(300px,92vw)!important;height:100vh!important;height:100dvh!important;max-height:100dvh!important;overflow:hidden!important}
@@ -55,7 +55,7 @@ body.cart-open #cartRoot .cart-drawer{transform:translateX(0)!important}
 #cartRoot .cart-empty div{font-size:27px!important;margin-bottom:7px!important}
 #cartRoot .cart-empty strong{font-size:11px!important}
 #cartRoot .cart-empty span{font-size:8px!important}
-#cartRoot .cart-float{width:42px!important;height:42px!important;right:auto!important;left:clamp(12px,5vw,36px)!important;bottom:16px!important}
+#cartRoot .cart-float{width:42px!important;height:42px!important;right:auto!important;left:14px!important;bottom:14px!important}
 #cartRoot .cart-float svg{width:21px!important;height:21px!important}
 #cartRoot .cart-float b{min-width:16px!important;height:16px!important;font-size:7px!important}
 #cartRoot .cart-freight{font-size:9px!important}
