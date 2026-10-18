@@ -63,9 +63,16 @@ async function loadProducts(){
   throw new Error('Não foi possível conectar ao Supabase. Verifique a conexão e tente novamente. Os produtos antigos não serão exibidos como se fossem os dados novos.');
  }
  if(!r.ok){
-  let detail='';
-  try{const body=await r.clone().json();detail=body.message||body.msg||body.error_description||body.error||'';}catch(_e){}
-  throw new Error('O Supabase respondeu com erro HTTP '+r.status+(detail?' — '+detail:'')+'. A versão de teste não exibirá o catálogo antigo como substituto.');
+  let detail='', raw='', contentType=r.headers.get('content-type')||'não informado';
+  try{raw=await r.text();}catch(_e){}
+  try{
+   const body=JSON.parse(raw);
+   detail=body.message||body.msg||body.error_description||body.error||body.hint||body.details||'';
+   if(!detail)detail=JSON.stringify(body);
+  }catch(_e){detail=raw;}
+  detail=String(detail||'Sem mensagem no corpo da resposta.').replace(/[<>]/g,' ').slice(0,700);
+  const requestId=r.headers.get('x-request-id')||r.headers.get('sb-request-id')||'não informado';
+  throw new Error('Diagnóstico Supabase: HTTP '+r.status+'. Tipo de resposta: '+contentType+'. Detalhe: '+detail+'. ID da requisição: '+requestId+'. URL do projeto: '+String(cfg.url).replace(/^https?:\/\//,'').replace(/\/$/,'')+'. A chave pública está presente (prefixo '+String(cfg.publishableKey).slice(0,15)+'…). Nenhuma chave completa será exibida.');
  }
  const rows=await r.json();
  if(!Array.isArray(rows))throw new Error('Resposta inesperada do Supabase ao carregar o catálogo.');
