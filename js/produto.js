@@ -37,7 +37,7 @@ async function init(){
   if(!cfg?.url||!cfg?.publishableKey)throw new Error('Configuração do Supabase ausente nesta versão de teste.');
   let r;
   try{
-   r=await fetch(cfg.url+'/rest/v1/amora_products?select=*&id=eq.'+encodeURIComponent(id)+'&published=eq.true&limit=1',{headers:{apikey:cfg.publishableKey,Authorization:'Bearer '+cfg.publishableKey}});
+   r=await fetch(cfg.url+'/rest/v1/amora_products?select=*&id=eq.'+encodeURIComponent(id)+'&published=eq.true&limit=1',{headers:{apikey:cfg.publishableKey}});
   }catch(e){throw new Error('Não foi possível conectar ao Supabase. Os dados antigos não serão usados como substitutos.');}
   if(!r.ok)throw new Error('O Supabase respondeu com erro HTTP '+r.status+'.');
   const rows=await r.json();
