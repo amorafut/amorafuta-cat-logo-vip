@@ -13,13 +13,28 @@ function isCat(p,cat){
  if(cat==='Ofertas')return !!p.oldPrice||p.badge==='OFERTA';
  return p.category===cat;
 }
+function productImages(p){
+ const raw=Array.isArray(p.images)?p.images:[];
+ const all=raw.concat(p.image||[]).filter(x=>typeof x==='string'&&x.trim());
+ return [...new Set(all)].slice(0,3);
+}
 function visual(p){
- const src=(p.images&&p.images[0])||p.image;
- return src?'<img src="'+esc(src)+'" alt="'+esc(p.name)+'" width="300" height="400" loading="lazy" decoding="async" onerror="this.style.display=&quot;none&quot;;this.parentElement.classList.add(&quot;no-image&quot;)">':'';
+ const imgs=productImages(p),src=imgs[0]||'';
+ return src?'<img class="card-photo-image" src="'+esc(src)+'" alt="'+esc(p.name)+'" width="300" height="400" loading="lazy" decoding="async" onerror="this.style.display=&quot;none&quot;;this.parentElement.classList.add(&quot;no-image&quot;)">':'';
 }
 function card(p){
- const badge=p.soldOut?'ESGOTADO':(p.badge||'');
- return '<article class="card '+(p.soldOut?'sold':'')+'"><a class="card-open" href="produto.html?id='+encodeURIComponent(p.id)+'" aria-label="Ver '+esc(p.name)+'"><div class="photo">'+visual(p)+'<div class="placeholder"><div class="shirt-mark">'+initials(p.name)+'</div><span>AMORA FUT</span><small>STREETWEAR</small></div>'+(badge?'<b class="badge '+(p.soldOut?'sold-badge':'')+'">'+esc(badge)+'</b>':'')+(p.version?'<b class="version-badge '+(/jogador/i.test(p.version)?'version-player':(/torcedor/i.test(p.version)?'version-fan':''))+'">VERSÃO '+esc(p.version)+'</b>':'')+'<div class="quick">VER DETALHES</div></div><div class="info"><div class="catline">'+esc(p.team||p.category)+' <i>•</i> '+esc(p.version||'')+'</div><h3>'+esc(p.name)+'</h3><div class="price">'+(p.oldPrice?'<del>'+fmt(p.oldPrice)+'</del>':'')+'<strong>'+fmt(p.price)+'</strong></div>'+(p.wholesalePrice>0?'<div class="wholesale-price">Atacado: <strong>'+fmt(p.wholesalePrice)+'/un.</strong> a partir de 5 peças</div>':'')+'<div class="pix"><span>PIX</span> '+fmt(pix(p.price))+'</div>'+(p.stock&&Object.keys(p.stock).length?'<div class="stock-card">'+(Object.values(p.stock).reduce((a,v)=>a+Number(v||0),0)>0?'<b>ESTOQUE: '+Object.values(p.stock).reduce((a,v)=>a+Number(v||0),0)+' UN.</b>':'<b class="stock-zero">ESGOTADO</b>')+'</div>':'')+'<span class="cta">Ver produto <b>→</b></span></div></a></article>';
+ const badge=p.soldOut?'ESGOTADO':(p.badge||''),imgs=productImages(p),href='produto.html?id='+encodeURIComponent(p.id);
+ const photoControls=imgs.length>1?'<button type="button" class="photo-step photo-prev" data-photo-step="-1" aria-label="Foto anterior">‹</button><button type="button" class="photo-step photo-next" data-photo-step="1" aria-label="Próxima foto">›</button><div class="photo-dots" aria-label="Fotos do produto">'+imgs.map((_,i)=>'<span class="photo-dot '+(i===0?'active':'')+'"></span>').join('')+'</div><span class="photo-count">1/'+imgs.length+'</span>':'';
+ return '<article class="card '+(p.soldOut?'sold':'')+'"><div class="photo" data-images="'+esc(JSON.stringify(imgs))+'" data-photo-index="0"><a class="photo-link" href="'+href+'" aria-label="Ver '+esc(p.name)+'">'+visual(p)+'<div class="placeholder"><div class="shirt-mark">'+initials(p.name)+'</div><span>AMORA FUT</span><small>STREETWEAR</small></div>'+(badge?'<b class="badge '+(p.soldOut?'sold-badge':'')+'">'+esc(badge)+'</b>':'')+(p.version?'<b class="version-badge '+(/jogador/i.test(p.version)?'version-player':(/torcedor/i.test(p.version)?'version-fan':''))+'">VERSÃO '+esc(p.version)+'</b>':'')+'<div class="quick">VER DETALHES</div></a>'+photoControls+'</div><a class="card-open" href="'+href+'"><div class="info"><div class="catline">'+esc(p.team||p.category)+' <i>•</i> '+esc(p.version||'')+'</div><h3>'+esc(p.name)+'</h3><div class="price">'+(p.oldPrice?'<del>'+fmt(p.oldPrice)+'</del>':'')+'<strong>'+fmt(p.price)+'</strong></div>'+(p.wholesalePrice>0?'<div class="wholesale-price">Atacado: <strong>'+fmt(p.wholesalePrice)+'/un.</strong> a partir de 5 peças</div>':'')+'<div class="pix"><span>PIX</span> '+fmt(pix(p.price))+'</div>'+(p.stock&&Object.keys(p.stock).length?'<div class="stock-card">'+(Object.values(p.stock).reduce((a,v)=>a+Number(v||0),0)>0?'<b>ESTOQUE: '+Object.values(p.stock).reduce((a,v)=>a+Number(v||0),0)+' UN.</b>':'<b class="stock-zero">ESGOTADO</b>')+'</div>':'')+'<span class="cta">Ver produto <b>→</b></span></div></a></article>';
+}
+function setCardPhoto(photo,next){
+ let imgs;try{imgs=JSON.parse(photo.dataset.images||'[]')}catch{return}
+ if(imgs.length<2)return;
+ const idx=(Number(photo.dataset.photoIndex||0)+next+imgs.length)%imgs.length;
+ photo.dataset.photoIndex=String(idx);
+ const img=photo.querySelector('.card-photo-image');if(img){img.src=imgs[idx];img.style.display='';}
+ photo.querySelectorAll('.photo-dot').forEach((dot,i)=>dot.classList.toggle('active',i===idx));
+ const count=photo.querySelector('.photo-count');if(count)count.textContent=(idx+1)+'/'+imgs.length;
 }
 function render(){
  let arr=PRODUCTS.filter(p=>p.published!==false).filter(p=>isCat(p,state.cat)&&isTeam(p,state.team)&&((p.name+' '+(p.team||'')+' '+(p.category||'')+' '+(p.version||'')).toLowerCase().includes(state.q)));
@@ -83,6 +98,11 @@ async function init(){
  try{
   PRODUCTS=await loadProducts();
   renderTeams();
+  const grid=$('#grid');
+  grid.addEventListener('click',e=>{const btn=e.target.closest('[data-photo-step]');if(!btn)return;e.preventDefault();e.stopPropagation();setCardPhoto(btn.closest('.photo'),Number(btn.dataset.photoStep));});
+  let swipeStart=null;
+  grid.addEventListener('touchstart',e=>{const photo=e.target.closest('.photo');if(photo&&productImages({images:JSON.parse(photo.dataset.images||'[]')}).length>1)swipeStart={photo,x:e.changedTouches[0].clientX,y:e.changedTouches[0].clientY};},{passive:true});
+  grid.addEventListener('touchend',e=>{if(!swipeStart)return;const dx=e.changedTouches[0].clientX-swipeStart.x,dy=e.changedTouches[0].clientY-swipeStart.y;if(Math.abs(dx)>35&&Math.abs(dx)>Math.abs(dy))setCardPhoto(swipeStart.photo,dx<0?1:-1);swipeStart=null;},{passive:true});
   document.querySelectorAll('.category-card').forEach(b=>b.addEventListener('click',()=>setCat(b.dataset.cat)));
   document.querySelectorAll('[data-nav-cat]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();setCat(a.dataset.navCat)}));
   const sync=e=>setSearch(e.target.value);
