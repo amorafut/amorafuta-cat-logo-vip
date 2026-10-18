@@ -41,7 +41,7 @@ async function migrateLegacyCatalog(){
   if(!response.ok)throw new Error('Não consegui ler o catálogo atual do GitHub.');
   const legacy=await response.json();let done=0,total=legacy.length;
   for(const old of legacy){
-   const p={id:old.id,name:old.name,team:old.team||'',category:old.category||'Brasileiras',version:old.version||'Torcedor',price:Number(old.price||0),oldPrice:old.oldPrice??null,badge:old.badge||'',description:old.description||'',published:old.published!==false,soldOut:!!old.soldOut,stock:old.stock||{P:0,M:0,G:0,GG:0,'3G':0},images:[],sortOrder:old.sortOrder||0};
+   const existing=products.find(item=>item.id===old.id);const p={id:old.id,name:old.name,team:old.team||'',category:old.category||'Brasileiras',version:old.version||'Torcedor',price:Number(old.price||0),wholesalePrice:Number(old.wholesalePrice??old.wholesale_price??existing?.wholesalePrice??0),oldPrice:old.oldPrice??null,badge:old.badge||'',description:old.description||'',published:old.published!==false,soldOut:!!old.soldOut,stock:old.stock||{P:0,M:0,G:0,GG:0,'3G':0},images:[],sortOrder:old.sortOrder||0};
    const sourceImages=(old.images&&old.images.length?old.images:(old.image?[old.image]:[]));
    for(let i=0;i<sourceImages.length;i++){
     const src=sourceImages[i];
