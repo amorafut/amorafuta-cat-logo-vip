@@ -163,3 +163,6 @@ del{color:#a0a3aa}
 #cartRoot .freight-option small{font-size:7px}
 @media(max-width:380px){#cartRoot .cart-drawer{width:min(290px,94vw)}#cartRoot .cart-foot{padding:9px;max-height:52%}#cartRoot .cart-items{padding:8px}#cartRoot .cart-item-img{width:44px;height:54px}}
 @media(max-height:650px){#cartRoot .cart-head{padding:10px 13px}#cartRoot .cart-foot{max-height:52%;padding:9px}#cartRoot .cart-total{margin-bottom:5px}#cartRoot .cart-checkout,#cartRoot .cart-continue{min-height:30px}}
+
+/* Preço de atacado: destaque compacto, sem competir com o varejo. */
+.wholesale-price{margin-top:7px;padding:7px 9px;border:1px solid rgba(181,145,82,.48);border-radius:6px;color:inherit;font-size:12px;line-height:1.45}.wholesale-price strong{color:#c6a66b;font-weight:800}.wholesale-price{background:rgba(181,145,82,.08)}
