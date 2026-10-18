@@ -149,7 +149,7 @@ del{color:#a0a3aa}
 #cartRoot .cart-empty div{font-size:27px;margin-bottom:7px}
 #cartRoot .cart-empty strong{font-size:11px}
 #cartRoot .cart-empty span{font-size:8px}
-#cartRoot .cart-float{width:42px;height:42px;right:clamp(12px,5vw,36px);bottom:16px}
+#cartRoot .cart-float{width:42px;height:42px;right:auto;left:clamp(12px,5vw,36px);bottom:16px}
 #cartRoot .cart-float svg{width:21px;height:21px}
 #cartRoot .cart-float b{min-width:16px;height:16px;font-size:7px}
 #cartRoot .cart-freight{font-size:9px}
