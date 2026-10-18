@@ -57,7 +57,7 @@ async function loadProducts(){
  let r;
  try{
   r=await fetch(cfg.url+'/rest/v1/amora_products?select=*&published=eq.true&order=sort_order.asc,created_at.desc',{
-   headers:{apikey:cfg.publishableKey,Authorization:'Bearer '+cfg.publishableKey}
+   headers:{apikey:cfg.publishableKey}
   });
  }catch(e){
   throw new Error('Não foi possível conectar ao Supabase. Verifique a conexão e tente novamente. Os produtos antigos não serão exibidos como se fossem os dados novos.');
