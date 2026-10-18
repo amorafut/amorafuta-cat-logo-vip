@@ -33,15 +33,21 @@ function normalizeSupabaseProduct(p){
 }
 async function init(){
  try{
-  let ps=null;const cfg=window.AMORA_SUPABASE_CONFIG;
-  if(cfg?.url&&cfg?.publishableKey){
-   try{
-    const r=await fetch(cfg.url+'/rest/v1/amora_products?select=*&id=eq.'+encodeURIComponent(id)+'&published=eq.true&limit=1',{headers:{apikey:cfg.publishableKey,Authorization:'Bearer '+cfg.publishableKey}});
-    if(r.ok){const rows=await r.json();if(rows.length)ps=rows.map(normalizeSupabaseProduct);}
-   }catch(e){console.warn('Supabase indisponível; consultando catálogo estático.',e);}
-  }
-  if(!ps){const r=await fetch('data/products.json?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('Falha ao carregar catálogo');ps=await r.json();}
-  const p=ps.find(x=>x.id===id&&x.published!==false);if(!p)throw new Error('Produto não encontrado');render(p);
- }catch(e){document.querySelector('#productRoot').innerHTML='<div class="empty"><strong>Produto não encontrado.</strong><span><a href="index.html#catalogo">Voltar ao catálogo</a></span></div>';}
+  const cfg=window.AMORA_SUPABASE_CONFIG;
+  if(!cfg?.url||!cfg?.publishableKey)throw new Error('Configuração do Supabase ausente nesta versão de teste.');
+  let r;
+  try{
+   r=await fetch(cfg.url+'/rest/v1/amora_products?select=*&id=eq.'+encodeURIComponent(id)+'&published=eq.true&limit=1',{headers:{apikey:cfg.publishableKey,Authorization:'Bearer '+cfg.publishableKey}});
+  }catch(e){throw new Error('Não foi possível conectar ao Supabase. Os dados antigos não serão usados como substitutos.');}
+  if(!r.ok)throw new Error('O Supabase respondeu com erro HTTP '+r.status+'.');
+  const rows=await r.json();
+  if(!Array.isArray(rows)||!rows.length)throw new Error('Este produto ainda não está publicado no banco novo. Volte ao catálogo de teste ou importe os produtos pelo painel após confirmar a migração.');
+  const p=rows.map(normalizeSupabaseProduct).find(x=>x.id===id&&x.published!==false);
+  if(!p)throw new Error('Produto não encontrado no catálogo novo.');
+  render(p);
+ }catch(e){
+  const root=document.querySelector('#productRoot');
+  root.innerHTML='<div class="empty"><strong>Não foi possível carregar este produto.</strong><span>'+esc(e&&e.message?e.message:'Tente atualizar a página.')+' <a href="index.html#catalogo">Voltar ao catálogo</a></span></div>';
+ }
 }
 document.addEventListener('DOMContentLoaded',init);
