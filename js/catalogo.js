@@ -49,16 +49,10 @@ function renderTeams(){const box=$('#teamFilters');const teams=[...new Set(PRODU
 function normalizeSupabaseProduct(p){
  return {id:p.id,name:p.name,team:p.team||'',category:p.category||'Brasileiras',version:p.version||'Torcedor',price:Number(p.price||0),wholesalePrice:Number(p.wholesale_price||0),oldPrice:p.old_price==null?undefined:Number(p.old_price),badge:p.badge||'',description:p.description||'',published:p.published!==false,soldOut:!!p.sold_out,stock:p.stock||{},images:Array.isArray(p.images)?p.images:[],sortOrder:Number(p.sort_order||0)};
 }
-async function loadLegacyProducts(){
- const r=await fetch('data/products.json?v='+Date.now(),{cache:'no-store'});
- if(!r.ok)throw new Error('Falha ao carregar o catálogo de segurança do GitHub.');
- return await r.json();
-}
 async function loadProducts(){
  const cfg=window.AMORA_SUPABASE_CONFIG;
  if(!cfg?.url||!cfg?.publishableKey){
-  console.warn('Configuração do Supabase ausente; usando catálogo de segurança do GitHub.');
-  return await loadLegacyProducts();
+  throw new Error('A configuração do Supabase não foi encontrada. Esta versão de teste não carregará silenciosamente os produtos antigos.');
  }
  let r;
  try{
@@ -66,16 +60,14 @@ async function loadProducts(){
    headers:{apikey:cfg.publishableKey,Authorization:'Bearer '+cfg.publishableKey}
   });
  }catch(e){
-  console.warn('Supabase indisponível; usando catálogo de segurança do GitHub.',e);
-  return await loadLegacyProducts();
+  throw new Error('Não foi possível conectar ao Supabase. Verifique a conexão e tente novamente. Os produtos antigos não serão exibidos como se fossem os dados novos.');
  }
  if(!r.ok){
-  console.warn('Supabase respondeu com erro HTTP '+r.status+'; usando catálogo de segurança do GitHub.');
-  return await loadLegacyProducts();
+  throw new Error('O Supabase respondeu com erro HTTP '+r.status+'. A versão de teste não exibirá o catálogo antigo como substituto.');
  }
  const rows=await r.json();
  if(!Array.isArray(rows))throw new Error('Resposta inesperada do Supabase ao carregar o catálogo.');
- if(rows.length===0)throw new Error('O Supabase respondeu, mas não há produtos publicados. Confira a importação do catálogo no painel administrativo antes de continuar.');
+ if(rows.length===0)throw new Error('A conexão com o Supabase funcionou, mas ainda não há produtos publicados. Use “Importar catálogo atual” no painel de teste somente depois de confirmar que deseja copiar os produtos e as fotos para o banco novo.');
  return rows.map(normalizeSupabaseProduct);
 }
 async function init(){
