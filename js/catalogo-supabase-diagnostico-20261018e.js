@@ -3,7 +3,7 @@ const fmt=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL
 const pix=v=>Number(v||0)*.95;
 function calcWholesale(version,price,fallback=0){const v=String(version||'');if(/jogador/i.test(v))return 110;if(/torcedor/i.test(v))return 90;return Number(fallback||0);}
 let PRODUCTS=[];
-let state={cat:'Todos',team:'Todos',q:'',sort:'relevantes'};
+let state={cat:'Todos',team:'Todos',q:'',size:'Todos',sort:'relevantes'};
 const $=s=>document.querySelector(s);
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
 function initials(name){return String(name||'AF').split(/\s+/).slice(0,3).map(x=>x[0]).join('').toUpperCase();}
@@ -38,7 +38,7 @@ function setCardPhoto(photo,next){
  const count=photo.querySelector('.photo-count');if(count)count.textContent=(idx+1)+'/'+imgs.length;
 }
 function render(){
- let arr=PRODUCTS.filter(p=>p.published!==false).filter(p=>isCat(p,state.cat)&&isTeam(p,state.team)&&((p.name+' '+(p.team||'')+' '+(p.category||'')+' '+(p.version||'')).toLowerCase().includes(state.q)));
+ let arr=PRODUCTS.filter(p=>p.published!==false).filter(p=>isCat(p,state.cat)&&isTeam(p,state.team)&&((p.name+' '+(p.team||'')+' '+(p.category||'')+' '+(p.version||'')).toLowerCase().includes(state.q))&&(state.size==='Todos'||Number((p.stock||{})[state.size]||0)>0));
  if(state.sort==='menor')arr.sort((a,b)=>Number(a.price)-Number(b.price));
  if(state.sort==='maior')arr.sort((a,b)=>Number(b.price)-Number(a.price));
  $('#grid').innerHTML=arr.map(card).join('')||'<div class="empty"><strong>Nenhum produto encontrado.</strong><span>Tente outro time, coleção ou categoria.</span></div>';
@@ -108,6 +108,7 @@ async function init(){
   document.querySelectorAll('[data-nav-cat]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();setCat(a.dataset.navCat)}));
   const sync=e=>setSearch(e.target.value);
   $('#search').addEventListener('input',sync);$('#searchMobile').addEventListener('input',sync);$('#sort').addEventListener('change',e=>{state.sort=e.target.value;render();});
+  $('#sizeFilter').addEventListener('change',e=>{state.size=e.target.value;render();});
   syncSearchUI();render();
  }catch(e){
   const detail=e&&e.message?e.message:'Tente atualizar a página em alguns segundos.';
