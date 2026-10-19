@@ -47,8 +47,9 @@ function checkoutCart(){
  if(!selectedFreight){alert('Informe o CEP e calcule o frete. Depois, selecione uma opção de entrega.');return}
  const totalQty=c.reduce((n,i)=>n+Number(i.qty||0),0),wholesaleActive=totalQty>=5;
  let t='Olá! Quero fazer um pedido na Amora Fut:\n\n';
- if(wholesaleActive)t+='🏷️ PREÇO DE ATACADO APLICADO ('+totalQty+' peças no pedido)\n\n';
- c.forEach((i,n)=>{const unit=effectivePrice(i);t+=(n+1)+'. '+i.name+(i.size?' — tamanho '+i.size:'')+' — '+i.qty+' un. — '+(wholesaleActive?'atacado '+money(unit)+'/un. — subtotal '+money(unit*i.qty):money(unit*i.qty))+'\n';});
+ if(wholesaleActive)t+='🏷️ PREÇO DE ATACADO APLICADO ('+totalQty+' peças no pedido)\nValores por unidade e subtotal de cada item abaixo.\n\n';
+ else t+='Preço de varejo: '+totalQty+' peça(s) no carrinho. Para liberar o atacado, adicione mais '+(5-totalQty)+' peça(s) (mínimo de 5).\n\n';
+ c.forEach((i,n)=>{const unit=effectivePrice(i);t+=(n+1)+'. '+i.name+(i.size?' — tamanho '+i.size:'')+' — '+i.qty+' un. — '+(wholesaleActive?'atacado ':'varejo ')+money(unit)+'/un. — subtotal '+money(unit*i.qty)+'\n';});
  t+='\nCEP de entrega: '+freightCep+'\nFrete ('+selectedFreight._name+'): '+money(shippingPrice())+'\nSubtotal dos produtos: '+money(cartTotal())+'\nTotal com frete: '+money(orderTotal())+'\n\nGostaria de confirmar disponibilidade e pagamento.';
  window.open('https://wa.me/'+WA_CART+'?text='+encodeURIComponent(t),'_blank','noopener');
 }
