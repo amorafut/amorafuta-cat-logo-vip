@@ -1,7 +1,7 @@
 const WA='5585998022643';
 const fmt=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 const pix=v=>Number(v||0)*.95;
-function calcWholesale(version,price,fallback=0){const v=String(version||'');const p=Number(price||0);if(/jogador/i.test(v))return Math.round(p*0.6875*100)/100;if(/torcedor/i.test(v))return Math.round(p*0.69231*100)/100;return Number(fallback||0);}
+function calcWholesale(version,price,fallback=0){const v=String(version||'');if(/jogador/i.test(v))return 110;if(/torcedor/i.test(v))return 90;return Number(fallback||0);}
 let PRODUCTS=[];
 let state={cat:'Todos',team:'Todos',q:'',sort:'relevantes'};
 const $=s=>document.querySelector(s);
