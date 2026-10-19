@@ -4,7 +4,7 @@ const money=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'B
 function getCart(){try{return JSON.parse(localStorage.getItem(CART_KEY)||'[]')}catch{return[]}}
 function saveCart(c){localStorage.setItem(CART_KEY,JSON.stringify(c));clearFreightQuote();renderCart();if(freightCep.length===8&&c.length)quoteFreight()}
 function cartCount(){return getCart().reduce((n,i)=>n+Number(i.qty||0),0)}
-function calcWholesale(version,price,fallback=0){const v=String(version||'');const p=Number(price||0);if(/jogador/i.test(v))return Math.round(p*0.6875*100)/100;if(/torcedor/i.test(v))return Math.round(p*0.69231*100)/100;return Number(fallback||0)}
+function calcWholesale(version,price,fallback=0){const v=String(version||'');if(/jogador/i.test(v))return 110;if(/torcedor/i.test(v))return 90;return Number(fallback||0)}
 function cartTotal(){const c=getCart(),qty=c.reduce((n,i)=>n+Number(i.qty||0),0);return c.reduce((s,i)=>s+(qty>=5&&calcWholesale(i.version,i.price,i.wholesalePrice)>0?calcWholesale(i.version,i.price,i.wholesalePrice):Number(i.price||0))*Number(i.qty||0),0)}
 function effectivePrice(i){const qty=getCart().reduce((n,x)=>n+Number(x.qty||0),0);const wholesale=calcWholesale(i.version,i.price,i.wholesalePrice);return qty>=5&&wholesale>0?wholesale:Number(i.price||0)}
 let freightCep=(localStorage.getItem(CEP_KEY)||'').replace(/[^\d]/g,'').slice(0,8),freightOptions=[],selectedFreight=null,freightLoading=false,freightError='';
