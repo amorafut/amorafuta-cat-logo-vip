@@ -47,7 +47,7 @@ function setSearch(q){
 }
 function renderTeams(){const box=$('#teamFilters');const teams=[...new Set(PRODUCTS.filter(p=>p.published!==false).map(p=>p.team).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt-BR'));box.innerHTML='<button class="team-chip active" data-team="Todos">Todos os times</button>'+teams.map(t=>'<button class="team-chip" data-team="'+esc(t)+'">'+esc(t)+'</button>').join('');box.querySelectorAll('.team-chip').forEach(b=>b.addEventListener('click',()=>setTeam(b.dataset.team)));}
 function normalizeSupabaseProduct(p){
- return {id:p.id,name:p.name,team:p.team||'',category:p.category||'Brasileiras',version:p.version||'Torcedor',price:Number(p.price||0),wholesalePrice:Number(p.wholesale_price||0),oldPrice:p.old_price==null?undefined:Number(p.old_price),badge:p.badge||'',description:p.description||'',published:p.published!==false,soldOut:!!p.sold_out,stock:p.stock||{},images:Array.isArray(p.images)?p.images:[],sortOrder:Number(p.sort_order||0)};
+ return {id:p.id,name:p.name,team:p.team||'',category:p.category||'Brasileiras',version:p.version||'Torcedor',price:Number(p.price||0),wholesalePrice:/jogador/i.test(p.version||'')?110:(/torcedor/i.test(p.version||'')?90:Number(p.wholesale_price||0)),oldPrice:p.old_price==null?undefined:Number(p.old_price),badge:p.badge||'',description:p.description||'',published:p.published!==false,soldOut:!!p.sold_out,stock:p.stock||{},images:Array.isArray(p.images)?p.images:[],sortOrder:Number(p.sort_order||0)};
 }
 async function loadProducts(){
  const cfg=window.AMORA_SUPABASE_CONFIG;
