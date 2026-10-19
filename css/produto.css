@@ -47,3 +47,6 @@ html,body{max-width:100%;overflow-x:hidden}
   .product-media{padding:6px}
   .product-info{padding-left:14px;padding-right:14px}
 }
+
+/* Preço por unidade para pedidos de atacado. */
+.wholesale-price{margin:12px 0;padding:12px 14px;border:1px solid rgba(181,145,82,.55);border-radius:8px;background:rgba(181,145,82,.08);font-size:14px;line-height:1.5}.wholesale-price strong{color:#c6a66b;font-weight:800}

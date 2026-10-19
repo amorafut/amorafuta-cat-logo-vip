@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 330" role="img" aria-labelledby="title desc">
+<title id="title">Amora Fut Streetwear — Designer Premium</title><desc id="desc">Logomarca horizontal em prata, branco e rosa neon.</desc>
+<defs><linearGradient id="silver" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".45" stop-color="#d9d9df"/><stop offset=".7" stop-color="#fff"/><stop offset="1" stop-color="#999ba4"/></linearGradient><linearGradient id="pink" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9cc8"/><stop offset=".35" stop-color="#ff0b75"/><stop offset="1" stop-color="#a9004b"/></linearGradient><filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<g filter="url(#glow)" stroke="#f20b72" stroke-width="3" stroke-linejoin="round"><path d="M35 252 116 48 207 48 282 252 220 252 162 105 102 252Z" fill="url(#silver)"/><path d="M185 35 345 35 306 83 222 83Z" fill="url(#pink)"/><path d="M210 99 319 99 289 138 232 138Z" fill="url(#pink)"/><circle cx="159" cy="199" r="27" fill="url(#pink)"/></g>
+<text x="365" y="146" font-family="Arial,Helvetica,sans-serif" font-size="112" font-weight="900" letter-spacing="-4" fill="url(#silver)" stroke="#161616" stroke-width="3" paint-order="stroke">AMORA</text>
+<text x="620" y="224" font-family="Arial,Helvetica,sans-serif" font-size="90" font-weight="900" font-style="italic" letter-spacing="3" fill="url(#pink)" stroke="#310019" stroke-width="3" paint-order="stroke">FUT</text>
+<path d="M360 192H605 M870 192H1165" stroke="url(#pink)" stroke-width="7" stroke-linecap="round"/>
+<text x="365" y="281" font-family="Arial,Helvetica,sans-serif" font-size="44" font-weight="900" letter-spacing="16" fill="url(#silver)">STREETWEAR</text>
+<path d="M520 309H566 M1044 309H1090" stroke="url(#pink)" stroke-width="5"/>
+<text x="580" y="319" font-family="Arial,Helvetica,sans-serif" font-size="25" font-weight="800" letter-spacing="8" fill="url(#pink)">DESIGNER PREMIUM</text>
+</svg>

@@ -1,0 +1,44 @@
+name: Validar integração Supabase Amora Fut
+
+on:
+  push:
+    branches:
+      - integracao-supabase-amora
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'admin/**'
+      - 'js/**'
+      - 'supabase-amora-schema.sql'
+      - '.github/workflows/validar-integracao-supabase.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validar:
+    name: Verificações estáticas
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verificar sintaxe dos arquivos JavaScript
+        run: |
+          node --check admin/admin.js
+          node --check js/catalogo.js
+          node --check js/produto.js
+
+      - name: Confirmar arquivos necessários da integração
+        run: |
+          test -s js/supabase-config.js
+          test -s supabase-amora-schema.sql
+          grep -q 'AMORA_SUPABASE_CONFIG' js/supabase-config.js
+          grep -q 'amora_products' supabase-amora-schema.sql
+          grep -q 'amora_admin_users' supabase-amora-schema.sql
