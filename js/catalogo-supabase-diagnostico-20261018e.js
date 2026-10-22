@@ -37,8 +37,9 @@ function setCardPhoto(photo,next){
  photo.querySelectorAll('.photo-dot').forEach((dot,i)=>dot.classList.toggle('active',i===idx));
  const count=photo.querySelector('.photo-count');if(count)count.textContent=(idx+1)+'/'+imgs.length;
 }
-function render(){
- let arr=PRODUCTS.filter(p=>p.published!==false).filter(p=>isCat(p,state.cat)&&isTeam(p,state.team)&&((p.name+' '+(p.team||'')+' '+(p.category||'')+' '+(p.version||'')).toLowerCase().includes(state.q))&&(state.size==='Todos'||Number((p.stock||{})[state.size]||0)>0));
+function normalizeSearch(value){return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('pt-BR').trim();}
+ function render(){
+ let arr=PRODUCTS.filter(p=>p.published!==false).filter(p=>isCat(p,state.cat)&&isTeam(p,state.team)&&normalizeSearch(p.name+' '+(p.team||'')+' '+(p.category||'')+' '+(p.version||'')).includes(normalizeSearch(state.q))&&(state.size==='Todos'||Number((p.stock||{})[state.size]||0)>0));
  if(state.sort==='menor')arr.sort((a,b)=>Number(a.price)-Number(b.price));
  if(state.sort==='maior')arr.sort((a,b)=>Number(b.price)-Number(a.price));
  $('#grid').innerHTML=arr.map(card).join('')||'<div class="empty"><strong>Nenhum produto encontrado.</strong><span>Tente outro time, coleção ou categoria.</span></div>';
