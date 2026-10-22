@@ -1,6 +1,6 @@
 let db=null,products=[],currentId=null,pendingFiles=[],pendingByProduct={},pendingFilesByProduct={},slugManuallyEdited=false;
 const $=s=>document.querySelector(s);
-function calcWholesale(version,price,fallback=0){const v=String(version||'');if(/jogador/i.test(v))return 110;if(/torcedor/i.test(v))return 90;return Number(fallback||0);}
+function calcWholesale(version,price,fallback=0){const v=String(version||'');if(//jogador/i.test(v))return 110;if(/torcedor/i.test(v))return 90;return Number(fallback||0);}
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 function msg(t,ok=true){$('#authMsg').textContent=t;$('#status').textContent=t;$('#authMsg').style.color=ok?'var(--green)':'var(--danger)';}
 function fromRow(r){return {id:r.id,name:r.name,team:r.team||'',category:r.category||'Brasileiras',version:r.version||'Torcedor',price:Number(r.price||0),wholesalePrice:calcWholesale(r.version,r.price,r.wholesale_price),oldPrice:r.old_price==null?'':Number(r.old_price),badge:r.badge||'',description:r.description||'',published:r.published!==false,soldOut:!!r.sold_out,stock:r.stock||{P:0,M:0,G:0,GG:0,'3G':0},images:Array.isArray(r.images)?r.images:[],sortOrder:Number(r.sort_order||0)};}
