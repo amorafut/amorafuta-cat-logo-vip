@@ -233,3 +233,18 @@ del{color:#a0a3aa}
   .tools { gap: 7px !important; }
   .tools .sort, .tools select { font-size: 11px !important; padding: 0 6px !important; }
 }
+
+
+/* Acessibilidade: reforço de legibilidade e contraste na prévia */
+:root{--muted:#c2c5cc}
+.teams-head h2{margin:5px 0 0;font-size:22px;letter-spacing:-.5px}
+.teams-head h2 em{color:#ff5b9c;font-style:normal}
+.teams-hint,.catline,.footer-copy,.section-kicker{color:#c2c5cc}
+.benefits small,.topbar,.social,.navlinks a,.category-card,.team-chip,.sort,.tools input,
+.info h3,.price,.pix,.badge,.catline,.footer-links a,.footer-benefits>div,
+#cartRoot .cart-head small,#cartRoot .cart-item-main small,#cartRoot .cart-remove,
+#cartRoot .cart-total span,#cartRoot .cart-freight,#cartRoot .freight-title,
+#cartRoot .freight-label,#cartRoot .freight-option small{font-size:max(12px,1em)}
+.searchbar input,.tools input,.sort{font-size:16px}
+button,a,input,select{touch-action:manipulation}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
