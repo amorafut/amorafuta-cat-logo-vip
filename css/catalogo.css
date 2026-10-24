@@ -248,3 +248,38 @@ del{color:#a0a3aa}
 .searchbar input,.tools input,.sort{font-size:16px}
 button,a,input,select{touch-action:manipulation}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+
+/* Acessibilidade: reforço adicional de contraste em textos secundários e controles */
+:root{
+  --muted:#c8cbd2;
+  --line:#55575e;
+}
+body{color:#f2f2f5}
+.topbar,.social,.benefits small,.teams-hint,.catline,#count,
+.info .catline,.footer-copy,.footer-brand small,.footer-links a,
+.price del,.modal-price del,.modal-points,.cart-item-main small,
+.cart-total span,.cart-empty,.cart-freight,.freight-label,
+.freight-option small,.teams-hint,.empty span{
+  color:#c4c7ce;
+}
+.searchbar input::placeholder,.tools input::placeholder{color:#c4c7ce}
+.pix{color:#7cf0bd}
+.pix span{color:#9af5cf;border-color:#72d9ad}
+.cta{color:#ff8fbd}
+.section-kicker{color:#ff82b5}
+.team-chip{color:#e5e6ea;border-color:#62646b}
+.sort,.tools input{color:#f7f7fa;border-color:#62646b}
+.category-card{color:#f4f4f6;border-color:#62646b}
+.cart-remove{color:#ff91bd}
+.footer-copy,.footer-brand small{color:#c4c7ce}
+.stock-card{color:#ff91bd}
+.stock-total{color:#c4c7ce}
+.freight-error{color:#ffb3ce}
+.wholesale-price strong{color:#e5c58b}
+.version-badge{background:rgba(15,16,19,.97);border-color:#bfc1c8}
+.badge,.team-chip.active,.hero-action.primary,.cart-checkout{background:#b00050!important;color:#fff!important}
+button:disabled{opacity:1}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
