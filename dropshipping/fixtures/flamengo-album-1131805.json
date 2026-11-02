@@ -7,37 +7,18 @@
   "sourceCategory": "Flamengo",
   "categoryId": "brasileirao",
   "subcategoryId": "flamengo",
-  "collectionIds": [
-    "atual"
-  ],
-  "sizesSource": [
-    "S",
-    "M",
-    "L",
-    "XL",
-    "XXL"
-  ],
-  "sizesDisplay": [
-    "P",
-    "M",
-    "G",
-    "GG",
-    "XGG"
-  ],
+  "collectionIds": ["atual"],
+  "sizesSource": ["S", "M", "L", "XL", "XXL"],
+  "sizesDisplay": ["S", "M", "L", "XL", "XXL"],
   "imageReferences": [
-    "1131805-0",
-    "1131805-1",
-    "1131805-2",
-    "1131805-3",
-    "1131805-4",
-    "1131805-5",
-    "1131805-6",
-    "1131805-7",
-    "1131805-8",
-    "1131805-9",
-    "1131805-10"
+    "1131805-0", "1131805-1", "1131805-2", "1131805-3",
+    "1131805-4", "1131805-5", "1131805-6", "1131805-7",
+    "1131805-8", "1131805-9", "1131805-10"
   ],
   "sourceDate": "2025-03-01",
   "validation": "metadata-confirmed",
-  "note": "Fixture de validação da estrutura. URLs diretas das imagens e disponibilidade/estoque ainda precisam ser confirmados pelo importador; não publicar como produto disponível."
+  "sizeMapping": "unconfirmed",
+  "imageUrls": "unconfirmed",
+  "stock": "unconfirmed",
+  "note": "Os tamanhos são preservados como aparecem no fornecedor. Não converter para P/M/G/GG/XGG sem tabela de medidas ou confirmação. Referências das 11 imagens foram vistas na página, mas URLs diretas ainda não foram validadas pelo Worker."
 }
