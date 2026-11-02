@@ -50,3 +50,10 @@ html,body{max-width:100%;overflow-x:hidden}
 
 /* Preço por unidade para pedidos de atacado. */
 .wholesale-price{margin:12px 0;padding:12px 14px;border:1px solid rgba(181,145,82,.55);border-radius:8px;background:rgba(181,145,82,.08);font-size:14px;line-height:1.5}.wholesale-price strong{color:#c6a66b;font-weight:800}
+
+
+/* Tamanhos esgotados e estado sem estoque. */
+.size:disabled,.size.disabled{position:relative;opacity:.58;text-decoration:none;cursor:not-allowed;background:#25262a;color:#a1a3a9;border-color:#55575d;}
+.size:disabled::after,.size.disabled::after{content:"";position:absolute;left:5px;right:5px;top:50%;height:1.5px;background:#ff668f;transform:rotate(-35deg);transform-origin:center;pointer-events:none;}
+.size:disabled small,.size.disabled small{font-size:8px;color:#ff9ab8;}
+.sold-out-message{color:#ff9ab8;font-weight:800;line-height:1.6;margin-top:14px;}
