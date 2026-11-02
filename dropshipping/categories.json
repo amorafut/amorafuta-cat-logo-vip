@@ -1,0 +1,713 @@
+{
+  "version": 3,
+  "language": "pt-BR",
+  "classification": "championship_then_club",
+  "fallback_category": "outros-clubes",
+  "categories": [
+    {
+      "id": "premier-league",
+      "name": "Premier League",
+      "type": "league",
+      "subcategories": [
+        {
+          "id": "arsenal",
+          "name": "Arsenal",
+          "aliases": []
+        },
+        {
+          "id": "chelsea",
+          "name": "Chelsea",
+          "aliases": []
+        },
+        {
+          "id": "liverpool",
+          "name": "Liverpool",
+          "aliases": []
+        },
+        {
+          "id": "manchester-city",
+          "name": "Manchester City",
+          "aliases": []
+        },
+        {
+          "id": "manchester-united",
+          "name": "Manchester United",
+          "aliases": []
+        },
+        {
+          "id": "tottenham",
+          "name": "Tottenham Hotspur",
+          "aliases": []
+        },
+        {
+          "id": "aston-villa",
+          "name": "Aston Villa",
+          "aliases": []
+        },
+        {
+          "id": "newcastle",
+          "name": "Newcastle United",
+          "aliases": []
+        },
+        {
+          "id": "everton",
+          "name": "Everton",
+          "aliases": []
+        },
+        {
+          "id": "west-ham",
+          "name": "West Ham",
+          "aliases": []
+        },
+        {
+          "id": "nottingham-forest",
+          "name": "Nottingham Forest",
+          "aliases": []
+        },
+        {
+          "id": "brighton",
+          "name": "Brighton",
+          "aliases": []
+        },
+        {
+          "id": "crystal-palace",
+          "name": "Crystal Palace",
+          "aliases": []
+        },
+        {
+          "id": "fulham",
+          "name": "Fulham",
+          "aliases": []
+        },
+        {
+          "id": "brentford",
+          "name": "Brentford",
+          "aliases": []
+        },
+        {
+          "id": "bournemouth",
+          "name": "Bournemouth",
+          "aliases": []
+        },
+        {
+          "id": "sunderland",
+          "name": "Sunderland",
+          "aliases": []
+        },
+        {
+          "id": "leeds",
+          "name": "Leeds United",
+          "aliases": []
+        },
+        {
+          "id": "burnley",
+          "name": "Burnley",
+          "aliases": []
+        },
+        {
+          "id": "wolves",
+          "name": "Wolverhampton",
+          "aliases": [
+            "Wolverhampton Wanderers"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "brasileirao",
+      "name": "Brasileirão",
+      "type": "league",
+      "subcategories": [
+        {
+          "id": "flamengo",
+          "name": "Flamengo",
+          "aliases": [
+            "Flamengo",
+            "CR Flamengo"
+          ]
+        },
+        {
+          "id": "ceara",
+          "name": "Ceará",
+          "aliases": [
+            "Ceara",
+            "Ceará Sporting Club"
+          ]
+        },
+        {
+          "id": "fortaleza",
+          "name": "Fortaleza",
+          "aliases": [
+            "Fortaleza EC"
+          ]
+        },
+        {
+          "id": "palmeiras",
+          "name": "Palmeiras",
+          "aliases": [
+            "SE Palmeiras"
+          ]
+        },
+        {
+          "id": "corinthians",
+          "name": "Corinthians",
+          "aliases": [
+            "Corinthians",
+            "SC Corinthians"
+          ]
+        },
+        {
+          "id": "sao-paulo",
+          "name": "São Paulo",
+          "aliases": [
+            "Sao Paulo",
+            "São Paulo FC"
+          ]
+        },
+        {
+          "id": "santos",
+          "name": "Santos",
+          "aliases": [
+            "Santos FC"
+          ]
+        },
+        {
+          "id": "vasco",
+          "name": "Vasco",
+          "aliases": [
+            "Vasco da Gama"
+          ]
+        },
+        {
+          "id": "fluminense",
+          "name": "Fluminense",
+          "aliases": [
+            "Fluminense FC"
+          ]
+        },
+        {
+          "id": "botafogo",
+          "name": "Botafogo",
+          "aliases": [
+            "Botafogo FR"
+          ]
+        },
+        {
+          "id": "gremio",
+          "name": "Grêmio",
+          "aliases": [
+            "Gremio",
+            "Grêmio FBPA"
+          ]
+        },
+        {
+          "id": "internacional",
+          "name": "Internacional",
+          "aliases": [
+            "SC Internacional",
+            "Internacional"
+          ]
+        },
+        {
+          "id": "atletico-mineiro",
+          "name": "Atlético Mineiro",
+          "aliases": [
+            "Atletico Mineiro",
+            "Atlético-MG",
+            "Atletico MG"
+          ]
+        },
+        {
+          "id": "cruzeiro",
+          "name": "Cruzeiro",
+          "aliases": [
+            "Cruzeiro EC"
+          ]
+        },
+        {
+          "id": "bahia",
+          "name": "Bahia",
+          "aliases": []
+        },
+        {
+          "id": "sport-recife",
+          "name": "Sport Recife",
+          "aliases": []
+        },
+        {
+          "id": "athletico-paranaense",
+          "name": "Athletico Paranaense",
+          "aliases": []
+        },
+        {
+          "id": "bragantino",
+          "name": "RB Bragantino",
+          "aliases": []
+        },
+        {
+          "id": "vitoria",
+          "name": "Vitória",
+          "aliases": []
+        },
+        {
+          "id": "goias",
+          "name": "Goiás",
+          "aliases": []
+        },
+        {
+          "id": "avai",
+          "name": "Avaí",
+          "aliases": []
+        },
+        {
+          "id": "chapecoense",
+          "name": "Chapecoense",
+          "aliases": []
+        },
+        {
+          "id": "nautico",
+          "name": "Náutico",
+          "aliases": []
+        },
+        {
+          "id": "santa-cruz",
+          "name": "Santa Cruz",
+          "aliases": []
+        },
+        {
+          "id": "remo",
+          "name": "Remo",
+          "aliases": []
+        },
+        {
+          "id": "paysandu",
+          "name": "Paysandu",
+          "aliases": []
+        },
+        {
+          "id": "guarani",
+          "name": "Guarani",
+          "aliases": []
+        },
+        {
+          "id": "figueirense",
+          "name": "Figueirense",
+          "aliases": []
+        },
+        {
+          "id": "coritiba",
+          "name": "Coritiba",
+          "aliases": []
+        },
+        {
+          "id": "criciuma",
+          "name": "Criciúma",
+          "aliases": []
+        },
+        {
+          "id": "juventude",
+          "name": "Juventude",
+          "aliases": []
+        },
+        {
+          "id": "cuiaba",
+          "name": "Cuiabá",
+          "aliases": []
+        }
+      ]
+    },
+    {
+      "id": "bundesliga",
+      "name": "Bundesliga",
+      "type": "league",
+      "subcategories": [
+        {
+          "id": "bayern-munique",
+          "name": "Bayern de Munique",
+          "aliases": [
+            "Bayern Munich",
+            "FC Bayern"
+          ]
+        },
+        {
+          "id": "borussia-dortmund",
+          "name": "Borussia Dortmund",
+          "aliases": [
+            "Borussia Dortmund",
+            "BVB"
+          ]
+        },
+        {
+          "id": "bayer-leverkusen",
+          "name": "Bayer Leverkusen",
+          "aliases": []
+        },
+        {
+          "id": "rb-leipzig",
+          "name": "RB Leipzig",
+          "aliases": []
+        },
+        {
+          "id": "eintracht-frankfurt",
+          "name": "Eintracht Frankfurt",
+          "aliases": []
+        },
+        {
+          "id": "stuttgart",
+          "name": "Stuttgart",
+          "aliases": []
+        },
+        {
+          "id": "wolfsburg",
+          "name": "Wolfsburg",
+          "aliases": []
+        },
+        {
+          "id": "schalke",
+          "name": "Schalke 04",
+          "aliases": []
+        },
+        {
+          "id": "werder-bremen",
+          "name": "Werder Bremen",
+          "aliases": []
+        }
+      ]
+    },
+    {
+      "id": "la-liga",
+      "name": "La Liga",
+      "type": "league",
+      "subcategories": [
+        {
+          "id": "barcelona",
+          "name": "Barcelona",
+          "aliases": [
+            "FC Barcelona",
+            "Barcelona"
+          ]
+        },
+        {
+          "id": "real-madrid",
+          "name": "Real Madrid",
+          "aliases": [
+            "Real Madrid CF"
+          ]
+        },
+        {
+          "id": "atletico-madrid",
+          "name": "Atlético de Madrid",
+          "aliases": [
+            "Atletico Madrid",
+            "Atlético Madrid"
+          ]
+        },
+        {
+          "id": "sevilla",
+          "name": "Sevilla",
+          "aliases": []
+        },
+        {
+          "id": "valencia",
+          "name": "Valencia",
+          "aliases": []
+        },
+        {
+          "id": "athletic-bilbao",
+          "name": "Athletic Bilbao",
+          "aliases": []
+        },
+        {
+          "id": "real-betis",
+          "name": "Real Betis",
+          "aliases": []
+        },
+        {
+          "id": "villarreal",
+          "name": "Villarreal",
+          "aliases": []
+        },
+        {
+          "id": "real-sociedad",
+          "name": "Real Sociedad",
+          "aliases": []
+        },
+        {
+          "id": "girona",
+          "name": "Girona",
+          "aliases": []
+        },
+        {
+          "id": "mallorca",
+          "name": "Mallorca",
+          "aliases": []
+        }
+      ]
+    },
+    {
+      "id": "serie-a-italia",
+      "name": "Serie A",
+      "type": "league",
+      "subcategories": [
+        {
+          "id": "inter-de-milao",
+          "name": "Inter de Milão",
+          "aliases": [
+            "Inter Milan",
+            "FC Internazionale"
+          ]
+        },
+        {
+          "id": "milan",
+          "name": "Milan",
+          "aliases": [
+            "AC Milan"
+          ]
+        },
+        {
+          "id": "juventus",
+          "name": "Juventus",
+          "aliases": [
+            "Juventus FC"
+          ]
+        },
+        {
+          "id": "roma",
+          "name": "Roma",
+          "aliases": [
+            "AS Roma"
+          ]
+        },
+        {
+          "id": "napoli",
+          "name": "Napoli",
+          "aliases": [
+            "SSC Napoli"
+          ]
+        },
+        {
+          "id": "lazio",
+          "name": "Lazio",
+          "aliases": [
+            "SS Lazio"
+          ]
+        },
+        {
+          "id": "fiorentina",
+          "name": "Fiorentina",
+          "aliases": []
+        },
+        {
+          "id": "atalanta",
+          "name": "Atalanta",
+          "aliases": []
+        },
+        {
+          "id": "bologna",
+          "name": "Bologna",
+          "aliases": []
+        }
+      ]
+    },
+    {
+      "id": "ligue-1",
+      "name": "Ligue 1",
+      "type": "league",
+      "subcategories": [
+        {
+          "id": "paris-saint-germain",
+          "name": "Paris Saint-Germain",
+          "aliases": [
+            "PSG",
+            "Paris Saint Germain"
+          ]
+        },
+        {
+          "id": "marseille",
+          "name": "Olympique de Marselha",
+          "aliases": [
+            "Olympique Marseille"
+          ]
+        },
+        {
+          "id": "lyon",
+          "name": "Olympique Lyonnais",
+          "aliases": []
+        },
+        {
+          "id": "monaco",
+          "name": "Monaco",
+          "aliases": [
+            "AS Monaco"
+          ]
+        },
+        {
+          "id": "lille",
+          "name": "Lille",
+          "aliases": []
+        },
+        {
+          "id": "nice",
+          "name": "Nice",
+          "aliases": [
+            "OGC Nice"
+          ]
+        },
+        {
+          "id": "lens",
+          "name": "Lens",
+          "aliases": [
+            "RC Lens"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "primeira-liga",
+      "name": "Primeira Liga",
+      "type": "league",
+      "subcategories": [
+        {
+          "id": "benfica",
+          "name": "Benfica",
+          "aliases": []
+        },
+        {
+          "id": "porto",
+          "name": "Porto",
+          "aliases": []
+        },
+        {
+          "id": "sporting",
+          "name": "Sporting",
+          "aliases": [
+            "Sporting CP Lisbon"
+          ]
+        },
+        {
+          "id": "braga",
+          "name": "Braga",
+          "aliases": []
+        },
+        {
+          "id": "vitoria-guimaraes",
+          "name": "Vitória de Guimarães",
+          "aliases": [
+            "Vitoria SC"
+          ]
+        },
+        {
+          "id": "famalicao",
+          "name": "Famalicão",
+          "aliases": []
+        }
+      ]
+    },
+    {
+      "id": "selecoes",
+      "name": "Seleções",
+      "type": "national-teams",
+      "subcategories": []
+    },
+    {
+      "id": "outros-campeonatos",
+      "name": "Outros Campeonatos",
+      "type": "league-group",
+      "subcategories": [
+        {
+          "id": "mls",
+          "name": "MLS",
+          "aliases": []
+        },
+        {
+          "id": "liga-mx",
+          "name": "Liga MX",
+          "aliases": []
+        },
+        {
+          "id": "eredivisie",
+          "name": "Eredivisie",
+          "aliases": []
+        },
+        {
+          "id": "saudi-pro-league",
+          "name": "Liga Saudita",
+          "aliases": []
+        },
+        {
+          "id": "j-league",
+          "name": "J-League",
+          "aliases": []
+        },
+        {
+          "id": "liga-chilena",
+          "name": "Campeonato Chileno",
+          "aliases": []
+        },
+        {
+          "id": "liga-argentina",
+          "name": "Campeonato Argentino",
+          "aliases": []
+        },
+        {
+          "id": "liga-colombiana",
+          "name": "Campeonato Colombiano",
+          "aliases": []
+        },
+        {
+          "id": "liga-uruguaia",
+          "name": "Campeonato Uruguaio",
+          "aliases": []
+        },
+        {
+          "id": "liga-escocesa",
+          "name": "Campeonato Escocês",
+          "aliases": []
+        },
+        {
+          "id": "liga-turca",
+          "name": "Campeonato Turco",
+          "aliases": []
+        }
+      ]
+    },
+    {
+      "id": "outros-clubes",
+      "name": "Outros Clubes",
+      "type": "fallback",
+      "subcategories": []
+    }
+  ],
+  "collections": [
+    {
+      "id": "atual",
+      "name": "Camisas atuais"
+    },
+    {
+      "id": "retro",
+      "name": "Camisas retrô"
+    },
+    {
+      "id": "treino",
+      "name": "Treino"
+    },
+    {
+      "id": "jaquetas",
+      "name": "Jaquetas e agasalhos"
+    },
+    {
+      "id": "outros",
+      "name": "Outros modelos"
+    }
+  ],
+  "rules": [
+    "A categoria principal representa o campeonato ou grupo (ex.: Brasileirão).",
+    "A subcategoria representa o clube, com nome exibido em português quando houver forma consagrada.",
+    "O nome original do álbum deve ser preservado para auditoria e sincronização.",
+    "Coleções como Retrô são etiquetas secundárias, não campeonatos; um álbum retrô do Flamengo continua em Brasileirão > Flamengo e recebe a coleção Camisas retrô.",
+    "Não criar cópia do mesmo álbum para representar atual e retrô; usar uma única entrada com etiquetas.",
+    "Se o clube ou campeonato não puder ser identificado com segurança, usar Outros Clubes e não adivinhar.",
+    "Usar a URL/identificador original do álbum como chave para evitar duplicações.",
+    "As categorias de clubes devem seguir a categoria indicada pelo fornecedor quando ela corresponder a um campeonato conhecido; não inferir liga apenas pelo nome do clube quando houver ambiguidade."
+  ]
+}
