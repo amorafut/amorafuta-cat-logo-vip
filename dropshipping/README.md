@@ -19,6 +19,13 @@ Este diretório é um módulo isolado da AmoraFut, desenvolvido na branch `drops
 - Exemplo: um álbum retrô do Flamengo fica em **Brasileirão → Flamengo**, com etiqueta **Camisas retrô**. Não será duplicado em outra categoria.
 - A lista de campeonatos, clubes, aliases e coleções está em `categories.json`.
 
+## Categorias observadas no fornecedor
+A navegação pública do Yupoo também apresenta clubes agrupados por Premier League, La Liga, Primeira Liga, Ligue 1, Serie A, Bundesliga e Brasileiro Série A. Há ainda áreas separadas para seleções, retrô, outros campeonatos, produtos de treino, calçados e outros esportes.
+- A estrutura inicial de clubes foi ampliada em `categories.json` usando os nomes observados na navegação.
+- Os nomes exibidos no catálogo serão em português quando houver tradução/forma consagrada.
+- Se um álbum estiver na seção retrô, ele recebe a coleção **Camisas retrô** e a classificação do clube só será atribuída quando identificada com segurança.
+- Produtos que não sejam camisas de futebol não devem ser misturados automaticamente às categorias de clubes; terão classificação própria quando esse escopo for ativado.
+
 ## Validação inicial de álbum
 Foi inspecionado o álbum público `https://www.yupoo.store/albums/1131805`:
 - ID de origem: `1131805`.
