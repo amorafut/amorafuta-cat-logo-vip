@@ -40,8 +40,9 @@ function setCardPhoto(photo,next){
 function normalizeSearch(value){return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('pt-BR').trim();}
  function render(){
  let arr=PRODUCTS.filter(p=>p.published!==false).filter(p=>isCat(p,state.cat)&&isTeam(p,state.team)&&normalizeSearch(p.name+' '+(p.team||'')+' '+(p.category||'')+' '+(p.version||'')).includes(normalizeSearch(state.q))&&(state.size==='Todos'||Number((p.stock||{})[state.size]||0)>0));
- if(state.sort==='menor')arr.sort((a,b)=>Number(a.price)-Number(b.price));
- if(state.sort==='maior')arr.sort((a,b)=>Number(b.price)-Number(a.price));
+ if(state.sort==='menor')arr.sort((a,b)=>(Number(a.price)-Number(b.price))||(Number(a.soldOut)-Number(b.soldOut)));
+ else if(state.sort==='maior')arr.sort((a,b)=>(Number(b.price)-Number(a.price))||(Number(a.soldOut)-Number(b.soldOut)));
+ else arr.sort((a,b)=>Number(a.soldOut)-Number(b.soldOut));
  $('#grid').innerHTML=arr.map(card).join('')||'<div class="empty"><strong>Nenhum produto encontrado.</strong><span>Tente outro time, coleção ou categoria.</span></div>';
  $('#count').textContent=arr.length+' '+(arr.length===1?'produto':'produtos');
 }
@@ -64,7 +65,7 @@ function setSearch(q){
 }
 function renderTeams(){const box=$('#teamFilters');const teams=[...new Set(PRODUCTS.filter(p=>p.published!==false).map(p=>p.team).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt-BR'));box.innerHTML='<button class="team-chip active" data-team="Todos">Todos os times</button>'+teams.map(t=>'<button class="team-chip" data-team="'+esc(t)+'">'+esc(t)+'</button>').join('');box.querySelectorAll('.team-chip').forEach(b=>b.addEventListener('click',()=>setTeam(b.dataset.team)));}
 function normalizeSupabaseProduct(p){
- return {id:p.id,name:p.name,team:p.team||'',category:p.category||'Brasileiras',version:p.version||'Torcedor',price:Number(p.price||0),wholesalePrice:calcWholesale(p.version,p.price,p.wholesale_price),oldPrice:p.old_price==null?undefined:Number(p.old_price),badge:p.badge||'',description:p.description||'',published:p.published!==false,soldOut:!!p.sold_out,stock:p.stock||{},images:Array.isArray(p.images)?p.images:[],sortOrder:Number(p.sort_order||0)};
+ return {id:p.id,name:p.name,team:p.team||'',category:p.category||'Brasileiras',version:p.version||'Torcedor',price:Number(p.price||0),wholesalePrice:calcWholesale(p.version,p.price,p.wholesale_price),oldPrice:p.old_price==null?undefined:Number(p.old_price),badge:p.badge||'',description:p.description||'',published:p.published!==false,soldOut:!!p.sold_out||((p.stock&&Object.keys(p.stock).length>0)&&Object.values(p.stock).reduce((a,v)=>a+Math.max(0,Number(v)||0),0)===0),stock:p.stock||{},images:Array.isArray(p.images)?p.images:[],sortOrder:Number(p.sort_order||0)};
 }
 async function loadProducts(){
  const cfg=window.AMORA_SUPABASE_CONFIG;
