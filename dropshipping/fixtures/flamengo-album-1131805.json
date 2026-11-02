@@ -1,0 +1,43 @@
+{
+  "source": "yupoo.store",
+  "sourceAlbumId": "1131805",
+  "sourceUrl": "https://www.yupoo.store/albums/1131805",
+  "originalTitle": "2025/26 Player Version Flamengo Home Jersey",
+  "displayTitle": "Camisa titular do Flamengo 2025/26 — versão jogador",
+  "sourceCategory": "Flamengo",
+  "categoryId": "brasileirao",
+  "subcategoryId": "flamengo",
+  "collectionIds": [
+    "atual"
+  ],
+  "sizesSource": [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL"
+  ],
+  "sizesDisplay": [
+    "P",
+    "M",
+    "G",
+    "GG",
+    "XGG"
+  ],
+  "imageReferences": [
+    "1131805-0",
+    "1131805-1",
+    "1131805-2",
+    "1131805-3",
+    "1131805-4",
+    "1131805-5",
+    "1131805-6",
+    "1131805-7",
+    "1131805-8",
+    "1131805-9",
+    "1131805-10"
+  ],
+  "sourceDate": "2025-03-01",
+  "validation": "metadata-confirmed",
+  "note": "Fixture de validação da estrutura. URLs diretas das imagens e disponibilidade/estoque ainda precisam ser confirmados pelo importador; não publicar como produto disponível."
+}
