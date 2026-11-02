@@ -1,7 +1,8 @@
 {
-  "version": 1,
+  "version": 2,
+  "language": "pt-BR",
   "classification": "championship_then_club",
-  "fallback_category": "Outros Clubes",
+  "fallback_category": "outros-clubes",
   "categories": [
     {
       "id": "premier-league",
@@ -13,31 +14,211 @@
       "id": "brasileirao",
       "name": "Brasileirão",
       "type": "league",
-      "subcategories": []
+      "subcategories": [
+        {
+          "id": "flamengo",
+          "name": "Flamengo",
+          "aliases": [
+            "Flamengo",
+            "CR Flamengo"
+          ]
+        },
+        {
+          "id": "ceara",
+          "name": "Ceará",
+          "aliases": [
+            "Ceara",
+            "Ceará Sporting Club"
+          ]
+        },
+        {
+          "id": "fortaleza",
+          "name": "Fortaleza",
+          "aliases": [
+            "Fortaleza EC"
+          ]
+        },
+        {
+          "id": "palmeiras",
+          "name": "Palmeiras",
+          "aliases": [
+            "SE Palmeiras"
+          ]
+        },
+        {
+          "id": "corinthians",
+          "name": "Corinthians",
+          "aliases": [
+            "Corinthians",
+            "SC Corinthians"
+          ]
+        },
+        {
+          "id": "sao-paulo",
+          "name": "São Paulo",
+          "aliases": [
+            "Sao Paulo",
+            "São Paulo FC"
+          ]
+        },
+        {
+          "id": "santos",
+          "name": "Santos",
+          "aliases": [
+            "Santos FC"
+          ]
+        },
+        {
+          "id": "vasco",
+          "name": "Vasco",
+          "aliases": [
+            "Vasco da Gama"
+          ]
+        },
+        {
+          "id": "fluminense",
+          "name": "Fluminense",
+          "aliases": [
+            "Fluminense FC"
+          ]
+        },
+        {
+          "id": "botafogo",
+          "name": "Botafogo",
+          "aliases": [
+            "Botafogo FR"
+          ]
+        },
+        {
+          "id": "gremio",
+          "name": "Grêmio",
+          "aliases": [
+            "Gremio",
+            "Grêmio FBPA"
+          ]
+        },
+        {
+          "id": "internacional",
+          "name": "Internacional",
+          "aliases": [
+            "SC Internacional",
+            "Internacional"
+          ]
+        },
+        {
+          "id": "atletico-mineiro",
+          "name": "Atlético Mineiro",
+          "aliases": [
+            "Atletico Mineiro",
+            "Atlético-MG",
+            "Atletico MG"
+          ]
+        },
+        {
+          "id": "cruzeiro",
+          "name": "Cruzeiro",
+          "aliases": [
+            "Cruzeiro EC"
+          ]
+        }
+      ]
     },
     {
       "id": "bundesliga",
       "name": "Bundesliga",
       "type": "league",
-      "subcategories": []
+      "subcategories": [
+        {
+          "id": "bayern-munique",
+          "name": "Bayern de Munique",
+          "aliases": [
+            "Bayern Munich",
+            "FC Bayern"
+          ]
+        },
+        {
+          "id": "borussia-dortmund",
+          "name": "Borussia Dortmund",
+          "aliases": [
+            "Borussia Dortmund",
+            "BVB"
+          ]
+        }
+      ]
     },
     {
       "id": "la-liga",
       "name": "La Liga",
       "type": "league",
-      "subcategories": []
+      "subcategories": [
+        {
+          "id": "barcelona",
+          "name": "Barcelona",
+          "aliases": [
+            "FC Barcelona",
+            "Barcelona"
+          ]
+        },
+        {
+          "id": "real-madrid",
+          "name": "Real Madrid",
+          "aliases": [
+            "Real Madrid CF"
+          ]
+        },
+        {
+          "id": "atletico-madrid",
+          "name": "Atlético de Madrid",
+          "aliases": [
+            "Atletico Madrid",
+            "Atlético Madrid"
+          ]
+        }
+      ]
     },
     {
       "id": "serie-a-italia",
       "name": "Serie A",
       "type": "league",
-      "subcategories": []
+      "subcategories": [
+        {
+          "id": "inter-de-milao",
+          "name": "Inter de Milão",
+          "aliases": [
+            "Inter Milan",
+            "FC Internazionale"
+          ]
+        },
+        {
+          "id": "milan",
+          "name": "Milan",
+          "aliases": [
+            "AC Milan"
+          ]
+        },
+        {
+          "id": "juventus",
+          "name": "Juventus",
+          "aliases": [
+            "Juventus FC"
+          ]
+        }
+      ]
     },
     {
       "id": "ligue-1",
       "name": "Ligue 1",
       "type": "league",
-      "subcategories": []
+      "subcategories": [
+        {
+          "id": "paris-saint-germain",
+          "name": "Paris Saint-Germain",
+          "aliases": [
+            "PSG",
+            "Paris Saint Germain"
+          ]
+        }
+      ]
     },
     {
       "id": "primeira-liga",
@@ -58,11 +239,35 @@
       "subcategories": []
     }
   ],
+  "collections": [
+    {
+      "id": "atual",
+      "name": "Camisas atuais"
+    },
+    {
+      "id": "retro",
+      "name": "Camisas retrô"
+    },
+    {
+      "id": "treino",
+      "name": "Treino"
+    },
+    {
+      "id": "jaquetas",
+      "name": "Jaquetas e agasalhos"
+    },
+    {
+      "id": "outros",
+      "name": "Outros modelos"
+    }
+  ],
   "rules": [
-    "Cada categoria principal representa um campeonato ou grupo específico de equipes.",
-    "As subcategorias serão criadas a partir dos clubes encontrados nos álbuns de cada categoria.",
-    "Um álbum deve pertencer a uma categoria principal e, quando identificado, à subcategoria do clube.",
-    "Álbuns sem campeonato ou clube identificável devem ir para Outros Clubes.",
-    "Não duplicar álbuns durante a importação; usar o identificador ou URL original do álbum."
+    "A categoria principal representa o campeonato ou grupo (ex.: Brasileirão).",
+    "A subcategoria representa o clube, com nome exibido em português quando houver forma consagrada.",
+    "O nome original do álbum deve ser preservado para auditoria e sincronização.",
+    "Coleções como Retrô são etiquetas secundárias, não campeonatos; um álbum retrô do Flamengo continua em Brasileirão > Flamengo e recebe a coleção Camisas retrô.",
+    "Não criar cópia do mesmo álbum para representar atual e retrô; usar uma única entrada com etiquetas.",
+    "Se o clube ou campeonato não puder ser identificado com segurança, usar Outros Clubes e não adivinhar.",
+    "Usar a URL/identificador original do álbum como chave para evitar duplicações."
   ]
 }
