@@ -12,12 +12,24 @@ Este diretório é um módulo isolado da AmoraFut, desenvolvido na branch `drops
 
 ## Organização do catálogo
 - Categorias principais por campeonato: Premier League, Brasileirão, Bundesliga, La Liga, Serie A, Ligue 1 e Primeira Liga.
-- Seleções terá uma categoria própria.
-- Subcategorias representam os clubes. Os nomes exibidos serão em português quando houver uma forma usual em português; o título original do álbum será preservado internamente.
+- Seleções terá categoria própria; outras ligas e modalidades poderão ser adicionadas à medida que forem necessárias.
+- Subcategorias representam os clubes. Os nomes exibidos serão em português quando houver forma usual em português; o título original será preservado internamente.
 - Álbuns sem classificação segura ficam em **Outros Clubes**.
-- Coleções como **Camisas retrô**, **Camisas atuais**, **Treino** e **Jaquetas e agasalhos** serão etiquetas secundárias, não campeonatos.
-- Exemplo: um álbum retrô do Flamengo fica em **Brasileirão → Flamengo**, com a etiqueta **Camisas retrô**. Assim ele não é confundido com uma camisa atual nem duplicado em outra categoria.
-- A lista inicial de campeonatos, clubes, aliases e coleções está em `categories.json`. Ela poderá crescer conforme o fornecedor for analisado.
+- Coleções como **Camisas atuais**, **Camisas retrô**, **Treino** e **Jaquetas e agasalhos** serão etiquetas secundárias, não campeonatos.
+- Exemplo: um álbum retrô do Flamengo fica em **Brasileirão → Flamengo**, com etiqueta **Camisas retrô**. Não será duplicado em outra categoria.
+- A lista de campeonatos, clubes, aliases e coleções está em `categories.json`.
+
+## Validação inicial de álbum
+Foi inspecionado o álbum público `https://www.yupoo.store/albums/1131805`:
+- ID de origem: `1131805`.
+- Título original: `2025/26 Player Version Flamengo Home Jersey`.
+- Categoria informada pelo fornecedor: `Flamengo`.
+- Tamanhos de origem: S, M, L, XL, XXL; apresentação planejada: P, M, G, GG, XGG.
+- Galeria: 11 imagens identificadas pelos códigos `1131805-0` a `1131805-10`.
+- Classificação: **Brasileirão → Flamengo → Camisas atuais**.
+- Exemplo estruturado em `fixtures/flamengo-album-1131805.json`.
+
+Esta validação confirma que a página pública expõe título, categoria, tamanhos e referências de imagens. Ainda não confirma que os endereços diretos das imagens possam ser baixados pelo Worker, nem estoque ou disponibilidade comercial. Não tratar o álbum de exemplo como produto publicado/disponível até a próxima etapa de teste técnico.
 
 ## Etapa atual
-Estrutura de classificação preparada. A importação real ainda depende de validar a leitura de álbuns individuais e configurar backend/Worker e Supabase exclusivos. Nenhuma configuração da loja principal foi alterada.
+A estrutura de classificação e um exemplo real de metadados foram preparados. A importação automática em massa ainda depende de testar o Worker com o HTML efetivamente recebido, validar URLs de imagem e configurar backend/Worker e Supabase exclusivos. Nenhuma configuração da loja principal foi alterada.
