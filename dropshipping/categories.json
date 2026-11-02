@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "classification": "championship_then_club",
+  "fallback_category": "Outros Clubes",
+  "categories": [
+    {
+      "id": "premier-league",
+      "name": "Premier League",
+      "type": "league",
+      "subcategories": []
+    },
+    {
+      "id": "brasileirao",
+      "name": "Brasileirão",
+      "type": "league",
+      "subcategories": []
+    },
+    {
+      "id": "bundesliga",
+      "name": "Bundesliga",
+      "type": "league",
+      "subcategories": []
+    },
+    {
+      "id": "la-liga",
+      "name": "La Liga",
+      "type": "league",
+      "subcategories": []
+    },
+    {
+      "id": "serie-a-italia",
+      "name": "Serie A",
+      "type": "league",
+      "subcategories": []
+    },
+    {
+      "id": "ligue-1",
+      "name": "Ligue 1",
+      "type": "league",
+      "subcategories": []
+    },
+    {
+      "id": "primeira-liga",
+      "name": "Primeira Liga",
+      "type": "league",
+      "subcategories": []
+    },
+    {
+      "id": "selecoes",
+      "name": "Seleções",
+      "type": "national-teams",
+      "subcategories": []
+    },
+    {
+      "id": "outros-clubes",
+      "name": "Outros Clubes",
+      "type": "fallback",
+      "subcategories": []
+    }
+  ],
+  "rules": [
+    "Cada categoria principal representa um campeonato ou grupo específico de equipes.",
+    "As subcategorias serão criadas a partir dos clubes encontrados nos álbuns de cada categoria.",
+    "Um álbum deve pertencer a uma categoria principal e, quando identificado, à subcategoria do clube.",
+    "Álbuns sem campeonato ou clube identificável devem ir para Outros Clubes.",
+    "Não duplicar álbuns durante a importação; usar o identificador ou URL original do álbum."
+  ]
+}
