@@ -283,3 +283,9 @@ button:disabled{opacity:1}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+
+/* Produtos sem estoque: miniatura em escala de cinza e ao final do catálogo. */
+.card.sold .photo .card-photo-image{filter:grayscale(1);}
+.card.sold .photo{border-color:#62646b;}
+.card.sold .info{opacity:.78;}

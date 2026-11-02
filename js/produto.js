@@ -10,27 +10,48 @@ function imageGallery(p){
  return '<div class="gallery-main"><img id="mainProductImage" src="'+esc(imgs[0])+'" alt="'+esc(p.name)+'" width="900" height="1200" decoding="async"></div><div class="thumbs">'+imgs.map((x,i)=>'<button type="button" class="thumb '+(i===0?'active':'')+'" data-img="'+esc(x)+'"><img src="'+esc(x)+'" alt=""></button>').join('')+'</div>';
 }
 function sizeButtons(p){
- const s=p.stock||{};const sizes=['P','M','G','GG','3G'];const total=Object.values(s).reduce((a,v)=>a+Number(v||0),0);if(p.soldOut)return '<div class="stock-note">Produto esgotado.</div>';if(!p.stock||total===0)return '<div class="sizes">'+sizes.map(x=>'<button class="size" data-size="'+x+'">'+x+'</button>').join('')+'</div><div class="stock-note">Disponibilidade sujeita a confirmação pelo WhatsApp.</div>';
- return '<div class="sizes">'+sizes.map(x=>{const n=Number(s[x]||0);return '<button class="size '+(!n?'disabled':'')+'" data-size="'+x+'" '+(!n?'disabled':'')+'>'+x+(n?' <small>('+n+' un.)</small>':'<small>Esgotado</small>')+'</button>';}).join('')+'</div><div class="stock-total">Estoque total: <b>'+total+' unidades</b></div>';
+ const stock=p.stock||{},sizes=['P','M','G','GG','3G'],managed=Object.keys(stock).length>0;
+ const total=Object.values(stock).reduce((sum,value)=>sum+Math.max(0,Number(value)||0),0);
+ if(!managed&&!p.soldOut)return '<div class="sizes">'+sizes.map(size=>'<button class="size" data-size="'+size+'">'+size+'</button>').join('')+'</div><div class="stock-note">Disponibilidade sujeita a confirmação pelo WhatsApp.</div>';
+ return '<div class="sizes">'+sizes.map(size=>{
+  const quantity=Math.max(0,Number(stock[size]||0));
+  const unavailable=p.soldOut||!managed||quantity===0;
+  return '<button class="size '+(unavailable?'disabled':'')+'" data-size="'+size+'" '+(unavailable?'disabled aria-disabled="true"':'')+'>'+size+(unavailable?' <small>Esgotado</small>':' <small>('+quantity+' un.)</small>')+'</button>';
+ }).join('')+'</div>'+(p.soldOut?'<div class="stock-note sold-out-message">Produto esgotado em todos os tamanhos.</div>':managed?'<div class="stock-total">Estoque total: <b>'+total+' unidades</b></div>':'');
 }
 function render(p){
  document.title=p.name+' — Amora Fut Streetwear';
  const imgs=(p.images&&p.images.length?p.images:(p.image?[p.image]:[]));
  const badge=p.soldOut?'ESGOTADO':(p.badge||'CATÁLOGO VIP');
- document.querySelector('#productRoot').innerHTML='<div class="product-breadcrumb"><a href="index.html">Início</a> / <a href="index.html#catalogo">Catálogo</a> / '+esc(p.name)+'</div><section class="product-box"><div class="product-media">'+imageGallery(p)+'</div><div class="product-info"><div class="product-tag">'+esc(badge)+'</div><h1>'+esc(p.name)+'</h1><div class="product-meta">'+esc(p.team||'')+' • '+esc(p.category||'')+' • '+esc(p.version||'')+'</div><div class="product-price">'+(p.oldPrice?'<del>'+fmt(p.oldPrice)+'</del>':'')+'<strong>'+fmt(p.price)+'</strong></div>'+(p.wholesalePrice>0?'<div class="wholesale-price">Atacado: <strong>'+fmt(p.wholesalePrice)+'/un.</strong> a partir de 5 peças no pedido</div>':'')+'<div class="product-pix">PIX · '+fmt(Number(p.price||0)*.95)+' — 5% OFF</div>'+(p.description?'<p class="product-description">'+esc(p.description)+'</p>':'')+'<div class="size-label">TAMANHOS</div>'+sizeButtons(p)+'<div class="product-points"><div>✓ Envio para todo o Brasil</div><div>✓ Atendimento personalizado</div><div>✓ Confirmação de estoque pelo WhatsApp</div></div><div class="product-cart-row"><div class="product-qty"><button type="button" id="qtyMinus">−</button><strong id="qtyValue">1</strong><button type="button" id="qtyPlus">+</button></div><button id="addCartBtn" class="product-btn primary '+(p.soldOut?'disabled':'')+'" type="button" '+(p.soldOut?'disabled':'')+'>🛒 Adicionar ao carrinho</button></div><div class="product-actions"><a id="waBtn" class="product-btn secondary" '+(p.soldOut?'aria-disabled="true"':'href="'+wa(p)+'" target="_blank" rel="noopener"')+'>'+(p.soldOut?'Produto esgotado':'Pedir direto pelo WhatsApp')+'</a><a class="product-btn secondary" href="index.html#catalogo">← Voltar ao catálogo</a></div></div></section>';
+ const purchaseControls=p.soldOut
+  ? '<div class="stock-note sold-out-message">Este produto está esgotado no momento. Não é possível adicioná-lo ao carrinho.</div><div class="product-actions"><a class="product-btn secondary" href="'+wa(p)+'" target="_blank" rel="noopener">Consultar reposição pelo WhatsApp</a><a class="product-btn secondary" href="index.html#catalogo">← Voltar ao catálogo</a></div>'
+  : '<div class="product-cart-row"><div class="product-qty"><button type="button" id="qtyMinus">−</button><strong id="qtyValue">1</strong><button type="button" id="qtyPlus">+</button></div><button id="addCartBtn" class="product-btn primary" type="button">🛒 Adicionar ao carrinho</button></div><div class="product-actions"><a id="waBtn" class="product-btn secondary" href="'+wa(p)+'" target="_blank" rel="noopener">Pedir direto pelo WhatsApp</a><a class="product-btn secondary" href="index.html#catalogo">← Voltar ao catálogo</a></div>';
+ document.querySelector('#productRoot').innerHTML='<div class="product-breadcrumb"><a href="index.html">Início</a> / <a href="index.html#catalogo">Catálogo</a> / '+esc(p.name)+'</div><section class="product-box"><div class="product-media">'+imageGallery(p)+'</div><div class="product-info"><div class="product-tag">'+esc(badge)+'</div><h1>'+esc(p.name)+'</h1><div class="product-meta">'+esc(p.team||'')+' • '+esc(p.category||'')+' • '+esc(p.version||'')+'</div><div class="product-price">'+(p.oldPrice?'<del>'+fmt(p.oldPrice)+'</del>':'')+'<strong>'+fmt(p.price)+'</strong></div>'+(p.wholesalePrice>0?'<div class="wholesale-price">Atacado: <strong>'+fmt(p.wholesalePrice)+'/un.</strong> a partir de 5 peças no pedido</div>':'')+'<div class="product-pix">PIX · '+fmt(Number(p.price||0)*.95)+' — 5% OFF</div>'+(p.description?'<p class="product-description">'+esc(p.description)+'</p>':'')+'<div class="size-label">TAMANHOS</div>'+sizeButtons(p)+'<div class="product-points"><div>✓ Envio para todo o Brasil</div><div>✓ Atendimento personalizado</div><div>✓ Confirmação de estoque pelo WhatsApp</div></div>'+purchaseControls+'</div></section>';
  const mainImage=document.querySelector('#mainProductImage');
  const setGalleryImage=(index)=>{if(!mainImage||!imgs.length)return;const i=(index+imgs.length)%imgs.length;mainImage.src=imgs[i];document.querySelectorAll('.thumb').forEach((x,n)=>x.classList.toggle('active',n===i));};
- document.querySelectorAll('.thumb').forEach((b,i)=>b.addEventListener('click',()=>setGalleryImage(i)));
+ document.querySelectorAll('.thumb').forEach((button,index)=>button.addEventListener('click',()=>setGalleryImage(index)));
  if(mainImage&&imgs.length>1){
   let startX=0,startY=0,moved=false;
-  mainImage.addEventListener('touchstart',e=>{const t=e.changedTouches[0];startX=t.clientX;startY=t.clientY;moved=false},{passive:true});
+  mainImage.addEventListener('touchstart',e=>{const t=e.changedTouches[0];startX=t.clientX;startY=t.clientY;moved=false;},{passive:true});
   mainImage.addEventListener('touchmove',e=>{const t=e.changedTouches[0];if(Math.abs(t.clientX-startX)>10)moved=true;},{passive:true});
-  mainImage.addEventListener('touchend',e=>{if(!moved)return;const t=e.changedTouches[0];const dx=t.clientX-startX;const dy=t.clientY-startY;if(Math.abs(dx)<45||Math.abs(dx)<Math.abs(dy))return;const active=[...document.querySelectorAll('.thumb')].findIndex(x=>x.classList.contains('active'));setGalleryImage(active+(dx<0?1:-1));},{passive:true});
+  mainImage.addEventListener('touchend',e=>{if(!moved)return;const t=e.changedTouches[0],dx=t.clientX-startX,dy=t.clientY-startY;if(Math.abs(dx)<45||Math.abs(dx)<Math.abs(dy))return;const active=[...document.querySelectorAll('.thumb')].findIndex(x=>x.classList.contains('active'));setGalleryImage(active+(dx<0?1:-1));},{passive:true});
  }
- document.querySelectorAll('.size:not(.disabled)').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.size').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');document.querySelector('#waBtn').href=wa(p,b.dataset.size);}));let qty=1;const qv=document.querySelector('#qtyValue'),qm=document.querySelector('#qtyMinus'),qp=document.querySelector('#qtyPlus'),addBtn=document.querySelector('#addCartBtn');const selectedSize=()=>document.querySelector('.size.selected')?.dataset.size||'';const maxQty=()=>{const s=selectedSize();return p.stock&&s?Number(p.stock[s]||0):null};const syncQty=()=>{const m=maxQty();if(m!==null&&m>0)qty=Math.min(qty,m);qv.textContent=qty};qm?.addEventListener('click',()=>{qty=Math.max(1,qty-1);syncQty()});qp?.addEventListener('click',()=>{const m=maxQty();if(m===null||qty<m)qty++;syncQty()});addBtn?.addEventListener('click',()=>{if(p.soldOut)return;const s=selectedSize();if(p.stock&&Object.keys(p.stock).length&&!s){alert('Selecione um tamanho.');return}addToCart(p,s,qty)});
+ document.querySelectorAll('.size:not(.disabled)').forEach(button=>button.addEventListener('click',()=>{
+  document.querySelectorAll('.size').forEach(item=>item.classList.remove('selected'));
+  button.classList.add('selected');
+  const waButton=document.querySelector('#waBtn');if(waButton)waButton.href=wa(p,button.dataset.size);
+ }));
+ let qty=1;
+ const qv=document.querySelector('#qtyValue'),qm=document.querySelector('#qtyMinus'),qp=document.querySelector('#qtyPlus'),addBtn=document.querySelector('#addCartBtn');
+ const selectedSize=()=>document.querySelector('.size.selected')?.dataset.size||'';
+ const maxQty=()=>{const size=selectedSize();return p.stock&&size?Number(p.stock[size]||0):null;};
+ const syncQty=()=>{const max=maxQty();if(max!==null&&max>0)qty=Math.min(qty,max);if(qv)qv.textContent=qty;};
+ qm?.addEventListener('click',()=>{qty=Math.max(1,qty-1);syncQty();});
+ qp?.addEventListener('click',()=>{const max=maxQty();if(max===null||qty<max)qty++;syncQty();});
+ addBtn?.addEventListener('click',()=>{if(p.soldOut)return;const size=selectedSize();if(p.stock&&Object.keys(p.stock).length&&!size){alert('Selecione um tamanho.');return;}if(p.stock&&size&&Number(p.stock[size]||0)<=0){alert('Este tamanho está esgotado.');return;}addToCart(p,size,qty);});
 }
 function normalizeSupabaseProduct(p){
- return {id:p.id,name:p.name,team:p.team||'',category:p.category||'Brasileiras',version:p.version||'Torcedor',price:Number(p.price||0),wholesalePrice:calcWholesale(p.version,p.price,p.wholesale_price),oldPrice:p.old_price==null?undefined:Number(p.old_price),badge:p.badge||'',description:p.description||'',published:p.published!==false,soldOut:!!p.sold_out,stock:p.stock||{},images:Array.isArray(p.images)?p.images:[]};
+ return {id:p.id,name:p.name,team:p.team||'',category:p.category||'Brasileiras',version:p.version||'Torcedor',price:Number(p.price||0),wholesalePrice:calcWholesale(p.version,p.price,p.wholesale_price),oldPrice:p.old_price==null?undefined:Number(p.old_price),badge:p.badge||'',description:p.description||'',published:p.published!==false,soldOut:!!p.sold_out||((p.stock&&Object.keys(p.stock).length>0)&&Object.values(p.stock).reduce((sum,value)=>sum+Math.max(0,Number(value)||0),0)===0),stock:p.stock||{},images:Array.isArray(p.images)?p.images:[]};
 }
 async function init(){
  try{
