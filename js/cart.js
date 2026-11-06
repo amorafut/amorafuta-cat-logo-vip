@@ -5,11 +5,11 @@ function getCart(){try{return JSON.parse(localStorage.getItem(CART_KEY)||'[]')}c
 function saveCart(c){localStorage.setItem(CART_KEY,JSON.stringify(c));clearFreightQuote();renderCart();if(freightCep.length===8&&c.length)quoteFreight()}
 function cartCount(){return getCart().reduce((n,i)=>n+Number(i.qty||0),0)}
 function calcWholesale(version,price,fallback=0){const v=String(version||'');if(/jogador/i.test(v))return 110;if(/torcedor/i.test(v))return 90;return Number(fallback||0)}
-function cartTotal(){const c=getCart(),qty=c.reduce((n,i)=>n+Math.max(0,Number(i.qty)||0),0);return c.reduce((s,i)=>{const v=String(i.version||'')+' '+String(i.name||'');const wholesale=calcWholesale(v,i.price,i.wholesalePrice);const unit=qty>=5&&wholesale>0?wholesale:Number(i.price||0);return s+unit*Math.max(0,Number(i.qty)||0)},0)}
-function effectivePrice(i){const c=getCart(),qty=c.reduce((n,x)=>n+Math.max(0,Number(x.qty)||0),0);const version=String(i.version||'')+' '+String(i.name||'');const wholesale=calcWholesale(version,i.price,i.wholesalePrice);return qty>=5&&wholesale>0?wholesale:Number(i.price||0)}
+function cartTotal(){return getCart().reduce((s,i)=>s+effectivePrice(i)*Math.max(0,Number(i.qty)||0),0)}
+function effectivePrice(i){if(i.bfMode==='bf2')return Number(i.bf2Price||i.price||0);return Number(i.salePrice??75)}
 let freightCep=(localStorage.getItem(CEP_KEY)||'').replace(/[^\d]/g,'').slice(0,8),freightOptions=[],selectedFreight=null,freightLoading=false,freightError='';
 function clearFreightQuote(){freightOptions=[];selectedFreight=null;freightError='';}
-function addToCart(p,size,qty=1){const c=getCart(),key=p.id+'::'+(size||'ÚNICO'),max=p.stock&&size?Number(p.stock[size]||0):null,found=c.find(i=>i.key===key);if(found)found.qty=max?Math.min(max,found.qty+qty):found.qty+qty;else c.push({key,id:p.id,name:p.name,team:p.team||'',version:p.version||'',price:Number(p.price||0),wholesalePrice:calcWholesale(p.version,p.price,p.wholesalePrice),size:size||'',qty:Number(qty||1),image:(p.images&&p.images[0])||p.image||'',stock:max});saveCart(c);openCart()}
+function addToCart(p,size,qty=1){const c=getCart(),key=p.id+'::'+(size||'ÚNICO'),max=p.stock&&size?Number(p.stock[size]||0):null,found=c.find(i=>i.key===key);if(found)found.qty=max?Math.min(max,found.qty+qty):found.qty+qty;else c.push({key,id:p.id,name:p.name,team:p.team||'',version:p.version||'',price:Number(p.price||0),salePrice:Number(p.salePrice??75),bfMode:p.bfMode||'bf1',bf2Price:p.bf2Price==null?null:Number(p.bf2Price),wholesalePrice:calcWholesale(p.version,p.price,p.wholesalePrice),size:size||'',qty:Number(qty||1),image:(p.images&&p.images[0])||p.image||'',stock:max});saveCart(c);openCart()}
 function changeCart(key,d){const c=getCart(),i=c.findIndex(x=>x.key===key);if(i<0)return;const max=c[i].stock;c[i].qty=max?Math.min(max,c[i].qty+d):c[i].qty+d;if(c[i].qty<=0)c.splice(i,1);saveCart(c)}
 function removeCart(key){saveCart(getCart().filter(x=>x.key!==key))}
 function setFreightCep(v){freightCep=String(v||'').replace(/[^\d]/g,'').slice(0,8);try{localStorage.setItem(CEP_KEY,freightCep)}catch(e){}const input=document.getElementById('freightCep');if(input){const digits=freightCep;input.value=digits.length>5?digits.slice(0,5)+'-'+digits.slice(5):digits;}clearFreightQuote()}
@@ -47,9 +47,8 @@ function checkoutCart(){
  if(!selectedFreight){alert('Informe o CEP e calcule o frete. Depois, selecione uma opção de entrega.');return}
  const totalQty=c.reduce((n,i)=>n+Number(i.qty||0),0),wholesaleActive=totalQty>=5;
  let t='Olá! Quero fazer um pedido na Amora Fut:\n\n';
- if(wholesaleActive)t+='🏷️ PREÇO DE ATACADO APLICADO ('+totalQty+' peças no pedido)\nValores por unidade e subtotal de cada item abaixo.\n\n';
- else t+='Preço de varejo: '+totalQty+' peça(s) no carrinho. Para liberar o atacado, adicione mais '+(5-totalQty)+' peça(s) (mínimo de 5).\n\n';
- c.forEach((i,n)=>{const unit=effectivePrice(i);t+=(n+1)+'. '+i.name+(i.size?' — tamanho '+i.size:'')+' — '+i.qty+' un. — '+(wholesaleActive?'atacado ':'varejo ')+money(unit)+'/un. — subtotal '+money(unit*i.qty)+'\n';});
+ t+='🏷️ PREÇOS BLACK FRIDAY APLICADOS\n\n';
+ c.forEach((i,n)=>{const unit=effectivePrice(i);t+=(n+1)+'. '+i.name+(i.size?' — tamanho '+i.size:'')+' — '+i.qty+' un. — '+(i.bfMode==='bf2'?'Black Friday 2 ':'Black Friday 1 ')+money(unit)+'/un. — subtotal '+money(unit*i.qty)+'\n';});
  t+='\nCEP de entrega: '+freightCep+'\nFrete ('+selectedFreight._name+'): '+money(shippingPrice())+'\nSubtotal dos produtos: '+money(cartTotal())+'\nTotal com frete: '+money(orderTotal())+'\n\nGostaria de confirmar disponibilidade e pagamento.';
  window.open('https://wa.me/'+WA_CART+'?text='+encodeURIComponent(t),'_blank','noopener');
 }
