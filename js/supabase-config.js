@@ -4,5 +4,5 @@
 window.AMORA_SUPABASE_CONFIG = {
   url: "https://fdkvghcxfjqtiwwfjkjz.supabase.co",
   publishableKey: "sb_publishable_erE3C809F94OQ3GOXx1t6A_mbchiASd",
-  bucket: "amora-product-images"
+  bucket: "amora-product-images",\n  r2WorkerUrl: "" // preencher após publicar o Worker da Cloudflare
 };
