@@ -1,6 +1,7 @@
 const WA='5585998022643';
 const fmt=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 function bf1Price(version){const v=String(version||'').toLowerCase();if(v.includes('jogador'))return 80;if(v.includes('retr'))return 85;return 70;}
+function calcWholesale(version,price,fallback=0){const v=String(version||'');if(/jogador/i.test(v))return 110;if(/torcedor/i.test(v))return 90;return Number(fallback||0);}
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 const params=new URLSearchParams(location.search),id=params.get('id');
 function displayPrice(p){return Number(p.salePrice??75)}
