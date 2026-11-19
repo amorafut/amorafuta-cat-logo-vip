@@ -3,7 +3,7 @@ const fmt=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL
 function bf1Price(version){const v=String(version||'').toLowerCase();if(v.includes('jogador'))return 80;if(v.includes('retr'))return 85;return 70;}
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 const params=new URLSearchParams(location.search),id=params.get('id');
-function displayPrice(p){return Number(p.salePrice??75)}
+function displayPrice(p){return Number(p.salePrice??bf1Price(p.version))}
 function wa(p,size){let t='Olá! Vi no catálogo VIP da Amora Fut e tenho interesse na '+p.name+' ('+(p.version||'')+')';if(size)t+=' no tamanho '+size;t+=', por '+fmt(displayPrice(p))+'. Gostaria de confirmar disponibilidade.';return 'https://wa.me/'+WA+'?text='+encodeURIComponent(t);}
 function imageGallery(p){
  const imgs=(p.images&&p.images.length?p.images:(p.image?[p.image]:[]));
@@ -52,7 +52,7 @@ function render(p){
  addBtn?.addEventListener('click',()=>{if(p.soldOut)return;const size=selectedSize();if(p.stock&&Object.keys(p.stock).length&&!size){alert('Selecione um tamanho.');return;}if(p.stock&&size&&Number(p.stock[size]||0)<=0){alert('Este tamanho está esgotado.');return;}addToCart(p,size,qty);});
 }
 function normalizeSupabaseProduct(p){
- return {id:p.id,name:p.name,team:p.team||'',category:p.category||'Brasileiras',version:p.version||'Torcedor',price:Number(p.price||0),salePrice:(p.bf_mode||'bf1')==='bf2'?Number(p.bf2_price||0):bf1Price(p.version),bfMode:p.bf_mode||'bf1',bf2Price:p.bf2_price==null?null:Number(p.bf2_price),wholesalePrice:calcWholesale(p.version,p.price,p.wholesale_price),oldPrice:p.old_price==null?undefined:Number(p.old_price),badge:p.badge||'',description:p.description||'',published:p.published!==false,soldOut:!!p.sold_out||((p.stock&&Object.keys(p.stock).length>0)&&Object.values(p.stock).reduce((sum,value)=>sum+Math.max(0,Number(value)||0),0)===0),stock:p.stock||{},images:Array.isArray(p.images)?p.images:[]};
+ return {id:p.id,name:p.name,team:p.team||'',category:p.category||'Brasileiras',version:p.version||'Torcedor',price:Number(p.price||0),salePrice:(p.bf_mode||'bf1')==='bf2'?Number(p.bf2_price||0):bf1Price(p.version),bfMode:p.bf_mode||'bf1',bf2Price:p.bf2_price==null?null:Number(p.bf2_price),oldPrice:p.old_price==null?undefined:Number(p.old_price),badge:p.badge||'',description:p.description||'',published:p.published!==false,soldOut:!!p.sold_out||((p.stock&&Object.keys(p.stock).length>0)&&Object.values(p.stock).reduce((sum,value)=>sum+Math.max(0,Number(value)||0),0)===0),stock:p.stock||{},images:Array.isArray(p.images)?p.images:[]};
 }
 async function init(){
  try{
