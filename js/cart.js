@@ -49,7 +49,7 @@ function checkoutCart(){
  let t='Olá! Quero fazer um pedido na Amora Fut:\n\n';
  t+='🏷️ PREÇOS BLACK FRIDAY APLICADOS\n\n';
  c.forEach((i,n)=>{const unit=effectivePrice(i);t+=(n+1)+'. '+i.name+(i.size?' — tamanho '+i.size:'')+' — '+i.qty+' un. — '+(i.bfMode==='bf2'?'Black Friday 2 ':'Black Friday 1 ')+money(unit)+'/un. — subtotal '+money(unit*i.qty)+'\n';});
- t+='\nCEP de entrega: '+freightCep+'\nFrete ('+selectedFreight._name+'): '+money(shippingPrice())+'\nSubtotal dos produtos: '+money(cartTotal())+'\nTotal com frete: '+money(orderTotal())+'\n\nGostaria de confirmar disponibilidade e pagamento.';
+ const prazoEntrega=selectedFreight.delivery_time!=null&&selectedFreight.delivery_time!==''?String(selectedFreight.delivery_time)+' dias':'não informado pela transportadora';\n t+='\nCEP de entrega: '+freightCep+'\nFrete ('+selectedFreight._name+'): '+money(shippingPrice())+'\nPrazo de entrega: '+prazoEntrega+'\nSubtotal dos produtos: '+money(cartTotal())+'\nTotal com frete: '+money(orderTotal())+'\n\nGostaria de confirmar disponibilidade e pagamento.';
  window.open('https://wa.me/'+WA_CART+'?text='+encodeURIComponent(t),'_blank','noopener');
 }
 const CART_ICON='<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 6h3l2.2 13.2a2 2 0 0 0 2 1.7h11.9a2 2 0 0 0 1.9-1.5L28 10H8"/><circle cx="12.5" cy="26" r="2"/><circle cx="24" cy="26" r="2"/></svg>';
