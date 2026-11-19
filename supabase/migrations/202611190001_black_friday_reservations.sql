@@ -307,5 +307,5 @@ create policy "bf reservations admin read" on public.amora_bf_reservations
 for select to authenticated
 using (exists (select 1 from public.amora_admin_users a where a.user_id = auth.uid()));
 
--- Expiração automática: depois de habilitar pg_cron no projeto de teste,
--- agendar a execução de select public.amora_bf_expire_reservations(); a cada minuto.
+-- A expiração automática é configurada em arquivo separado após habilitar pg_cron.
+-- Consulte supabase/black-friday-schedule.sql no mesmo branch.
