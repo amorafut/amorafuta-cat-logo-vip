@@ -272,8 +272,34 @@ grant execute on function public.amora_bf_confirm_order(uuid) to authenticated;
 grant execute on function public.amora_bf_update_shipping(uuid,text,numeric) to authenticated;
 grant execute on function public.amora_bf_expire_reservations() to authenticated;
 
+
+-- Leitura dos pedidos e reservas somente por administradores autenticados.
+drop policy if exists "bf orders admin read" on public.amora_bf_orders;
+create policy "bf orders admin read" on public.amora_bf_orders
+for select to authenticated
+using (exists (select 1 from public.amora_admin_users a where a.user_id = auth.uid()));
+
+drop policy if exists "bf reservations admin read" on public.amora_bf_reservations;
+create policy "bf reservations admin read" on public.amora_bf_reservations
+for select to authenticated
+using (exists (select 1 from public.amora_admin_users a where a.user_id = auth.uid()));
+
+-- Agendamento automático: executa a cada minuto se pg_cron já estiver habilitado.
+do $
+begin
+  if exists (select 1 from pg_extension where extname = 'pg_cron') then
+    perform cron.unschedule(jobid)
+    from cron.job
+    where jobname = 'amora-bf-expire-every-minute';
+    perform cron.schedule(
+      'amora-bf-expire-every-minute',
+      '* * * * *',
+      'select public.amora_bf_expire_reservations();'
+    );
+  end if;
+exception when undefined_table or undefined_function then
+  raise notice 'pg_cron não está habilitado. Ative a extensão pg_cron no Supabase de teste para expiração automática pontual.';
+end $;
+
 -- Expiração é executada quando uma nova reserva é solicitada.
--- Para liberar exatamente ao completar 3h mesmo sem novos pedidos,
--- habilitar pg_cron no projeto de TESTE e agendar:
--- select cron.schedule('amora-bf-expire-every-minute','* * * * *',
---   $$select public.amora_bf_expire_reservations();$$);
+-- A expiração automática exata depende de pg_cron estar habilitado no projeto.
