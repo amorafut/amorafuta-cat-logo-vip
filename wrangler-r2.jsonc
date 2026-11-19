@@ -1,0 +1,16 @@
+{
+  "$schema": "https://raw.githubusercontent.com/cloudflare/workers-sdk/main/packages/wrangler/config-schema.json",
+  "name": "amora-fut-imagens",
+  "main": "cloudflare/amora-fut-imagens.js",
+  "compatibility_date": "2026-11-17",
+  "r2_buckets": [
+    {
+      "binding": "AMORA_IMAGES",
+      "bucket_name": "amora-fut-imagens"
+    }
+  ],
+  "vars": {
+    "SUPABASE_URL": "https://fdkvghcxfjqtiwwfjkjz.supabase.co",
+    "SUPABASE_PUBLISHABLE_KEY": "sb_publishable_erE3C809F94OQ3GOXx1t6A_mbchiASd"
+  }
+}
