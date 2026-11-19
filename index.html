@@ -73,6 +73,18 @@ body.cart-open #cartRoot .cart-drawer{transform:translateX(0)!important}
 @media(max-width:380px){#cartRoot .cart-drawer{width:min(290px,94vw)!important}#cartRoot .cart-foot{padding:9px!important;max-height:52%!important}#cartRoot .cart-items{padding:8px!important}#cartRoot .cart-item-img{width:44px!important;height:54px!important}}
 @media(max-height:650px){#cartRoot .cart-head{padding:10px 13px!important}#cartRoot .cart-foot{max-height:52%!important;padding:9px!important}#cartRoot .cart-total{margin-bottom:5px!important}#cartRoot .cart-checkout,#cartRoot .cart-continue{min-height:30px!important}}
 
+
+/* Faixa compacta de acesso ao Dropshipping */
+.dropship-teaser{width:min(100% - 32px,1180px);margin:14px auto 18px}
+.dropship-teaser a{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 20px;border:1px solid rgba(218,180,94,.58);border-radius:10px;background:linear-gradient(105deg,#171719,#29251d 55%,#171719);color:#fff;text-decoration:none;box-shadow:0 5px 18px rgba(0,0,0,.13);transition:transform .2s,border-color .2s}
+.dropship-teaser a:hover{transform:translateY(-2px);border-color:#e7c77c}
+.dropship-teaser-copy{display:flex;align-items:center;gap:12px;min-width:0}
+.dropship-teaser-mark{display:grid;place-items:center;width:38px;height:38px;flex:0 0 38px;border-radius:8px;background:rgba(218,180,94,.13);color:#e7c77c;font-size:20px}
+.dropship-teaser strong{display:block;font-size:clamp(11px,1.5vw,14px);letter-spacing:.09em}
+.dropship-teaser small{display:block;margin-top:3px;color:#c7c2b7;font-size:11px}
+.dropship-teaser-cta{flex:0 0 auto;color:#e7c77c;font-size:10px;font-weight:800;letter-spacing:.1em;white-space:nowrap}
+@media(max-width:520px){.dropship-teaser{width:calc(100% - 22px);margin:10px auto 13px}.dropship-teaser a{padding:10px 12px;gap:8px}.dropship-teaser-mark{width:32px;height:32px;flex-basis:32px;font-size:17px}.dropship-teaser small{font-size:9px}.dropship-teaser-cta{font-size:9px}}
+
 </style></head><body id="top"><a class="skip-link" href="#conteudo-principal">Pular para o conteúdo principal</a><div id="cartRoot"></div>
 <div class="topbar"><div>🚚 <b>FRETE PARA TODO O BRASIL</b></div><div>♛ <b>QUALIDADE PREMIUM</b></div><div>🔒 <b>ATENDIMENTO VIA WHATSAPP</b></div></div>
 <header class="site-header">
@@ -87,6 +99,14 @@ body.cart-open #cartRoot .cart-drawer{transform:translateX(0)!important}
 </header>
 <main id="conteudo-principal" tabindex="-1">
 <h1 class="sr-only">Amora Fut Streetwear — catálogo de camisas de futebol</h1>
+
+<section class="dropship-teaser" aria-label="Conheça o Dropshipping AmoraFut">
+ <a href="dropshipping.html">
+  <span class="dropship-teaser-copy"><span class="dropship-teaser-mark" aria-hidden="true">✦</span><span><strong>NOVIDADE AMORAFUT · DROPSHIPPING</strong><small>Mais opções de modelos no catálogo do fornecedor</small></span></span>
+  <span class="dropship-teaser-cta">SAIBA MAIS&nbsp; →</span>
+ </a>
+</section>
+
 <section class="hero-image-wrap" aria-label="Banner principal Amora Fut">
   <a class="hero-image-link" href="#catalogo" aria-label="Ver catálogo">
     <picture>
