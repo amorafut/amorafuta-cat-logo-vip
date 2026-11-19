@@ -9,14 +9,27 @@
 const ALLOWED_ORIGIN = "https://amorafut.github.io";
 const SUPERFRETE_URL = "https://api.superfrete.com/api/v0/calculator";
 
+function isAllowedOrigin(origin) {
+  if (!origin) return true;
+  try {
+    const url = new URL(origin);
+    return origin === ALLOWED_ORIGIN ||
+      (url.protocol === "https:" && url.hostname.endsWith(".vercel.app"));
+  } catch {
+    return false;
+  }
+}
+
 function cors(origin) {
-  const allowed = origin === ALLOWED_ORIGIN ? origin : ALLOWED_ORIGIN;
-  return {
-    "Access-Control-Allow-Origin": allowed,
+  const headers = {
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
     "Vary": "Origin"
   };
+  if (isAllowedOrigin(origin)) {
+    headers["Access-Control-Allow-Origin"] = origin || ALLOWED_ORIGIN;
+  }
+  return headers;
 }
 
 function json(data, status, origin) {
@@ -32,7 +45,7 @@ export default {
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: cors(origin) });
     }
-    if (origin && origin !== ALLOWED_ORIGIN) {
+    if (!isAllowedOrigin(origin)) {
       return json({ error: "Origem não autorizada." }, 403, origin);
     }
     if (request.method !== "POST") {
