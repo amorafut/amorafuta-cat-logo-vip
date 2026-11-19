@@ -267,10 +267,13 @@ begin
 end;
 $$;
 
+revoke all on function public.amora_bf_reserve_order(jsonb,text,numeric,text,text) from public;
+revoke all on function public.amora_bf_confirm_order(uuid) from public, anon;
+revoke all on function public.amora_bf_update_shipping(uuid,text,numeric) from public, anon;
+revoke all on function public.amora_bf_expire_reservations() from public, anon, authenticated;
 grant execute on function public.amora_bf_reserve_order(jsonb,text,numeric,text,text) to anon, authenticated;
 grant execute on function public.amora_bf_confirm_order(uuid) to authenticated;
 grant execute on function public.amora_bf_update_shipping(uuid,text,numeric) to authenticated;
-grant execute on function public.amora_bf_expire_reservations() to authenticated;
 
 
 -- Leitura dos pedidos e reservas somente por administradores autenticados.
