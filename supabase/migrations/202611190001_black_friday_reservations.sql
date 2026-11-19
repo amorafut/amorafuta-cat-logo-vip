@@ -2,7 +2,17 @@
 -- Aplicar somente no projeto Supabase de teste:
 -- fdkvghcxfjqtiwwfjkjz
 -- Esta migration usa amora_products.stock como JSONB: {"P":2,"M":1,...}
+-- Adiciona bf_mode e bf2_price, ausentes no schema encontrado.
 -- Não executar no projeto de produção.
+
+alter table public.amora_products
+  add column if not exists bf_mode text not null default 'bf1',
+  add column if not exists bf2_price numeric(10,2);
+
+alter table public.amora_products drop constraint if exists amora_products_bf_mode_check;
+alter table public.amora_products add constraint amora_products_bf_mode_check check (bf_mode in ('bf1','bf2'));
+alter table public.amora_products drop constraint if exists amora_products_bf2_price_check;
+alter table public.amora_products add constraint amora_products_bf2_price_check check (bf2_price is null or bf2_price > 0);
 
 create table if not exists public.amora_bf_orders (
   id uuid primary key default gen_random_uuid(),
@@ -45,6 +55,7 @@ alter table public.amora_bf_reservations enable row level security;
 -- Nenhum acesso direto anônimo às tabelas; operações passam pelas RPCs abaixo.
 revoke all on public.amora_bf_orders from anon, authenticated;
 revoke all on public.amora_bf_reservations from anon, authenticated;
+grant select on public.amora_bf_orders, public.amora_bf_reservations to authenticated;
 
 create or replace function public.amora_bf_expire_reservations()
 returns integer
@@ -156,8 +167,17 @@ begin
       raise exception 'O produto % no tamanho % não está mais disponível.', v_product.name, v_size;
     end if;
 
-    v_unit := coalesce((v_item->>'unit_price')::numeric, 0);
-    if v_unit < 0 then raise exception 'Preço inválido.'; end if;
+    -- O preço é calculado no banco, nunca aceito do navegador.
+    if v_product.bf_mode = 'bf2' then
+      v_unit := coalesce(v_product.bf2_price, 0);
+      if v_unit <= 0 then raise exception 'Preço BF2 não configurado para %.', v_product.name; end if;
+    else
+      v_unit := case
+        when lower(coalesce(v_product.version,'')) like '%jogador%' then 80
+        when lower(coalesce(v_product.version,'')) like '%retr%' then 85
+        else 70
+      end;
+    end if;
 
     update public.amora_products
     set stock = jsonb_set(coalesce(stock, '{}'::jsonb), array[v_size],
@@ -287,22 +307,5 @@ create policy "bf reservations admin read" on public.amora_bf_reservations
 for select to authenticated
 using (exists (select 1 from public.amora_admin_users a where a.user_id = auth.uid()));
 
--- Agendamento automático: executa a cada minuto se pg_cron já estiver habilitado.
-do $
-begin
-  if exists (select 1 from pg_extension where extname = 'pg_cron') then
-    perform cron.unschedule(jobid)
-    from cron.job
-    where jobname = 'amora-bf-expire-every-minute';
-    perform cron.schedule(
-      'amora-bf-expire-every-minute',
-      '* * * * *',
-      'select public.amora_bf_expire_reservations();'
-    );
-  end if;
-exception when undefined_table or undefined_function then
-  raise notice 'pg_cron não está habilitado. Ative a extensão pg_cron no Supabase de teste para expiração automática pontual.';
-end $;
-
--- Expiração é executada quando uma nova reserva é solicitada.
--- A expiração automática exata depende de pg_cron estar habilitado no projeto.
+-- Expiração automática: depois de habilitar pg_cron no projeto de teste,
+-- agendar a execução de select public.amora_bf_expire_reservations(); a cada minuto.
