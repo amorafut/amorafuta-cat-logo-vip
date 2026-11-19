@@ -3,7 +3,7 @@ const fmt=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL
 function bf1Price(version){const v=String(version||'').toLowerCase();if(v.includes('jogador'))return 80;if(v.includes('retr'))return 85;return 70;}
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 const params=new URLSearchParams(location.search),id=params.get('id');
-function displayPrice(p){return Number(p.salePrice??75)}
+function displayPrice(p){return Number(p.salePrice??bf1Price(p.version))}
 function wa(p,size){let t='Olá! Vi no catálogo VIP da Amora Fut e tenho interesse na '+p.name+' ('+(p.version||'')+')';if(size)t+=' no tamanho '+size;t+=', por '+fmt(displayPrice(p))+'. Gostaria de confirmar disponibilidade.';return 'https://wa.me/'+WA+'?text='+encodeURIComponent(t);}
 function imageGallery(p){
  const imgs=(p.images&&p.images.length?p.images:(p.image?[p.image]:[]));
