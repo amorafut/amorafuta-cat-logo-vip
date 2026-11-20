@@ -289,3 +289,10 @@ button:disabled{opacity:1}
 .card.sold .photo .card-photo-image{filter:grayscale(1);}
 .card.sold .photo{border-color:#62646b;}
 .card.sold .info{opacity:.78;}
+
+
+/* BLACK FRIDAY — selos organizados em telas estreitas */
+@media(max-width:600px){
+ .photo .badge{top:43px;left:8px;right:auto;padding:5px 7px;font-size:7px;letter-spacing:.35px;line-height:1.2;white-space:nowrap;max-width:none}
+ .photo .version-badge{top:8px;right:8px;left:auto;padding:5px 7px;font-size:7px;letter-spacing:.3px;line-height:1.2;white-space:nowrap;max-width:calc(100% - 16px)}
+}
