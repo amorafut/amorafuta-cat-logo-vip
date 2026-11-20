@@ -1,5 +1,6 @@
 const CART_KEY='amora_fut_cart_v1',CEP_KEY='amora_fut_freight_cep_v1',WA_CART='5585998022643';
 const FREIGHT_API='https://amora-fut-frete.amorafut.workers.dev/';
+// O SDK é carregado pela página antes deste arquivo para registrar a reserva no Supabase.
 const money=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 function getCart(){try{return JSON.parse(localStorage.getItem(CART_KEY)||'[]')}catch{return[]}}
 function saveCart(c){localStorage.setItem(CART_KEY,JSON.stringify(c));clearFreightQuote();renderCart();if(freightCep.length===8&&c.length)quoteFreight()}
@@ -42,16 +43,47 @@ async function quoteFreight(){
   finally{freightLoading=false;renderCart()}
 }
 function chooseFreight(id){selectedFreight=freightOptions.find(x=>x._id===String(id))||null;renderCart()}
-function checkoutCart(){
- const c=getCart();if(!c.length)return;
+let checkoutLoading=false;
+async function checkoutCart(){
+ const c=getCart();if(!c.length||checkoutLoading)return;
  if(!selectedFreight){alert('Informe o CEP e calcule o frete. Depois, selecione uma opção de entrega.');return}
- const totalQty=c.reduce((n,i)=>n+Number(i.qty||0),0);
- let t='Olá! Quero fazer um pedido na Amora Fut:\n\n';
- t+='🏷️ PREÇOS BLACK FRIDAY APLICADOS\n\n';
- c.forEach((i,n)=>{const unit=effectivePrice(i);t+=(n+1)+'. '+i.name+(i.size?' — tamanho '+i.size:'')+' — '+i.qty+' un. — '+(i.bfMode==='bf2'?'Black Friday 2 ':'Black Friday 1 ')+money(unit)+'/un. — subtotal '+money(unit*i.qty)+'\n';});
- const prazoEntrega=selectedFreight.delivery_time!=null&&selectedFreight.delivery_time!==''?String(selectedFreight.delivery_time)+' dias':'não informado pela transportadora';
- t+='\nCEP de entrega: '+freightCep+'\nFrete ('+selectedFreight._name+'): '+money(shippingPrice())+'\nPrazo de entrega: '+prazoEntrega+'\nSubtotal dos produtos: '+money(cartTotal())+'\nTotal com frete: '+money(orderTotal())+'\n\nGostaria de confirmar disponibilidade e pagamento.';
- window.open('https://wa.me/'+WA_CART+'?text='+encodeURIComponent(t),'_blank','noopener');
+ if(c.some(i=>!i.id||!i.size)){alert('Há um produto sem identificação ou tamanho. Volte ao produto, selecione o tamanho e tente novamente.');return}
+ const button=document.querySelector('.cart-checkout');
+ checkoutLoading=true;if(button){button.disabled=true;button.textContent='Reservando estoque…'}
+ const waWindow=window.open('about:blank','_blank');
+ try{
+  const cfg=window.AMORA_SUPABASE_CONFIG;
+  if(!cfg?.url||!cfg?.publishableKey)throw new Error('Configuração do ambiente de teste não encontrada.');
+  const items=c.map(i=>({product_id:String(i.id),size:String(i.size).toUpperCase(),quantity:Math.max(1,Math.floor(Number(i.qty)||1))}));
+  const {data,error}=await window.supabase.createClient(cfg.url,cfg.publishableKey).rpc('amora_bf_reserve_order',{
+   p_items:items,
+   p_shipping_method:selectedFreight._name,
+   p_shipping_amount:shippingPrice(),
+   p_customer_name:null,
+   p_customer_phone:null
+  });
+  if(error)throw error;
+  const orderId=data?.order_id,expiresAt=data?.expires_at;
+  if(!orderId||!expiresAt)throw new Error('O banco não confirmou o número e o prazo da reserva. O WhatsApp não será aberto.');
+  const expiry=new Date(expiresAt);
+  let t='Olá! Quero finalizar meu pedido na Amora Fut.\n\n';
+  t+='🔒 RESERVA DE ESTOQUE CONFIRMADA\n';
+  t+='Pedido: '+orderId+'\n';
+  t+='Reserva válida até: '+expiry.toLocaleString('pt-BR')+' (horário de Brasília)\n\n';
+  t+='🏷️ PREÇOS BLACK FRIDAY APLICADOS\n\n';
+  c.forEach((i,n)=>{const unit=effectivePrice(i);t+=(n+1)+'. '+i.name+(i.size?' — tamanho '+i.size:'')+' — '+i.qty+' un. — '+(i.bfMode==='bf2'?'Black Friday 2 ':'Black Friday 1 ')+money(unit)+'/un. — subtotal '+money(unit*i.qty)+'\n';});
+  const prazoEntrega=selectedFreight.delivery_time!=null&&selectedFreight.delivery_time!==''?String(selectedFreight.delivery_time)+' dias':'não informado pela transportadora';
+  t+='\nCEP de entrega: '+freightCep+'\nFrete ('+selectedFreight._name+'): '+money(shippingPrice())+'\nPrazo de entrega: '+prazoEntrega+'\nSubtotal dos produtos: '+money(cartTotal())+'\nTotal com frete: '+money(orderTotal())+'\n\nMinha reserva já está registrada. Gostaria de confirmar pagamento e entrega.';
+  const url='https://wa.me/'+WA_CART+'?text='+encodeURIComponent(t);
+  saveCart([]);
+  if(waWindow)waWindow.location.href=url;else window.location.href=url;
+ }catch(e){
+  if(waWindow)waWindow.close();
+  alert('Não foi possível reservar o estoque. Nenhum pedido foi enviado ao WhatsApp.\n\n'+(e.message||'Tente novamente.'));
+ }finally{
+  checkoutLoading=false;
+  if(button){button.disabled=false;button.textContent='Finalizar pelo WhatsApp'}
+ }
 }
 const CART_ICON='<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 6h3l2.2 13.2a2 2 0 0 0 2 1.7h11.9a2 2 0 0 0 1.9-1.5L28 10H8"/><circle cx="12.5" cy="26" r="2"/><circle cx="24" cy="26" r="2"/></svg>';
 function cartHTML(){return '<div id="cartOverlay" class="cart-overlay" onclick="if(event.target===this)closeCart()"></div><aside id="cartDrawer" class="cart-drawer"><div class="cart-head"><div><small>AMORA FUT</small><h2>Seu carrinho</h2></div><button class="cart-close" onclick="closeCart()">×</button></div><div id="cartItems" class="cart-items"></div><div class="cart-foot"><div id="cartFreight" class="cart-freight"></div><div class="cart-total"><span>Subtotal</span><strong id="cartSubtotal">R$ 0,00</strong></div><div class="cart-total"><span>Frete</span><strong id="cartShipping">A calcular</strong></div><div class="cart-total cart-grand-total"><span>Total com frete</span><strong id="cartTotal">R$ 0,00</strong></div><button class="cart-checkout" onclick="checkoutCart()">Finalizar pelo WhatsApp</button><button class="cart-continue" onclick="closeCart()">Continuar comprando</button></div></aside><button id="cartFloat" class="cart-float" onclick="openCart()" aria-label="Abrir carrinho">'+CART_ICON+'<b id="cartBadge">0</b></button>'}
