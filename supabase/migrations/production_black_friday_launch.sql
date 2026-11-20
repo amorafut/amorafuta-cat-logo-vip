@@ -5,12 +5,7 @@
 -- Ela pressupoe public.amora_products, public.amora_admin_users e estoque JSONB ja criados
 -- pelo arquivo supabase-amora-schema.sql. Nao altera produtos, precos ou estoque existentes.
 
--- Amora Fut | Black Friday 2026 | ambiente de TESTE
--- Aplicar somente no projeto Supabase de teste:
--- fdkvghcxfjqtiwwfjkjz
--- Esta migration usa amora_products.stock como JSONB: {"P":2,"M":1,...}
--- Adiciona bf_mode e bf2_price, ausentes no schema encontrado.
--- Não executar no projeto de produção.
+-- Extensões de preço BF1/BF2 e estrutura de reservas para produção.
 
 alter table public.amora_products
   add column if not exists bf_mode text not null default 'bf1',
@@ -318,9 +313,7 @@ using (exists (select 1 from public.amora_admin_users a where a.user_id = auth.u
 -- Consulte supabase/black-friday-schedule.sql no mesmo branch.
 
 
--- Amora Fut | Black Friday 2026 | cancelamento manual de reservas
--- Aplicar SOMENTE no Supabase de TESTE: fdkvghcxfjqtiwwfjkjz
--- Devolve ao estoque as quantidades reservadas e impede confirmação posterior.
+-- Cancelamento manual de reservas; devolve estoque e impede confirmação posterior.
 
 alter table public.amora_bf_orders
   add column if not exists cancelled_at timestamptz;
