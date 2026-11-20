@@ -93,7 +93,7 @@ function bfOrderMoney(v){return Number(v||0).toLocaleString('pt-BR',{style:'curr
 function bfOrderDate(v){if(!v)return '—';const d=new Date(v);return Number.isNaN(d.getTime())?'—':d.toLocaleString('pt-BR');}
 async function loadBfReservations(){
  const body=$('#bfReservationsList');if(!body||!db)return;
- body.innerHTML='<tr><td colspan="7">Carregando reservas…</td></tr>';
+ body.innerHTML='<tr><td colspan="8">Carregando reservas…</td></tr>';
  try{
   const {data:orders,error}=await db.from('amora_bf_orders').select('*').order('created_at',{ascending:false}).limit(100);
   if(error)throw error;
@@ -106,11 +106,34 @@ async function loadBfReservations(){
    const status=String(o.status||'').toUpperCase();
    const active=o.status==='reserved'&&new Date(o.expires_at)>new Date();
    const action=active?'<button type="button" class="primary bf-confirm-order" data-order="'+esc(o.id)+'">Confirmar venda</button>':'—';
-   return '<tr><td><strong>'+esc(o.id)+'</strong><br><small>'+bfOrderDate(o.created_at)+'</small></td><td>'+description+'</td><td>'+status+'</td><td>'+bfOrderDate(o.expires_at)+'</td><td>'+bfOrderMoney(o.products_subtotal)+'</td><td>'+bfOrderMoney(o.order_total)+'</td><td>'+action+'</td></tr>';
+   const shipping=Number(o.shipping_amount||0);
+   const method=String(o.shipping_method||'PAC').toUpperCase();
+   const shippingEditor='<div class="bf-shipping-editor"><select class="bf-shipping-method" data-order="'+esc(o.id)+'"><option value="PAC" '+(method==='PAC'?'selected':'')+'>PAC</option><option value="SEDEX" '+(method==='SEDEX'?'selected':'')+'>SEDEX</option><option value="RETIRADA" '+(method==='RETIRADA'?'selected':'')+'>Sem frete / retirada</option><option value="OUTRO" '+(!['PAC','SEDEX','RETIRADA'].includes(method)?'selected':'')+'>Outro</option></select><input class="bf-shipping-amount" data-order="'+esc(o.id)+'" type="number" min="0" step="0.01" inputmode="decimal" value="'+shipping.toFixed(2)+'" aria-label="Valor do frete"><button type="button" class="ghost bf-save-shipping" data-order="'+esc(o.id)+'">Salvar frete</button></div>';
+   return '<tr><td><strong>'+esc(o.id)+'</strong><br><small>'+bfOrderDate(o.created_at)+'</small></td><td>'+description+'</td><td>'+status+'</td><td>'+bfOrderDate(o.expires_at)+'</td><td>'+bfOrderMoney(o.products_subtotal)+'</td><td>'+shippingEditor+'</td><td>'+bfOrderMoney(o.order_total)+'</td><td>'+action+'</td></tr>';
   }).join(''):'<tr><td colspan="7" style="text-align:center;color:#999">Nenhum pedido Black Friday registrado.</td></tr>';
   body.querySelectorAll('.bf-confirm-order').forEach(btn=>btn.onclick=()=>confirmBfOrder(btn.dataset.order,btn));
+  body.querySelectorAll('.bf-save-shipping').forEach(btn=>btn.onclick=()=>saveBfShipping(btn.dataset.order,btn));
  }catch(e){
   body.innerHTML='<tr><td colspan="7" style="color:#c44">Não foi possível carregar as reservas: '+esc(e.message||e)+'</td></tr>';
+ }
+}
+async function saveBfShipping(orderId,button){
+ const amountInput=$('#bfReservationsList .bf-shipping-amount[data-order="'+orderId+'"]');
+ const methodInput=$('#bfReservationsList .bf-shipping-method[data-order="'+orderId+'"]');
+ const amount=Number(amountInput?.value);
+ const method=methodInput?.value||'PAC';
+ if(!Number.isFinite(amount)||amount<0){alert('Informe um valor de frete válido. Use 0 para retirar o frete.');return;}
+ if(!confirm('Salvar o frete de '+bfOrderMoney(amount)+'? O total do pedido será recalculado automaticamente.'))return;
+ button.disabled=true;button.textContent='Salvando…';
+ try{
+  const {data,error}=await db.rpc('amora_bf_update_shipping',{p_order_id:orderId,p_shipping_method:method,p_shipping_amount:amount});
+  if(error)throw error;
+  if(!data||data.order_id!==orderId)throw new Error('O banco não confirmou a atualização do frete.');
+  await loadBfReservations();
+  msg('Frete atualizado. Novo total: '+bfOrderMoney(data.order_total),true);
+ }catch(e){
+  alert('Não foi possível atualizar o frete: '+(e.message||e));
+  button.disabled=false;button.textContent='Salvar frete';
  }
 }
 async function confirmBfOrder(orderId,button){
