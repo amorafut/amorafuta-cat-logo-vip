@@ -105,13 +105,14 @@ async function loadBfReservations(){
    const description=rows.map(i=>{const p=products.find(x=>x.id===i.product_id);return (p?p.name:i.product_id)+' · '+i.size+' · '+i.quantity+' un.';}).join('<br>')||'—';
    const status=String(o.status||'').toUpperCase();
    const active=o.status==='reserved'&&new Date(o.expires_at)>new Date();
-   const action=active?'<button type="button" class="primary bf-confirm-order" data-order="'+esc(o.id)+'">Confirmar venda</button>':'—';
+   const action=active?'<div class="bf-order-actions"><button type="button" class="primary bf-confirm-order" data-order="'+esc(o.id)+'">Confirmar venda</button><button type="button" class="ghost bf-cancel-order" data-order="'+esc(o.id)+'">Cancelar reserva</button></div>':(o.status==='cancelled'?'Reserva cancelada':'—');
    const shipping=Number(o.shipping_amount||0);
    const method=String(o.shipping_method||'PAC').toUpperCase();
    const shippingEditor='<div class="bf-shipping-editor"><select class="bf-shipping-method" data-order="'+esc(o.id)+'"><option value="PAC" '+(method==='PAC'?'selected':'')+'>PAC</option><option value="SEDEX" '+(method==='SEDEX'?'selected':'')+'>SEDEX</option><option value="RETIRADA" '+(method==='RETIRADA'?'selected':'')+'>Sem frete / retirada</option><option value="OUTRO" '+(!['PAC','SEDEX','RETIRADA'].includes(method)?'selected':'')+'>Outro</option></select><input class="bf-shipping-amount" data-order="'+esc(o.id)+'" type="number" min="0" step="0.01" inputmode="decimal" value="'+shipping.toFixed(2)+'" aria-label="Valor do frete"><button type="button" class="ghost bf-save-shipping" data-order="'+esc(o.id)+'">Salvar frete</button></div>';
    return '<tr><td><strong>'+esc(o.id)+'</strong><br><small>'+bfOrderDate(o.created_at)+'</small></td><td>'+description+'</td><td>'+status+'</td><td>'+bfOrderDate(o.expires_at)+'</td><td>'+bfOrderMoney(o.products_subtotal)+'</td><td>'+shippingEditor+'</td><td>'+bfOrderMoney(o.order_total)+'</td><td>'+action+'</td></tr>';
   }).join(''):'<tr><td colspan="7" style="text-align:center;color:#999">Nenhum pedido Black Friday registrado.</td></tr>';
   body.querySelectorAll('.bf-confirm-order').forEach(btn=>btn.onclick=()=>confirmBfOrder(btn.dataset.order,btn));
+  body.querySelectorAll('.bf-cancel-order').forEach(btn=>btn.onclick=()=>cancelBfOrder(btn.dataset.order,btn));
   body.querySelectorAll('.bf-save-shipping').forEach(btn=>btn.onclick=()=>saveBfShipping(btn.dataset.order,btn));
  }catch(e){
   body.innerHTML='<tr><td colspan="7" style="color:#c44">Não foi possível carregar as reservas: '+esc(e.message||e)+'</td></tr>';
@@ -134,6 +135,21 @@ async function saveBfShipping(orderId,button){
  }catch(e){
   alert('Não foi possível atualizar o frete: '+(e.message||e));
   button.disabled=false;button.textContent='Salvar frete';
+ }
+}
+async function cancelBfOrder(orderId,button){
+ if(!orderId||!confirm('Cancelar esta reserva? O estoque reservado será devolvido imediatamente e esta ação não poderá ser desfeita.'))return;
+ button.disabled=true;button.textContent='Cancelando…';
+ try{
+  const {data,error}=await db.rpc('amora_bf_cancel_order',{p_order_id:orderId});
+  if(error)throw error;
+  if(data?.status!=='cancelled')throw new Error('O banco não confirmou o cancelamento.');
+  await loadData();
+  await loadBfReservations();
+  msg('Reserva cancelada. '+Number(data.restored_units||0)+' unidade(s) devolvida(s) ao estoque.',true);
+ }catch(e){
+  alert('Não foi possível cancelar a reserva: '+(e.message||e)+'\n\nSe a função ainda não existir no Supabase, aplique a nova migration de cancelamento.');
+  button.disabled=false;button.textContent='Cancelar reserva';
  }
 }
 async function confirmBfOrder(orderId,button){
