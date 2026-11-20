@@ -79,7 +79,7 @@ async function migrateLegacyCatalog(){
  }catch(e){msg('Migração interrompida: '+(e.message||'erro desconhecido')+'. Você pode executar novamente; os produtos são atualizados pelo ID.',false);}
  finally{btn.disabled=false;}
 }
-async function publish(){msg('Sincronizando produtos e estoque...');$('#publish').disabled=true;try{const markApplied=preparePendingSales(products);for(const p of products){const {error}=await db.from('amora_products').upsert(toRow(p),{onConflict:'id'});if(error)throw error;}markApplied();await loadData();msg('Produtos e estoque sincronizados com o Supabase.');}catch(e){msg(e.message||'Não foi possível sincronizar.',false);}finally{$('#publish').disabled=false;}}
+async function publish(){msg('Sincronizando produtos e estoque...');$('#publish').disabled=true;try{await loadData();const markApplied=preparePendingSales(products);for(const p of products){const {error}=await db.from('amora_products').upsert(toRow(p),{onConflict:'id'});if(error)throw error;}markApplied();await loadData();msg('Produtos e estoque sincronizados com o Supabase.');}catch(e){msg(e.message||'Não foi possível sincronizar.',false);}finally{$('#publish').disabled=false;}}
 $('#connect').onclick=async()=>{const email=$('#email').value.trim(),password=$('#password').value;if(!email||!password)return msg('Informe e-mail e senha.',false);try{const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;const {data:admin,error:ae}=await db.from('amora_admin_users').select('user_id').eq('user_id',data.user.id).maybeSingle();if(ae)throw ae;if(!admin)throw new Error('Usuário ainda não autorizado na tabela amora_admin_users.');$('#authCard').classList.add('hidden');$('#app').classList.remove('hidden');await loadData();msg('Acesso autorizado.');}catch(e){msg(e.message||'Falha no acesso.',false);}};
 function slugify(value){return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').replace(/-+/g,'-');}
 function uniqueSlug(value){const base=slugify(value);if(!base)return '';let candidate=base,n=2;while(products.some(p=>p.id===candidate&&p.id!==currentId)){candidate=base+'-'+n++;}return candidate;}
@@ -97,7 +97,7 @@ async function loadBfReservations(){
  try{
   const {data:orders,error}=await db.from('amora_bf_orders').select('*').order('created_at',{ascending:false}).limit(100);
   if(error)throw error;
-  const {data:items,itemError}=await db.from('amora_bf_reservations').select('*').order('created_at',{ascending:true});
+  const {data:items,error:itemError}=await db.from('amora_bf_reservations').select('*').order('created_at',{ascending:true});
   if(itemError)throw itemError;
   const allItems=items||[];
   body.innerHTML=(orders||[]).length?(orders||[]).map(o=>{
