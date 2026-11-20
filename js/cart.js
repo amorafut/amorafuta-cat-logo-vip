@@ -1,15 +1,16 @@
 const CART_KEY='amora_fut_cart_v1',CEP_KEY='amora_fut_freight_cep_v1',WA_CART='5585998022643';
 const FREIGHT_API='https://amora-fut-frete.amorafut.workers.dev/';
+// O SDK é carregado pela página antes deste arquivo para registrar a reserva no Supabase.
 const money=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 function getCart(){try{return JSON.parse(localStorage.getItem(CART_KEY)||'[]')}catch{return[]}}
 function saveCart(c){localStorage.setItem(CART_KEY,JSON.stringify(c));clearFreightQuote();renderCart();if(freightCep.length===8&&c.length)quoteFreight()}
 function cartCount(){return getCart().reduce((n,i)=>n+Number(i.qty||0),0)}
-function calcWholesale(version,price,fallback=0){const v=String(version||'');if(/jogador/i.test(v))return 110;if(/torcedor/i.test(v))return 90;return Number(fallback||0)}
-function cartTotal(){const c=getCart(),qty=c.reduce((n,i)=>n+Math.max(0,Number(i.qty)||0),0);return c.reduce((s,i)=>{const v=String(i.version||'')+' '+String(i.name||'');const wholesale=calcWholesale(v,i.price,i.wholesalePrice);const unit=qty>=5&&wholesale>0?wholesale:Number(i.price||0);return s+unit*Math.max(0,Number(i.qty)||0)},0)}
-function effectivePrice(i){const c=getCart(),qty=c.reduce((n,x)=>n+Math.max(0,Number(x.qty)||0),0);const version=String(i.version||'')+' '+String(i.name||'');const wholesale=calcWholesale(version,i.price,i.wholesalePrice);return qty>=5&&wholesale>0?wholesale:Number(i.price||0)}
+function bf1Price(version){const v=String(version||'').toLowerCase();if(v.includes('jogador'))return 80;if(v.includes('retr'))return 85;return 70}
+function cartTotal(){return getCart().reduce((s,i)=>s+effectivePrice(i)*Math.max(0,Number(i.qty)||0),0)}
+function effectivePrice(i){if(i.bfMode==='bf2')return Number(i.bf2Price||i.price||0);return Number(i.salePrice??bf1Price(i.version))}
 let freightCep=(localStorage.getItem(CEP_KEY)||'').replace(/[^\d]/g,'').slice(0,8),freightOptions=[],selectedFreight=null,freightLoading=false,freightError='';
 function clearFreightQuote(){freightOptions=[];selectedFreight=null;freightError='';}
-function addToCart(p,size,qty=1){const c=getCart(),key=p.id+'::'+(size||'ÚNICO'),max=p.stock&&size?Number(p.stock[size]||0):null,found=c.find(i=>i.key===key);if(found)found.qty=max?Math.min(max,found.qty+qty):found.qty+qty;else c.push({key,id:p.id,name:p.name,team:p.team||'',version:p.version||'',price:Number(p.price||0),wholesalePrice:calcWholesale(p.version,p.price,p.wholesalePrice),size:size||'',qty:Number(qty||1),image:(p.images&&p.images[0])||p.image||'',stock:max});saveCart(c);openCart()}
+function addToCart(p,size,qty=1){const c=getCart(),key=p.id+'::'+(size||'ÚNICO'),max=p.stock&&size?Number(p.stock[size]||0):null,found=c.find(i=>i.key===key);if(found)found.qty=max?Math.min(max,found.qty+qty):found.qty+qty;else c.push({key,id:p.id,name:p.name,team:p.team||'',version:p.version||'',price:Number(p.price||0),salePrice:Number(p.salePrice??bf1Price(p.version)),bfMode:p.bfMode||'bf1',bf2Price:p.bf2Price==null?null:Number(p.bf2Price),size:size||'',qty:Number(qty||1),image:(p.images&&p.images[0])||p.image||'',stock:max});saveCart(c);openCart()}
 function changeCart(key,d){const c=getCart(),i=c.findIndex(x=>x.key===key);if(i<0)return;const max=c[i].stock;c[i].qty=max?Math.min(max,c[i].qty+d):c[i].qty+d;if(c[i].qty<=0)c.splice(i,1);saveCart(c)}
 function removeCart(key){saveCart(getCart().filter(x=>x.key!==key))}
 function setFreightCep(v){freightCep=String(v||'').replace(/[^\d]/g,'').slice(0,8);try{localStorage.setItem(CEP_KEY,freightCep)}catch(e){}const input=document.getElementById('freightCep');if(input){const digits=freightCep;input.value=digits.length>5?digits.slice(0,5)+'-'+digits.slice(5):digits;}clearFreightQuote()}
@@ -42,16 +43,42 @@ async function quoteFreight(){
   finally{freightLoading=false;renderCart()}
 }
 function chooseFreight(id){selectedFreight=freightOptions.find(x=>x._id===String(id))||null;renderCart()}
-function checkoutCart(){
- const c=getCart();if(!c.length)return;
+let checkoutLoading=false;
+async function checkoutCart(){
+ const c=getCart();if(!c.length||checkoutLoading)return;
  if(!selectedFreight){alert('Informe o CEP e calcule o frete. Depois, selecione uma opção de entrega.');return}
- const totalQty=c.reduce((n,i)=>n+Number(i.qty||0),0),wholesaleActive=totalQty>=5;
- let t='Olá! Quero fazer um pedido na Amora Fut:\n\n';
- if(wholesaleActive)t+='🏷️ PREÇO DE ATACADO APLICADO ('+totalQty+' peças no pedido)\nValores por unidade e subtotal de cada item abaixo.\n\n';
- else t+='Preço de varejo: '+totalQty+' peça(s) no carrinho. Para liberar o atacado, adicione mais '+(5-totalQty)+' peça(s) (mínimo de 5).\n\n';
- c.forEach((i,n)=>{const unit=effectivePrice(i);t+=(n+1)+'. '+i.name+(i.size?' — tamanho '+i.size:'')+' — '+i.qty+' un. — '+(wholesaleActive?'atacado ':'varejo ')+money(unit)+'/un. — subtotal '+money(unit*i.qty)+'\n';});
- t+='\nCEP de entrega: '+freightCep+'\nFrete ('+selectedFreight._name+'): '+money(shippingPrice())+'\nSubtotal dos produtos: '+money(cartTotal())+'\nTotal com frete: '+money(orderTotal())+'\n\nGostaria de confirmar disponibilidade e pagamento.';
- window.open('https://wa.me/'+WA_CART+'?text='+encodeURIComponent(t),'_blank','noopener');
+ if(c.some(i=>!i.id||!i.size)){alert('Há um produto sem identificação ou tamanho. Volte ao produto, selecione o tamanho e tente novamente.');return}
+ const button=document.querySelector('.cart-checkout');
+ checkoutLoading=true;if(button){button.disabled=true;button.textContent='Reservando estoque…'}
+ const waWindow=window.open('about:blank','_blank');
+ try{
+  const cfg=window.AMORA_SUPABASE_CONFIG;
+  if(!cfg?.url||!cfg?.publishableKey)throw new Error('Configuração do ambiente de teste não encontrada.');
+  const items=c.map(i=>({product_id:String(i.id),size:String(i.size).toUpperCase(),quantity:Math.max(1,Math.floor(Number(i.qty)||1))}));
+  const response=await fetch(cfg.url+'/rest/v1/rpc/amora_bf_reserve_order',{method:'POST',headers:{'Content-Type':'application/json',apikey:cfg.publishableKey,Authorization:'Bearer '+cfg.publishableKey},body:JSON.stringify({p_items:items,p_shipping_method:selectedFreight._name,p_shipping_amount:shippingPrice(),p_customer_name:null,p_customer_phone:null})});
+  let data;try{data=await response.json()}catch{data=null}
+  if(!response.ok)throw new Error(data?.message||data?.details||('Falha ao reservar estoque (HTTP '+response.status+').'));
+  const orderId=data?.order_id,expiresAt=data?.expires_at;
+  if(!orderId||!expiresAt)throw new Error('O banco não confirmou o número e o prazo da reserva. O WhatsApp não será aberto.');
+  const expiry=new Date(expiresAt);
+  let t='Olá! Quero finalizar meu pedido na Amora Fut.\n\n';
+  t+='🔒 RESERVA DE ESTOQUE CONFIRMADA\n';
+  t+='Pedido: '+orderId+'\n';
+  t+='Reserva válida até: '+expiry.toLocaleString('pt-BR')+' (horário de Brasília)\n\n';
+  t+='🏷️ PREÇOS BLACK FRIDAY APLICADOS\n\n';
+  c.forEach((i,n)=>{const unit=effectivePrice(i);t+=(n+1)+'. '+i.name+(i.size?' — tamanho '+i.size:'')+' — '+i.qty+' un. — '+(i.bfMode==='bf2'?'Black Friday 2 ':'Black Friday 1 ')+money(unit)+'/un. — subtotal '+money(unit*i.qty)+'\n';});
+  const prazoEntrega=selectedFreight.delivery_time!=null&&selectedFreight.delivery_time!==''?String(selectedFreight.delivery_time)+' dias':'não informado pela transportadora';
+  t+='\nCEP de entrega: '+freightCep+'\nFrete ('+selectedFreight._name+'): '+money(shippingPrice())+'\nPrazo de entrega: '+prazoEntrega+'\nSubtotal dos produtos: '+money(cartTotal())+'\nTotal com frete: '+money(orderTotal())+'\n\nMinha reserva já está registrada. Gostaria de confirmar pagamento e entrega.';
+  const url='https://wa.me/'+WA_CART+'?text='+encodeURIComponent(t);
+  saveCart([]);
+  if(waWindow)waWindow.location.href=url;else window.location.href=url;
+ }catch(e){
+  if(waWindow)waWindow.close();
+  alert('Não foi possível reservar o estoque. Nenhum pedido foi enviado ao WhatsApp.\n\n'+(e.message||'Tente novamente.'));
+ }finally{
+  checkoutLoading=false;
+  if(button){button.disabled=false;button.textContent='Finalizar pelo WhatsApp'}
+ }
 }
 const CART_ICON='<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 6h3l2.2 13.2a2 2 0 0 0 2 1.7h11.9a2 2 0 0 0 1.9-1.5L28 10H8"/><circle cx="12.5" cy="26" r="2"/><circle cx="24" cy="26" r="2"/></svg>';
 function cartHTML(){return '<div id="cartOverlay" class="cart-overlay" onclick="if(event.target===this)closeCart()"></div><aside id="cartDrawer" class="cart-drawer"><div class="cart-head"><div><small>AMORA FUT</small><h2>Seu carrinho</h2></div><button class="cart-close" onclick="closeCart()">×</button></div><div id="cartItems" class="cart-items"></div><div class="cart-foot"><div id="cartFreight" class="cart-freight"></div><div class="cart-total"><span>Subtotal</span><strong id="cartSubtotal">R$ 0,00</strong></div><div class="cart-total"><span>Frete</span><strong id="cartShipping">A calcular</strong></div><div class="cart-total cart-grand-total"><span>Total com frete</span><strong id="cartTotal">R$ 0,00</strong></div><button class="cart-checkout" onclick="checkoutCart()">Finalizar pelo WhatsApp</button><button class="cart-continue" onclick="closeCart()">Continuar comprando</button></div></aside><button id="cartFloat" class="cart-float" onclick="openCart()" aria-label="Abrir carrinho">'+CART_ICON+'<b id="cartBadge">0</b></button>'}
@@ -63,7 +90,7 @@ function renderFreight(){
 function renderCart(){
  const box=document.getElementById('cartItems'),badge=document.getElementById('cartBadge'),subtotal=document.getElementById('cartSubtotal'),shipping=document.getElementById('cartShipping'),total=document.getElementById('cartTotal'),headerBadge=document.getElementById('headerCartBadge');if(!box)return;
  const c=getCart();if(badge)badge.textContent=cartCount();if(headerBadge)headerBadge.textContent=cartCount();
- box.innerHTML=c.length?c.map(i=>'<div class="cart-item"><div class="cart-item-img">'+(i.image?'<img src="'+i.image+'" alt="">':'⚽')+'</div><div class="cart-item-main"><strong>'+safeText(i.name)+'</strong><small>'+safeText([i.team,i.size?'Tam. '+i.size:'',i.version].filter(Boolean).join(' • '))+'</small><div class="cart-item-bottom"><div class="qty"><button onclick="changeCart(\''+i.key+'\',-1)">−</button><b>'+i.qty+'</b><button onclick="changeCart(\''+i.key+'\',1)">+</button></div><strong>'+(cartCount()>=5?'<span style="display:block;color:#e9c46a;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px">Preço de atacado</span><span style="display:block;color:#e9c46a">'+money(effectivePrice(i)*i.qty)+'</span>': '<span>'+money(effectivePrice(i)*i.qty)+'</span>')+'</strong></div><button class="cart-remove" onclick="removeCart(\''+i.key+'\')">Remover</button></div></div>').join(''):'<div class="cart-empty"><div>🛒</div><strong>Seu carrinho está vazio</strong><span>Adicione suas camisas favoritas.</span></div>';
+ box.innerHTML=c.length?c.map(i=>'<div class="cart-item"><div class="cart-item-img">'+(i.image?'<img src="'+i.image+'" alt="">':'⚽')+'</div><div class="cart-item-main"><strong>'+safeText(i.name)+'</strong><small>'+safeText([i.team,i.size?'Tam. '+i.size:'',i.version].filter(Boolean).join(' • '))+'</small><div class="cart-item-bottom"><div class="qty"><button onclick="changeCart(\''+i.key+'\',-1)">−</button><b>'+i.qty+'</b><button onclick="changeCart(\''+i.key+'\',1)">+</button></div><strong>'+'<span>'+money(effectivePrice(i)*i.qty)+'</span>'+'</strong></div><button class="cart-remove" onclick="removeCart(\''+i.key+'\')">Remover</button></div></div>').join(''):'<div class="cart-empty"><div>🛒</div><strong>Seu carrinho está vazio</strong><span>Adicione suas camisas favoritas.</span></div>';
  renderFreight();if(subtotal)subtotal.textContent=money(cartTotal());if(shipping)shipping.textContent=selectedFreight?money(shippingPrice()):'A calcular';if(total)total.textContent=money(orderTotal());
 }
 function openCart(){document.body.classList.add('cart-open');renderCart()}function closeCart(){document.body.classList.remove('cart-open')}function initCart(){const r=document.getElementById('cartRoot');if(r)r.innerHTML=cartHTML();renderCart()}document.addEventListener('DOMContentLoaded',initCart);

@@ -113,3 +113,15 @@
     grid-column:span 2;
   }
 }
+
+.bf-admin-field{grid-column:span 2}.bf-admin-field small{display:block;color:#a4a6ad;font-size:9px;font-weight:400;letter-spacing:0;margin-top:6px;line-height:1.45}#bf2PriceWrap.hidden{display:none!important}@media(max-width:620px){.bf-admin-field{grid-column:auto}}
+
+/* EDIÇÃO DO FRETE DOS PEDIDOS BLACK FRIDAY */
+.bf-shipping-editor{display:grid;grid-template-columns:1fr;gap:6px;min-width:120px}
+.bf-shipping-editor select,.bf-shipping-editor input{width:100%;min-width:110px;border:1px solid #55575d;background:#202124;color:#fff;border-radius:6px;padding:8px;font:inherit;font-size:10px}
+.bf-shipping-editor button{white-space:nowrap;padding:8px 10px}
+#bfReservationsPanel .sales-table{min-width:1120px}
+
+.bf-order-actions{display:flex;flex-direction:column;gap:7px;min-width:125px}
+.bf-order-actions button{white-space:nowrap}
+.bf-cancel-order{border-color:#b94a63!important;color:#ff9ab0!important}

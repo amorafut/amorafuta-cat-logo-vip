@@ -3,9 +3,9 @@ const $=s=>document.querySelector(s);
 function calcWholesale(version,price,fallback=0){const v=String(version||'');if(/jogador|retr[oô]/i.test(v))return 110;if(/torcedor/i.test(v))return 90;return Number(fallback||0);}
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 function msg(t,ok=true){$('#authMsg').textContent=t;$('#status').textContent=t;$('#authMsg').style.color=ok?'var(--green)':'var(--danger)';}
-function fromRow(r){return {id:r.id,name:r.name,team:r.team||'',category:r.category||'Brasileiras',version:r.version||'Torcedor',price:Number(r.price||0),wholesalePrice:calcWholesale(r.version,r.price,r.wholesale_price),oldPrice:r.old_price==null?'':Number(r.old_price),badge:r.badge||'',description:r.description||'',published:r.published!==false,soldOut:!!r.sold_out,stock:r.stock||{P:0,M:0,G:0,GG:0,'3G':0},images:Array.isArray(r.images)?r.images:[],sortOrder:Number(r.sort_order||0)};}
-function toRow(p){return {id:p.id,name:p.name,team:p.team||'',category:p.category||'Brasileiras',version:p.version||'Torcedor',price:Number(p.price||0),wholesale_price:calcWholesale(p.version,p.price,p.wholesalePrice),old_price:p.oldPrice===''||p.oldPrice==null?null:Number(p.oldPrice),badge:p.badge||'',description:p.description||'',published:p.published!==false,sold_out:!!p.soldOut,stock:p.stock||{},images:p.images||[],sort_order:Number(p.sortOrder||0),updated_at:new Date().toISOString()};}
-async function loadData(){const {data,error}=await db.from('amora_products').select('*').order('sort_order',{ascending:true}).order('created_at',{ascending:false});if(error)throw error;products=(data||[]).map(fromRow);pendingByProduct={};pendingFilesByProduct={};renderList();updateStats();if(typeof renderSaleProducts==='function')renderSaleProducts();if(typeof renderSales==='function')renderSales();}
+function fromRow(r){return {id:r.id,name:r.name,team:r.team||'',category:r.category||'Brasileiras',version:r.version||'Torcedor',price:Number(r.price||0),wholesalePrice:calcWholesale(r.version,r.price,r.wholesale_price),oldPrice:r.old_price==null?'':Number(r.old_price),bfMode:r.bf_mode||'bf1',bf2Price:r.bf2_price==null?'':Number(r.bf2_price),badge:r.badge||'',description:r.description||'',published:r.published!==false,soldOut:!!r.sold_out,stock:r.stock||{P:0,M:0,G:0,GG:0,'3G':0},images:Array.isArray(r.images)?r.images:[],sortOrder:Number(r.sort_order||0)};}
+function toRow(p){return {id:p.id,name:p.name,team:p.team||'',category:p.category||'Brasileiras',version:p.version||'Torcedor',price:Number(p.price||0),wholesale_price:calcWholesale(p.version,p.price,p.wholesalePrice),old_price:p.oldPrice===''||p.oldPrice==null?null:Number(p.oldPrice),bf_mode:p.bfMode||'bf1',bf2_price:(p.bfMode||'bf1')==='bf2'?Number(p.bf2Price||0):null,badge:p.badge||'',description:p.description||'',published:p.published!==false,sold_out:!!p.soldOut,stock:p.stock||{},images:p.images||[],sort_order:Number(p.sortOrder||0),updated_at:new Date().toISOString()};}
+async function loadData(){const {data,error}=await db.from('amora_products').select('*').order('sort_order',{ascending:true}).order('created_at',{ascending:false});if(error)throw error;products=(data||[]).map(fromRow);pendingByProduct={};pendingFilesByProduct={};renderList();updateStats();if(typeof renderSaleProducts==='function')renderSaleProducts();if(typeof renderSales==='function')renderSales();if(typeof loadBfReservations==='function')await loadBfReservations();}
 function updateStats(){
  const sizes=['P','M','G','GG','3G'];
  const validProducts=Array.isArray(products)?products:[];
@@ -23,10 +23,10 @@ function updateStats(){
 function thumb(p){const src=(p.images&&p.images[0])||p.image;return src?'<img src="'+esc(src)+'" alt="">':'<span>⚽</span>';}
 function normalizeSearch(value){return String(value||'').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').toLocaleLowerCase('pt-BR').trim();}
 function renderList(){const q=normalizeSearch($('#filter').value);const arr=products.filter(p=>normalizeSearch(p.name+' '+(p.team||'')).includes(q));$('#list').innerHTML=arr.map(p=>'<div class="list-item '+(p.id===currentId?'active':'')+'" data-id="'+esc(p.id)+'"><div class="list-thumb">'+thumb(p)+'</div><div><strong>'+esc(p.name)+'</strong><small>'+esc(p.team||'')+' · '+esc(p.version||'')+'</small><span class="pill">'+(p.published===false?'RASCUNHO':(p.soldOut?'ESGOTADO':'PUBLICADO'))+'</span></div></div>').join('');document.querySelectorAll('.list-item').forEach(x=>x.onclick=()=>edit(x.dataset.id));}
-function blank(){return {id:'',team:'',name:'',category:'Brasileiras',version:'Torcedor',price:'',wholesalePrice:'',oldPrice:'',badge:'',description:'',published:true,soldOut:false,stock:{P:0,M:0,G:0,GG:0,'3G':0},images:[]};}
-function setForm(p){if(currentId&&currentId!==(p&&p.id))captureDraft();const d=p&&p.id?pendingByProduct[p.id]:null;if(d&&d.product)p=d.product;currentId=p.id||null;slugManuallyEdited=!!p.id;pendingFiles=pendingFilesByProduct[p.id]?[...pendingFilesByProduct[p.id]]:[];$('#emptyEditor').classList.add('hidden');$('#form').classList.remove('hidden');$('#editMode').textContent=p.id?'EDITAR PRODUTO':'NOVO PRODUTO';$('#formTitle').textContent=p.name||'Novo produto';$('#fId').value=p.id||'';$('#fName').value=p.name||'';$('#fTeam').value=p.team||'';$('#fCategory').value=p.category||'Brasileiras';$('#fVersion').value=p.version||'Torcedor';$('#fPrice').value=p.price??'';$('#fWholesalePrice').value=calcWholesale(p.version,p.price,p.wholesalePrice).toFixed(2);$('#fWholesalePrice').value=calcWholesale(p.version,p.price,p.wholesalePrice).toFixed(2);$('#fOldPrice').value=p.oldPrice??'';$('#fBadge').value=p.badge||'';$('#fDescription').value=p.description||'';$('#fPublished').checked=p.published!==false;$('#fSold').checked=!!p.soldOut;const s=p.stock||{};['P','M','G','GG','3G'].forEach(x=>$('#s'+x).value=Number(s[x]||0));renderPreviews(p.images||[]);$('#delete').style.visibility=p.id?'visible':'hidden';renderList();}
+function blank(){return {id:'',team:'',name:'',category:'Brasileiras',version:'Torcedor',price:'',wholesalePrice:'',oldPrice:'',bfMode:'bf1',bf2Price:'',badge:'',description:'',published:true,soldOut:false,stock:{P:0,M:0,G:0,GG:0,'3G':0},images:[]};}
+function setForm(p){if(currentId&&currentId!==(p&&p.id))captureDraft();const d=p&&p.id?pendingByProduct[p.id]:null;if(d&&d.product)p=d.product;currentId=p.id||null;slugManuallyEdited=!!p.id;pendingFiles=pendingFilesByProduct[p.id]?[...pendingFilesByProduct[p.id]]:[];$('#emptyEditor').classList.add('hidden');$('#form').classList.remove('hidden');$('#editMode').textContent=p.id?'EDITAR PRODUTO':'NOVO PRODUTO';$('#formTitle').textContent=p.name||'Novo produto';$('#fId').value=p.id||'';$('#fName').value=p.name||'';$('#fTeam').value=p.team||'';$('#fCategory').value=p.category||'Brasileiras';$('#fVersion').value=p.version||'Torcedor';$('#fPrice').value=p.price??'';$('#fWholesalePrice').value=calcWholesale(p.version,p.price,p.wholesalePrice).toFixed(2);$('#fWholesalePrice').value=calcWholesale(p.version,p.price,p.wholesalePrice).toFixed(2);$('#fOldPrice').value=p.oldPrice??'';$('#fBfMode').value=p.bfMode||'bf1';$('#fBf2Price').value=p.bf2Price??'';$('#bf2PriceWrap').classList.toggle('hidden',$('#fBfMode').value!=='bf2');$('#fBadge').value=p.badge||'';$('#fDescription').value=p.description||'';$('#fPublished').checked=p.published!==false;$('#fSold').checked=!!p.soldOut;const s=p.stock||{};['P','M','G','GG','3G'].forEach(x=>$('#s'+x).value=Number(s[x]||0));renderPreviews(p.images||[]);$('#delete').style.visibility=p.id?'visible':'hidden';renderList();}
 function captureDraft(){if(!currentId)return;try{pendingByProduct[currentId]={product:readForm()};pendingFilesByProduct[currentId]=[...pendingFiles];}catch(e){}}
-function readForm(){const p={id:$('#fId').value.trim().toLowerCase().replace(/[^a-z0-9-]+/g,'-'),name:$('#fName').value.trim(),team:$('#fTeam').value.trim(),category:$('#fCategory').value,version:$('#fVersion').value,price:Number($('#fPrice').value||0),wholesalePrice:calcWholesale($('#fVersion').value,$('#fPrice').value,$('#fWholesalePrice').value),badge:$('#fBadge').value||'',published:$('#fPublished').checked,soldOut:$('#fSold').checked,stock:{P:Number($('#sP').value||0),M:Number($('#sM').value||0),G:Number($('#sG').value||0),GG:Number($('#sGG').value||0),'3G':Number($('#s3G').value||0)},description:$('#fDescription').value.trim()};const old=Number($('#fOldPrice').value||0);if(old)p.oldPrice=old;const existing=products.find(x=>x.id===currentId);p.images=(existing&&existing.images)||[];return p;}
+function readForm(){const p={id:$('#fId').value.trim().toLowerCase().replace(/[^a-z0-9-]+/g,'-'),name:$('#fName').value.trim(),team:$('#fTeam').value.trim(),category:$('#fCategory').value,version:$('#fVersion').value,price:Number($('#fPrice').value||0),wholesalePrice:calcWholesale($('#fVersion').value,$('#fPrice').value,$('#fWholesalePrice').value),badge:$('#fBadge').value||'',published:$('#fPublished').checked,soldOut:$('#fSold').checked,stock:{P:Number($('#sP').value||0),M:Number($('#sM').value||0),G:Number($('#sG').value||0),GG:Number($('#sGG').value||0),'3G':Number($('#s3G').value||0)},description:$('#fDescription').value.trim()};p.bfMode=$('#fBfMode').value||'bf1';p.bf2Price=p.bfMode==='bf2'?Number($('#fBf2Price').value||0):null;if(p.bfMode==='bf2'&&p.bf2Price<=0)throw new Error('Informe um preço válido para Black Friday 2.');const old=Number($('#fOldPrice').value||0);if(old)p.oldPrice=old;const existing=products.find(x=>x.id===currentId);p.images=(existing&&existing.images)||[];return p;}
 function edit(id){const p=products.find(x=>x.id===id);if(p)setForm(p);}
 function newProduct(){if(currentId)captureDraft();pendingFiles=[];setForm(blank());}
 function renderPreviews(existing=[]){const list=[...existing.map((x,i)=>({url:x,name:'Imagem '+(i+1),kind:'existing',index:i})),...pendingFiles.map((x,i)=>({url:x.url,name:x.file.name,kind:'pending',index:i}))];$('#previews').innerHTML=list.map(x=>'<div class="preview"><img src="'+esc(x.url)+'" alt=""><span>'+esc(x.name)+'</span><button type="button" class="remove-photo" data-kind="'+x.kind+'" data-index="'+x.index+'">×</button></div>').join('');document.querySelectorAll('.remove-photo').forEach(b=>b.onclick=()=>{const kind=b.dataset.kind,i=Number(b.dataset.index);if(kind==='pending'){const item=pendingFiles[i];if(item&&item.url)URL.revokeObjectURL(item.url);pendingFiles.splice(i,1);}else{const p=products.find(x=>x.id===currentId);if(p&&p.images)p.images.splice(i,1);}const p=products.find(x=>x.id===currentId);renderPreviews(p?p.images||[]:[]);});}
@@ -79,7 +79,7 @@ async function migrateLegacyCatalog(){
  }catch(e){msg('Migração interrompida: '+(e.message||'erro desconhecido')+'. Você pode executar novamente; os produtos são atualizados pelo ID.',false);}
  finally{btn.disabled=false;}
 }
-async function publish(){msg('Sincronizando produtos e estoque...');$('#publish').disabled=true;try{const markApplied=preparePendingSales(products);for(const p of products){const {error}=await db.from('amora_products').upsert(toRow(p),{onConflict:'id'});if(error)throw error;}markApplied();await loadData();msg('Produtos e estoque sincronizados com o Supabase.');}catch(e){msg(e.message||'Não foi possível sincronizar.',false);}finally{$('#publish').disabled=false;}}
+async function publish(){msg('Sincronizando produtos e estoque...');$('#publish').disabled=true;try{await loadData();const markApplied=preparePendingSales(products);for(const p of products){const {error}=await db.from('amora_products').upsert(toRow(p),{onConflict:'id'});if(error)throw error;}markApplied();await loadData();msg('Produtos e estoque sincronizados com o Supabase.');}catch(e){msg(e.message||'Não foi possível sincronizar.',false);}finally{$('#publish').disabled=false;}}
 $('#connect').onclick=async()=>{const email=$('#email').value.trim(),password=$('#password').value;if(!email||!password)return msg('Informe e-mail e senha.',false);try{const {data,error}=await db.auth.signInWithPassword({email,password});if(error)throw error;const {data:admin,error:ae}=await db.from('amora_admin_users').select('user_id').eq('user_id',data.user.id).maybeSingle();if(ae)throw ae;if(!admin)throw new Error('Usuário ainda não autorizado na tabela amora_admin_users.');$('#authCard').classList.add('hidden');$('#app').classList.remove('hidden');await loadData();msg('Acesso autorizado.');}catch(e){msg(e.message||'Falha no acesso.',false);}};
 function slugify(value){return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').replace(/-+/g,'-');}
 function uniqueSlug(value){const base=slugify(value);if(!base)return '';let candidate=base,n=2;while(products.some(p=>p.id===candidate&&p.id!==currentId)){candidate=base+'-'+n++;}return candidate;}
@@ -88,6 +88,86 @@ $('#newProduct').onclick=newProduct;$('#migrateLegacy').onclick=migrateLegacyCat
 $('#delete').onclick=async()=>{if(!currentId)return;if(!confirm('Excluir este produto do Supabase?'))return;try{const {error}=await db.from('amora_products').delete().eq('id',currentId);if(error)throw error;products=products.filter(x=>x.id!==currentId);currentId=null;$('#form').classList.add('hidden');$('#emptyEditor').classList.remove('hidden');renderList();updateStats();msg('Produto excluído.');}catch(e){msg(e.message||'Erro ao excluir.',false);}};
 $('#form').onsubmit=async e=>{e.preventDefault();const p=readForm();if(!p.id||!p.name||!p.team){alert('Preencha ID, nome e time.');return;}if(products.some(x=>x.id===p.id&&x.id!==currentId)){alert('Esse ID já existe.');return;}const submit=$('#form button[type="submit"]');submit.disabled=true;try{await saveProduct(p);currentId=p.id;$('#editMode').textContent='EDITAR PRODUTO';$('#formTitle').textContent=p.name;$('#delete').style.visibility='visible';}catch(err){msg(err.message||'Não foi possível salvar.',false);}finally{submit.disabled=false;}};
 (async()=>{try{const cfg=window.AMORA_SUPABASE_CONFIG;if(!cfg||!cfg.url||!cfg.publishableKey)throw new Error('Configuração do Supabase não encontrada.');db=window.supabase.createClient(cfg.url,cfg.publishableKey);const {data}=await db.auth.getSession();if(data.session){const {data:admin}=await db.from('amora_admin_users').select('user_id').eq('user_id',data.session.user.id).maybeSingle();if(admin){$('#authCard').classList.add('hidden');$('#app').classList.remove('hidden');await loadData();}}db.auth.onAuthStateChange(async(_event,session)=>{if(!session){$('#app').classList.add('hidden');$('#authCard').classList.remove('hidden');}});}catch(e){msg(e.message||'Não foi possível iniciar o painel.',false);}})();
+/* PEDIDOS BLACK FRIDAY — reservas compartilhadas no Supabase */
+function bfOrderMoney(v){return Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});}
+function bfOrderDate(v){if(!v)return '—';const d=new Date(v);return Number.isNaN(d.getTime())?'—':d.toLocaleString('pt-BR');}
+async function loadBfReservations(){
+ const body=$('#bfReservationsList');if(!body||!db)return;
+ body.innerHTML='<tr><td colspan="8">Carregando reservas…</td></tr>';
+ try{
+  const {data:orders,error}=await db.from('amora_bf_orders').select('*').order('created_at',{ascending:false}).limit(100);
+  if(error)throw error;
+  const {data:items,error:itemError}=await db.from('amora_bf_reservations').select('*').order('created_at',{ascending:true});
+  if(itemError)throw itemError;
+  const allItems=items||[];
+  body.innerHTML=(orders||[]).length?(orders||[]).map(o=>{
+   const rows=allItems.filter(i=>i.order_id===o.id);
+   const description=rows.map(i=>{const p=products.find(x=>x.id===i.product_id);return (p?p.name:i.product_id)+' · '+i.size+' · '+i.quantity+' un.';}).join('<br>')||'—';
+   const status=String(o.status||'').toUpperCase();
+   const active=o.status==='reserved'&&new Date(o.expires_at)>new Date();
+   const action=active?'<div class="bf-order-actions"><button type="button" class="primary bf-confirm-order" data-order="'+esc(o.id)+'">Confirmar venda</button><button type="button" class="ghost bf-cancel-order" data-order="'+esc(o.id)+'">Cancelar reserva</button></div>':(o.status==='cancelled'?'Reserva cancelada':'—');
+   const shipping=Number(o.shipping_amount||0);
+   const method=String(o.shipping_method||'PAC').toUpperCase();
+   const shippingEditor='<div class="bf-shipping-editor"><select class="bf-shipping-method" data-order="'+esc(o.id)+'"><option value="PAC" '+(method==='PAC'?'selected':'')+'>PAC</option><option value="SEDEX" '+(method==='SEDEX'?'selected':'')+'>SEDEX</option><option value="RETIRADA" '+(method==='RETIRADA'?'selected':'')+'>Sem frete / retirada</option><option value="OUTRO" '+(!['PAC','SEDEX','RETIRADA'].includes(method)?'selected':'')+'>Outro</option></select><input class="bf-shipping-amount" data-order="'+esc(o.id)+'" type="number" min="0" step="0.01" inputmode="decimal" value="'+shipping.toFixed(2)+'" aria-label="Valor do frete"><button type="button" class="ghost bf-save-shipping" data-order="'+esc(o.id)+'">Salvar frete</button></div>';
+   return '<tr><td><strong>'+esc(o.id)+'</strong><br><small>'+bfOrderDate(o.created_at)+'</small></td><td>'+description+'</td><td>'+status+'</td><td>'+bfOrderDate(o.expires_at)+'</td><td>'+bfOrderMoney(o.products_subtotal)+'</td><td>'+shippingEditor+'</td><td>'+bfOrderMoney(o.order_total)+'</td><td>'+action+'</td></tr>';
+  }).join(''):'<tr><td colspan="7" style="text-align:center;color:#999">Nenhum pedido Black Friday registrado.</td></tr>';
+  body.querySelectorAll('.bf-confirm-order').forEach(btn=>btn.onclick=()=>confirmBfOrder(btn.dataset.order,btn));
+  body.querySelectorAll('.bf-cancel-order').forEach(btn=>btn.onclick=()=>cancelBfOrder(btn.dataset.order,btn));
+  body.querySelectorAll('.bf-save-shipping').forEach(btn=>btn.onclick=()=>saveBfShipping(btn.dataset.order,btn));
+ }catch(e){
+  body.innerHTML='<tr><td colspan="7" style="color:#c44">Não foi possível carregar as reservas: '+esc(e.message||e)+'</td></tr>';
+ }
+}
+async function saveBfShipping(orderId,button){
+ const amountInput=$('#bfReservationsList .bf-shipping-amount[data-order="'+orderId+'"]');
+ const methodInput=$('#bfReservationsList .bf-shipping-method[data-order="'+orderId+'"]');
+ const amount=Number(amountInput?.value);
+ const method=methodInput?.value||'PAC';
+ if(!Number.isFinite(amount)||amount<0){alert('Informe um valor de frete válido. Use 0 para retirar o frete.');return;}
+ if(!confirm('Salvar o frete de '+bfOrderMoney(amount)+'? O total do pedido será recalculado automaticamente.'))return;
+ button.disabled=true;button.textContent='Salvando…';
+ try{
+  const {data,error}=await db.rpc('amora_bf_update_shipping',{p_order_id:orderId,p_shipping_method:method,p_shipping_amount:amount});
+  if(error)throw error;
+  if(!data||data.order_id!==orderId)throw new Error('O banco não confirmou a atualização do frete.');
+  await loadBfReservations();
+  msg('Frete atualizado. Novo total: '+bfOrderMoney(data.order_total),true);
+ }catch(e){
+  alert('Não foi possível atualizar o frete: '+(e.message||e));
+  button.disabled=false;button.textContent='Salvar frete';
+ }
+}
+async function cancelBfOrder(orderId,button){
+ if(!orderId||!confirm('Cancelar esta reserva? O estoque reservado será devolvido imediatamente e esta ação não poderá ser desfeita.'))return;
+ button.disabled=true;button.textContent='Cancelando…';
+ try{
+  const {data,error}=await db.rpc('amora_bf_cancel_order',{p_order_id:orderId});
+  if(error)throw error;
+  if(data?.status!=='cancelled')throw new Error('O banco não confirmou o cancelamento.');
+  await loadData();
+  await loadBfReservations();
+  msg('Reserva cancelada. '+Number(data.restored_units||0)+' unidade(s) devolvida(s) ao estoque.',true);
+ }catch(e){
+  alert('Não foi possível cancelar a reserva: '+(e.message||e)+'\n\nSe a função ainda não existir no Supabase, aplique a nova migration de cancelamento.');
+  button.disabled=false;button.textContent='Cancelar reserva';
+ }
+}
+async function confirmBfOrder(orderId,button){
+ if(!orderId||!confirm('Confirmar a venda deste pedido? O estoque já foi reservado e continuará descontado.'))return;
+ button.disabled=true;button.textContent='Confirmando…';
+ try{
+  const {data,error}=await db.rpc('amora_bf_confirm_order',{p_order_id:orderId});
+  if(error)throw error;
+  if(data?.status!=='confirmed')throw new Error('O banco não confirmou a venda.');
+  await loadData();
+  await loadBfReservations();
+  msg('Venda confirmada. O estoque reservado permanece bloqueado.',true);
+ }catch(e){
+  alert('Não foi possível confirmar a venda: '+(e.message||e));
+  button.disabled=false;button.textContent='Confirmar venda';
+ }
+}
+const bfReload=$('#bfReload');if(bfReload)bfReload.onclick=loadBfReservations;
 /* CONTROLE DE VENDAS — armazenamento local e dedução no estoque */
 const SALES_KEY='amora_fut_sales_v1';
 function getSales(){try{return JSON.parse(localStorage.getItem(SALES_KEY)||'[]')}catch(e){return[]}}
@@ -197,6 +277,6 @@ function initSales(){
  };
  $('#clearSales').onclick=()=>{if(confirm('Apagar o histórico de vendas salvo neste navegador? Isso não altera vendas já publicadas no estoque.')){saveSales([]);renderSales()}};
 }
-$('#fVersion').addEventListener('change',()=>{$('#fWholesalePrice').value=calcWholesale($('#fVersion').value,$('#fPrice').value).toFixed(2)});$('#fPrice').addEventListener('input',()=>{$('#fWholesalePrice').value=calcWholesale($('#fVersion').value,$('#fPrice').value).toFixed(2)});
+$('#fBfMode').addEventListener('change',()=>$('#bf2PriceWrap').classList.toggle('hidden',$('#fBfMode').value!=='bf2'));$('#fVersion').addEventListener('change',()=>{$('#fWholesalePrice').value=calcWholesale($('#fVersion').value,$('#fPrice').value).toFixed(2)});$('#fPrice').addEventListener('input',()=>{$('#fWholesalePrice').value=calcWholesale($('#fVersion').value,$('#fPrice').value).toFixed(2)});
 initSales();
 const salesJump=$('#salesJump');if(salesJump)salesJump.onclick=()=>$('#saleForm')?.scrollIntoView({behavior:'smooth',block:'start'});
