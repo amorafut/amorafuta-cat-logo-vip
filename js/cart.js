@@ -55,14 +55,9 @@ async function checkoutCart(){
   const cfg=window.AMORA_SUPABASE_CONFIG;
   if(!cfg?.url||!cfg?.publishableKey)throw new Error('Configuração do ambiente de teste não encontrada.');
   const items=c.map(i=>({product_id:String(i.id),size:String(i.size).toUpperCase(),quantity:Math.max(1,Math.floor(Number(i.qty)||1))}));
-  const {data,error}=await window.supabase.createClient(cfg.url,cfg.publishableKey).rpc('amora_bf_reserve_order',{
-   p_items:items,
-   p_shipping_method:selectedFreight._name,
-   p_shipping_amount:shippingPrice(),
-   p_customer_name:null,
-   p_customer_phone:null
-  });
-  if(error)throw error;
+  const response=await fetch(cfg.url+'/rest/v1/rpc/amora_bf_reserve_order',{method:'POST',headers:{'Content-Type':'application/json',apikey:cfg.publishableKey,Authorization:'Bearer '+cfg.publishableKey},body:JSON.stringify({p_items:items,p_shipping_method:selectedFreight._name,p_shipping_amount:shippingPrice(),p_customer_name:null,p_customer_phone:null})});
+  let data;try{data=await response.json()}catch{data=null}
+  if(!response.ok)throw new Error(data?.message||data?.details||('Falha ao reservar estoque (HTTP '+response.status+').'));
   const orderId=data?.order_id,expiresAt=data?.expires_at;
   if(!orderId||!expiresAt)throw new Error('O banco não confirmou o número e o prazo da reserva. O WhatsApp não será aberto.');
   const expiry=new Date(expiresAt);
