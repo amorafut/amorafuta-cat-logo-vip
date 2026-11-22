@@ -280,3 +280,38 @@ function initSales(){
 $('#fBfMode').addEventListener('change',()=>$('#bf2PriceWrap').classList.toggle('hidden',$('#fBfMode').value!=='bf2'));$('#fVersion').addEventListener('change',()=>{$('#fWholesalePrice').value=calcWholesale($('#fVersion').value,$('#fPrice').value).toFixed(2)});$('#fPrice').addEventListener('input',()=>{$('#fWholesalePrice').value=calcWholesale($('#fVersion').value,$('#fPrice').value).toFixed(2)});
 initSales();
 const salesJump=$('#salesJump');if(salesJump)salesJump.onclick=()=>$('#saleForm')?.scrollIntoView({behavior:'smooth',block:'start'});
+
+/* GOOGLE ANALYTICS 4 — painel protegido pela sessão do administrador */
+function gaNumber(value){return Number(value||0).toLocaleString('pt-BR');}
+function gaRenderList(targetId,items){
+ const el=$('#'+targetId);if(!el)return;
+ if(!Array.isArray(items)||!items.length){el.textContent='Sem dados disponíveis neste período.';return;}
+ el.innerHTML=items.slice(0,10).map(item=>'<div class="analytics-row"><span>'+esc(item.name||'Não informado')+'</span><b>'+gaNumber(item.value)+'</b></div>').join('');
+}
+function gaSet(id,value){const el=$('#'+id);if(el)el.textContent=value;}
+async function loadAnalytics(){
+ const panel=$('#analyticsPanel');if(!panel||!db)return;
+ const status=$('#analyticsStatus'),button=$('#analyticsRefresh');
+ if(status)status.textContent='Consultando Google Analytics…';
+ if(button){button.disabled=true;button.textContent='Consultando…';}
+ try{
+  const {data,error}=await db.functions.invoke('amora-fut-analytics',{body:{}});
+  if(error)throw error;
+  if(!data||data.success!==true)throw new Error(data?.error||'A função não retornou dados válidos.');
+  const t=data.today||{},w=data.last7Days||{},m=data.last30Days||{};
+  gaSet('gaTodayVisitors',gaNumber(t.visitors));gaSet('gaTodaySessions',gaNumber(t.sessions)+' sessões');
+  gaSet('ga7Visitors',gaNumber(w.visitors));gaSet('ga7Sessions',gaNumber(w.sessions)+' sessões');
+  gaSet('ga30Visitors',gaNumber(m.visitors));gaSet('ga30Sessions',gaNumber(m.sessions)+' sessões');
+  gaSet('ga30Views',gaNumber(m.pageViews));
+  gaRenderList('gaPages',data.topPages);gaRenderList('gaChannels',data.channels);gaRenderList('gaCities',data.cities);
+  gaSet('analyticsUpdated',data.updatedAt?'Última consulta: '+new Date(data.updatedAt).toLocaleString('pt-BR'):'');
+  if(status)status.textContent='Dados recebidos do Google Analytics com sucesso.';
+ }catch(e){
+  if(status)status.textContent='Não foi possível carregar os dados: '+(e.message||'erro desconhecido')+'. Confira a autenticação da função e os registros de execução no Supabase.';
+  ['gaPages','gaChannels','gaCities'].forEach(id=>gaSet(id,'Falha na consulta.'));
+ }finally{
+  if(button){button.disabled=false;button.textContent='↻ Atualizar dados';}
+ }
+}
+const analyticsRefresh=$('#analyticsRefresh');
+if(analyticsRefresh)analyticsRefresh.onclick=loadAnalytics;
