@@ -45,4 +45,20 @@
 </section><section class="panel sales-panel" id="bfReservationsPanel">
 <div class="sales-head"><div><span>BLACK FRIDAY 2026</span><h2>Reservas e pedidos do WhatsApp</h2><p>O estoque é reservado por três horas. Confirme a venda aqui para manter a baixa de estoque.</p></div><button type="button" id="bfReload" class="ghost">↻ Atualizar reservas</button></div>
 <div class="sales-table-wrap"><table class="sales-table"><thead><tr><th>Pedido / data</th><th>Produtos e tamanhos</th><th>Status</th><th>Expira em</th><th>Produtos</th><th>Frete editável</th><th>Total</th><th>Ação</th></tr></thead><tbody id="bfReservationsList"><tr><td colspan="7">Entre no painel para carregar as reservas.</td></tr></tbody></table></div>
+</section></section>
+<section class="panel analytics-panel" id="analyticsPanel">
+ <div class="sales-head"><div><span>GOOGLE ANALYTICS 4</span><h2>Estatísticas de acesso</h2><p>Dados reais da loja, consultados diretamente no Google Analytics. Atualize quando quiser.</p></div><button type="button" id="analyticsRefresh" class="ghost">↻ Atualizar dados</button></div>
+ <div id="analyticsStatus" class="analytics-status">Entre no painel para consultar as estatísticas.</div>
+ <div class="analytics-cards">
+  <div><small>VISITANTES HOJE</small><b id="gaTodayVisitors">—</b><span id="gaTodaySessions">— sessões</span></div>
+  <div><small>VISITANTES · 7 DIAS</small><b id="ga7Visitors">—</b><span id="ga7Sessions">— sessões</span></div>
+  <div><small>VISITANTES · 30 DIAS</small><b id="ga30Visitors">—</b><span id="ga30Sessions">— sessões</span></div>
+  <div><small>VISUALIZAÇÕES · 30 DIAS</small><b id="ga30Views">—</b><span>páginas vistas</span></div>
+ </div>
+ <div class="analytics-lists">
+  <div><h3>Páginas mais acessadas · 30 dias</h3><div id="gaPages" class="analytics-list">Aguardando consulta…</div></div>
+  <div><h3>Origem dos visitantes · 30 dias</h3><div id="gaChannels" class="analytics-list">Aguardando consulta…</div></div>
+  <div><h3>Cidades · 30 dias</h3><div id="gaCities" class="analytics-list">Aguardando consulta…</div></div>
+ </div>
+ <small id="analyticsUpdated" class="analytics-updated"></small>
 </section></section></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../js/supabase-config.js?v=1"></script><script src="admin.js?v=bf4"></script><script src="reorder.js?v=2.4"></script></body></html>
